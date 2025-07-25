@@ -1,0 +1,179 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "liga" 1, "calt" 1;
+  }
+
+  .font-serif {
+    font-family: var(--font-serif);
+  }
+
+  .font-sans {
+    font-family: var(--font-sans);
+  }
+
+  .font-script {
+    font-family: var(--font-script);
+  }
+}
+
+/* Optimized CSS Animations */
+@keyframes float-heart {
+  0%,
+  100% {
+    transform: translateY(100vh) rotate(0deg);
+    opacity: 0;
+  }
+  10%,
+  90% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.6;
+    transform: translateY(-20px) rotate(180deg);
+  }
+}
+
+.animate-float-heart {
+  animation: float-heart linear infinite;
+}
+
+/* Enhanced scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: linear-gradient(to bottom, #fdf2f8, #fce7f3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #f472b6, #ec4899);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #ec4899, #db2777);
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Selection styling */
+::selection {
+  background: #f472b6;
+  color: white;
+}
+
+/* Performance optimized animations */
+@keyframes pulse-soft {
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 3s ease-in-out infinite;
+}
+
+/* Romantic gradient text */
+.text-romantic-gradient {
+  background: linear-gradient(135deg, #f472b6, #ec4899, #dc2626);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Enhanced shadow effects */
+.shadow-romantic {
+  box-shadow: 0 20px 40px rgba(244, 114, 182, 0.2);
+}
+
+.shadow-glow {
+  box-shadow: 0 0 30px rgba(244, 114, 182, 0.3);
+}
+
+/* Glass morphism */
+.glass {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Hover effects */
+.hover-lift:hover {
+  transform: translateY(-5px);
+  transition: transform 0.3s ease;
+}
+
+/* Responsive typography */
+@media (max-width: 768px) {
+  .text-responsive-xl {
+    font-size: clamp(2rem, 6vw, 4rem);
+  }
+
+  .text-responsive-lg {
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+  }
+}
+
+/* Focus states for accessibility */
+.focus-ring:focus {
+  outline: 2px solid #f472b6;
+  outline-offset: 2px;
+}
+
+/* Optimized transitions */
+* {
+  transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s
+    ease, opacity 0.2s ease;
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
