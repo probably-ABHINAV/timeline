@@ -149,6 +149,14 @@ const timelineEvents = [
 
 // Optimized Floating Hearts (reduced from 15 to 5)
 function OptimizedFloatingHearts() {
+  const [windowSize, setWindowSize] = useState({ width: 0, height: 0 })
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setWindowSize({ width: window.innerWidth, height: window.innerHeight })
+    }
+  }, [])
+
   return (
     <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
       {[...Array(5)].map((_, i) => (
@@ -657,6 +665,13 @@ function InteractiveJourneyMap() {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true })
   const [selectedLocation, setSelectedLocation] = useState<number | null>(null)
+  const [windowSize, setWindowSize] = useState({ width: 0, height: 0 })
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setWindowSize({ width: window.innerWidth, height: window.innerHeight })
+    }
+  }, [])
 
   const locations = [
     { id: 1, x: 25, y: 35, name: "JPHS Jaipur", event: "First Meeting", icon: Clock },
@@ -797,8 +812,15 @@ function InteractiveJourneyMap() {
 function EnhancedMusicSection() {
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentSong, setCurrentSong] = useState(0)
+  const [windowSize, setWindowSize] = useState({ width: 0, height: 0 })
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true })
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setWindowSize({ width: window.innerWidth, height: window.innerHeight })
+    }
+  }, [])
 
   const playlist = [
     { title: "Serendipity", artist: "BTS", mood: "First Meeting", color: "from-rose-400 to-pink-500" },
@@ -989,6 +1011,13 @@ function EnhancedVoiceMessage() {
   const [showMessage, setShowMessage] = useState(false)
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true })
+  const [windowSize, setWindowSize] = useState({ width: 0, height: 0 })
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setWindowSize({ width: window.innerWidth, height: window.innerHeight })
+    }
+  }, [])
 
   return (
     <motion.section
@@ -1154,8 +1183,15 @@ function EnhancedVoiceMessage() {
 function SpectacularBirthdayFinale() {
   const [showConfetti, setShowConfetti] = useState(false)
   const [showFireworks, setShowFireworks] = useState(false)
+  const [windowSize, setWindowSize] = useState({ width: 0, height: 0 })
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true })
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setWindowSize({ width: window.innerWidth, height: window.innerHeight })
+    }
+  }, [])
 
   useEffect(() => {
     if (isInView) {
@@ -1183,8 +1219,8 @@ function SpectacularBirthdayFinale() {
             key={i}
             className="absolute w-1 h-1 bg-white rounded-full"
             initial={{
-              x: Math.random() * window.innerWidth,
-              y: Math.random() * window.innerHeight,
+              x: Math.random() * (windowSize.width || 1200),
+              y: Math.random() * (windowSize.height || 800),
               opacity: Math.random(),
             }}
             animate={{
@@ -1210,15 +1246,15 @@ function SpectacularBirthdayFinale() {
                 ["bg-yellow-400", "bg-pink-400", "bg-rose-400", "bg-red-400", "bg-orange-400"][i % 5]
               } rounded-full`}
               initial={{
-                x: Math.random() * window.innerWidth,
+                x: Math.random() * (windowSize.width || 1200),
                 y: -20,
                 rotate: 0,
                 scale: Math.random() * 0.8 + 0.5,
               }}
               animate={{
-                y: window.innerHeight + 20,
+                y: (windowSize.height || 800) + 20,
                 rotate: 360,
-                x: Math.random() * window.innerWidth,
+                x: Math.random() * (windowSize.width || 1200),
               }}
               transition={{
                 duration: 4 + Math.random() * 3,
@@ -1238,8 +1274,8 @@ function SpectacularBirthdayFinale() {
               key={i}
               className="absolute"
               initial={{
-                x: Math.random() * window.innerWidth,
-                y: Math.random() * window.innerHeight * 0.6 + window.innerHeight * 0.2,
+                x: Math.random() * (windowSize.width || 1200),
+                y: Math.random() * ((windowSize.height || 800) * 0.6) + (windowSize.height || 800) * 0.2,
               }}
             >
               {[...Array(16)].map((_, j) => (
@@ -1263,6 +1299,7 @@ function SpectacularBirthdayFinale() {
         </div>
       )}
 
+      {/* Rest of the component remains the same */}
       <div className="relative z-10 text-center px-4 max-w-6xl">
         <motion.div
           initial={{ scale: 0.5, opacity: 0, rotateY: -180 }}
