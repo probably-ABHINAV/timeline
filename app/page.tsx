@@ -147,15 +147,15 @@ const timelineEvents = [
   },
 ]
 
-// Optimized Floating Hearts (reduced from 15 to 5)
+// Optimized Floating Hearts (completely SSR safe)
 function OptimizedFloatingHearts() {
-  const [windowSize, setWindowSize] = useState({ width: 0, height: 0 })
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      setWindowSize({ width: window.innerWidth, height: window.innerHeight })
-    }
+    setMounted(true)
   }, [])
+
+  if (!mounted) return null
 
   return (
     <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
@@ -354,6 +354,7 @@ function CreativeHeroSection() {
   const { scrollY } = useScroll()
   const y = useTransform(scrollY, [0, 1000], [0, 200])
   const opacity = useTransform(scrollY, [0, 600], [1, 0])
+  const [mounted, setMounted] = useState(false)
 
   const heroTexts = [
     "Our Love Story",
@@ -366,16 +367,23 @@ function CreativeHeroSection() {
   const [currentText, setCurrentText] = useState(0)
 
   useEffect(() => {
+    setMounted(true)
     const interval = setInterval(() => {
       setCurrentText((prev) => (prev + 1) % heroTexts.length)
     }, 3000)
     return () => clearInterval(interval)
   }, [heroTexts.length])
 
+  const handleScrollToNext = () => {
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: window.innerHeight, behavior: "smooth" })
+    }
+  }
+
   return (
     <motion.section
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
-      style={{ y, opacity }}
+      style={mounted ? { y, opacity } : {}}
     >
       {/* Optimized Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-pink-100 via-rose-100 to-red-100">
@@ -459,7 +467,7 @@ function CreativeHeroSection() {
           <Button
             size="lg"
             className="bg-gradient-to-r from-pink-500 via-rose-500 to-red-500 hover:from-pink-600 hover:via-rose-600 hover:to-red-600 text-white px-20 py-8 text-2xl rounded-full shadow-2xl border-0 transition-all duration-500 hover:scale-105 hover:shadow-pink-500/25 group"
-            onClick={() => window.scrollTo({ top: window.innerHeight, behavior: "smooth" })}
+            onClick={handleScrollToNext}
           >
             Begin Our Journey
             <motion.div
@@ -660,17 +668,15 @@ function OptimizedTimelineEvent({ event, index }: { event: (typeof timelineEvent
   )
 }
 
-// Interactive Journey Map
+// Interactive Journey Map (SSR Safe)
 function InteractiveJourneyMap() {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true })
   const [selectedLocation, setSelectedLocation] = useState<number | null>(null)
-  const [windowSize, setWindowSize] = useState({ width: 0, height: 0 })
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      setWindowSize({ width: window.innerWidth, height: window.innerHeight })
-    }
+    setMounted(true)
   }, [])
 
   const locations = [
@@ -692,29 +698,31 @@ function InteractiveJourneyMap() {
       transition={{ duration: 1 }}
     >
       {/* Background Hearts */}
-      <div className="absolute inset-0">
-        {[...Array(10)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute text-pink-200/20"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-            animate={{
-              scale: [1, 1.2, 1],
-              rotate: [0, 180, 360],
-            }}
-            transition={{
-              duration: 8 + Math.random() * 4,
-              repeat: Number.POSITIVE_INFINITY,
-              delay: Math.random() * 5,
-            }}
-          >
-            <Heart className="w-6 h-6 fill-current" />
-          </motion.div>
-        ))}
-      </div>
+      {mounted && (
+        <div className="absolute inset-0">
+          {[...Array(10)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute text-pink-200/20"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+              }}
+              animate={{
+                scale: [1, 1.2, 1],
+                rotate: [0, 180, 360],
+              }}
+              transition={{
+                duration: 8 + Math.random() * 4,
+                repeat: Number.POSITIVE_INFINITY,
+                delay: Math.random() * 5,
+              }}
+            >
+              <Heart className="w-6 h-6 fill-current" />
+            </motion.div>
+          ))}
+        </div>
+      )}
 
       <div className="container mx-auto px-4 relative z-10">
         <motion.div
@@ -808,18 +816,16 @@ function InteractiveJourneyMap() {
   )
 }
 
-// Enhanced Music Section
+// Enhanced Music Section (SSR Safe)
 function EnhancedMusicSection() {
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentSong, setCurrentSong] = useState(0)
-  const [windowSize, setWindowSize] = useState({ width: 0, height: 0 })
+  const [mounted, setMounted] = useState(false)
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true })
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      setWindowSize({ width: window.innerWidth, height: window.innerHeight })
-    }
+    setMounted(true)
   }, [])
 
   const playlist = [
@@ -846,29 +852,31 @@ function EnhancedMusicSection() {
       transition={{ duration: 1 }}
     >
       {/* Romantic Background */}
-      <div className="absolute inset-0">
-        {[...Array(20)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-1 h-1 bg-white/30 rounded-full"
-            initial={{
-              x: Math.random() * window.innerWidth,
-              y: Math.random() * window.innerHeight,
-              scale: Math.random() * 0.5 + 0.5,
-            }}
-            animate={{
-              y: [null, Math.random() * window.innerHeight],
-              opacity: [0.3, 1, 0.3],
-              scale: [0.5, 1.5, 0.5],
-            }}
-            transition={{
-              duration: 4 + Math.random() * 3,
-              repeat: Number.POSITIVE_INFINITY,
-              ease: "easeInOut",
-            }}
-          />
-        ))}
-      </div>
+      {mounted && (
+        <div className="absolute inset-0">
+          {[...Array(20)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute w-1 h-1 bg-white/30 rounded-full"
+              initial={{
+                x: Math.random() * 1200,
+                y: Math.random() * 800,
+                scale: Math.random() * 0.5 + 0.5,
+              }}
+              animate={{
+                y: [null, Math.random() * 800],
+                opacity: [0.3, 1, 0.3],
+                scale: [0.5, 1.5, 0.5],
+              }}
+              transition={{
+                duration: 4 + Math.random() * 3,
+                repeat: Number.POSITIVE_INFINITY,
+                ease: "easeInOut",
+              }}
+            />
+          ))}
+        </div>
+      )}
 
       <div className="container mx-auto px-4 relative z-10">
         <motion.div
@@ -1005,18 +1013,16 @@ function EnhancedMusicSection() {
   )
 }
 
-// Enhanced Voice Message
+// Enhanced Voice Message (SSR Safe)
 function EnhancedVoiceMessage() {
   const [isPlaying, setIsPlaying] = useState(false)
   const [showMessage, setShowMessage] = useState(false)
+  const [mounted, setMounted] = useState(false)
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true })
-  const [windowSize, setWindowSize] = useState({ width: 0, height: 0 })
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      setWindowSize({ width: window.innerWidth, height: window.innerHeight })
-    }
+    setMounted(true)
   }, [])
 
   return (
@@ -1028,30 +1034,32 @@ function EnhancedVoiceMessage() {
       transition={{ duration: 1 }}
     >
       {/* Floating Hearts */}
-      <div className="absolute inset-0">
-        {[...Array(8)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute text-pink-200/40"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-            animate={{
-              y: [0, -30, 0],
-              rotate: [0, 360],
-              scale: [1, 1.2, 1],
-            }}
-            transition={{
-              duration: 6 + Math.random() * 4,
-              repeat: Number.POSITIVE_INFINITY,
-              delay: Math.random() * 3,
-            }}
-          >
-            <Heart className="w-8 h-8 fill-current" />
-          </motion.div>
-        ))}
-      </div>
+      {mounted && (
+        <div className="absolute inset-0">
+          {[...Array(8)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute text-pink-200/40"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+              }}
+              animate={{
+                y: [0, -30, 0],
+                rotate: [0, 360],
+                scale: [1, 1.2, 1],
+              }}
+              transition={{
+                duration: 6 + Math.random() * 4,
+                repeat: Number.POSITIVE_INFINITY,
+                delay: Math.random() * 3,
+              }}
+            >
+              <Heart className="w-8 h-8 fill-current" />
+            </motion.div>
+          ))}
+        </div>
+      )}
 
       <div className="container mx-auto px-4 text-center relative z-10">
         <motion.div
@@ -1179,22 +1187,20 @@ function EnhancedVoiceMessage() {
   )
 }
 
-// Spectacular Birthday Finale
+// Spectacular Birthday Finale (SSR Safe)
 function SpectacularBirthdayFinale() {
   const [showConfetti, setShowConfetti] = useState(false)
   const [showFireworks, setShowFireworks] = useState(false)
-  const [windowSize, setWindowSize] = useState({ width: 0, height: 0 })
+  const [mounted, setMounted] = useState(false)
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true })
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      setWindowSize({ width: window.innerWidth, height: window.innerHeight })
-    }
+    setMounted(true)
   }, [])
 
   useEffect(() => {
-    if (isInView) {
+    if (isInView && mounted) {
       const confettiTimer = setTimeout(() => setShowConfetti(true), 1000)
       const fireworksTimer = setTimeout(() => setShowFireworks(true), 2000)
       return () => {
@@ -1202,7 +1208,7 @@ function SpectacularBirthdayFinale() {
         clearTimeout(fireworksTimer)
       }
     }
-  }, [isInView])
+  }, [isInView, mounted])
 
   return (
     <motion.section
@@ -1213,31 +1219,33 @@ function SpectacularBirthdayFinale() {
       transition={{ duration: 1 }}
     >
       {/* Animated Stars Background */}
-      <div className="absolute inset-0">
-        {[...Array(50)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-1 h-1 bg-white rounded-full"
-            initial={{
-              x: Math.random() * (windowSize.width || 1200),
-              y: Math.random() * (windowSize.height || 800),
-              opacity: Math.random(),
-            }}
-            animate={{
-              opacity: [Math.random(), 1, Math.random()],
-              scale: [1, 2, 1],
-            }}
-            transition={{
-              duration: 3 + Math.random() * 4,
-              repeat: Number.POSITIVE_INFINITY,
-              delay: Math.random() * 3,
-            }}
-          />
-        ))}
-      </div>
+      {mounted && (
+        <div className="absolute inset-0">
+          {[...Array(50)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute w-1 h-1 bg-white rounded-full"
+              initial={{
+                x: Math.random() * 1200,
+                y: Math.random() * 800,
+                opacity: Math.random(),
+              }}
+              animate={{
+                opacity: [Math.random(), 1, Math.random()],
+                scale: [1, 2, 1],
+              }}
+              transition={{
+                duration: 3 + Math.random() * 4,
+                repeat: Number.POSITIVE_INFINITY,
+                delay: Math.random() * 3,
+              }}
+            />
+          ))}
+        </div>
+      )}
 
       {/* Confetti */}
-      {showConfetti && (
+      {showConfetti && mounted && (
         <div className="absolute inset-0 pointer-events-none">
           {[...Array(50)].map((_, i) => (
             <motion.div
@@ -1246,15 +1254,15 @@ function SpectacularBirthdayFinale() {
                 ["bg-yellow-400", "bg-pink-400", "bg-rose-400", "bg-red-400", "bg-orange-400"][i % 5]
               } rounded-full`}
               initial={{
-                x: Math.random() * (windowSize.width || 1200),
+                x: Math.random() * 1200,
                 y: -20,
                 rotate: 0,
                 scale: Math.random() * 0.8 + 0.5,
               }}
               animate={{
-                y: (windowSize.height || 800) + 20,
+                y: 820,
                 rotate: 360,
-                x: Math.random() * (windowSize.width || 1200),
+                x: Math.random() * 1200,
               }}
               transition={{
                 duration: 4 + Math.random() * 3,
@@ -1267,15 +1275,15 @@ function SpectacularBirthdayFinale() {
       )}
 
       {/* Fireworks */}
-      {showFireworks && (
+      {showFireworks && mounted && (
         <div className="absolute inset-0 pointer-events-none">
           {[...Array(10)].map((_, i) => (
             <motion.div
               key={i}
               className="absolute"
               initial={{
-                x: Math.random() * (windowSize.width || 1200),
-                y: Math.random() * ((windowSize.height || 800) * 0.6) + (windowSize.height || 800) * 0.2,
+                x: Math.random() * 1200,
+                y: Math.random() * 480 + 160,
               }}
             >
               {[...Array(16)].map((_, j) => (
@@ -1299,7 +1307,6 @@ function SpectacularBirthdayFinale() {
         </div>
       )}
 
-      {/* Rest of the component remains the same */}
       <div className="relative z-10 text-center px-4 max-w-6xl">
         <motion.div
           initial={{ scale: 0.5, opacity: 0, rotateY: -180 }}
