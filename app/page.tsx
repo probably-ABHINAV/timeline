@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState, useCallback } from "react"
 import { motion, useScroll, useTransform, useInView, AnimatePresence } from "framer-motion"
 import {
   Heart,
@@ -24,6 +24,11 @@ import {
   Mic,
   Calendar,
   VolumeX,
+  Share2,
+  Download,
+  Eye,
+  EyeOff,
+  Maximize,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
@@ -54,6 +59,8 @@ const storyChapters = [
     weather: "Warm June afternoon",
     heartbeat: 72,
     voiceNote: "The moment I first saw you, time stopped...",
+    emotion: "Wonder",
+    soundtrack: "https://open.spotify.com/track/example1",
   },
   {
     id: 2,
@@ -79,6 +86,8 @@ const storyChapters = [
     weather: "Midnight silence",
     heartbeat: 95,
     voiceNote: "12:47 AM... I was so nervous typing that message...",
+    emotion: "Hope",
+    soundtrack: "https://open.spotify.com/track/example2",
   },
   {
     id: 3,
@@ -105,6 +114,8 @@ const storyChapters = [
     weather: "Gentle evening breeze",
     heartbeat: 88,
     voiceNote: "The night we both confessed... magic happened...",
+    emotion: "Pure Love",
+    soundtrack: "https://open.spotify.com/track/example3",
   },
   {
     id: 4,
@@ -129,6 +140,8 @@ const storyChapters = [
     weather: "Cozy café warmth",
     heartbeat: 102,
     voiceNote: "That first kiss... I still get butterflies thinking about it...",
+    emotion: "Electric",
+    soundtrack: "https://open.spotify.com/track/example4",
   },
   {
     id: 5,
@@ -154,6 +167,8 @@ const storyChapters = [
     weather: "Perfect January evening",
     heartbeat: 120,
     voiceNote: "The moment you said yes... my heart exploded with joy...",
+    emotion: "Euphoria",
+    soundtrack: "https://open.spotify.com/track/example5",
   },
   {
     id: 6,
@@ -177,6 +192,8 @@ const storyChapters = [
     weather: "Sunny adventure day",
     heartbeat: 85,
     voiceNote: "Every adventure with you feels like magic...",
+    emotion: "Adventure",
+    soundtrack: "https://open.spotify.com/track/example6",
   },
   {
     id: 7,
@@ -200,6 +217,8 @@ const storyChapters = [
     weather: "Stressful but supported",
     heartbeat: 78,
     voiceNote: "Your support meant everything to me...",
+    emotion: "Gratitude",
+    soundtrack: "https://open.spotify.com/track/example7",
   },
   {
     id: 8,
@@ -223,6 +242,8 @@ const storyChapters = [
     weather: "Room lit with love",
     heartbeat: 110,
     voiceNote: "When you proposed to me... I knew you were forever...",
+    emotion: "Bliss",
+    soundtrack: "https://open.spotify.com/track/example8",
   },
   {
     id: 9,
@@ -248,6 +269,8 @@ const storyChapters = [
     weather: "Storm clouds",
     heartbeat: 65,
     voiceNote: "I'm sorry for the pain I caused... but I never stopped loving you...",
+    emotion: "Redemption",
+    soundtrack: "https://open.spotify.com/track/example9",
   },
   {
     id: 10,
@@ -273,12 +296,41 @@ const storyChapters = [
     weather: "New dawn breaking",
     heartbeat: 92,
     voiceNote: "Thank you for giving us another chance... I love you, Beboo...",
+    emotion: "Forever",
+    soundtrack: "https://open.spotify.com/track/example10",
   },
 ]
 
-// Enhanced Floating Elements
+// Fixed floating elements with stable positions
 function EnhancedFloatingElements() {
   const [mounted, setMounted] = useState(false)
+  const [elements] = useState(() => {
+    // Generate stable positions on component initialization
+    return {
+      hearts: Array.from({ length: 8 }, (_, i) => ({
+        id: i,
+        initialX: (i * 12.5) % 100,
+        initialY: 100 + (i * 10),
+        scale: 0.5 + (i % 3) * 0.25,
+        duration: 15 + (i % 5) * 2,
+        delay: i * 2,
+      })),
+      sparkles: Array.from({ length: 12 }, (_, i) => ({
+        id: i,
+        left: (i * 8.33) % 100,
+        top: (i * 13.7) % 100,
+        duration: 4 + (i % 3),
+        delay: i * 0.5,
+      })),
+      notes: Array.from({ length: 6 }, (_, i) => ({
+        id: i,
+        left: 10 + i * 15,
+        top: 20 + (i % 3) * 25,
+        duration: 6 + (i % 2) * 2,
+        delay: i * 1.5,
+      })),
+    }
+  })
 
   useEffect(() => {
     setMounted(true)
@@ -287,27 +339,27 @@ function EnhancedFloatingElements() {
   if (!mounted) return null
 
   return (
-    <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
-      {/* Floating Hearts */}
-      {[...Array(12)].map((_, i) => (
+    <div className="fixed inset-0 pointer-events-none overflow-hidden z-0" role="presentation" aria-hidden="true">
+      {/* Optimized Floating Hearts */}
+      {elements.hearts.map((heart) => (
         <motion.div
-          key={`heart-${i}`}
+          key={`heart-${heart.id}`}
           className="absolute"
           initial={{
-            x: Math.random() * window.innerWidth,
-            y: window.innerHeight + 50,
+            x: `${heart.initialX}vw`,
+            y: `${heart.initialY}vh`,
             rotate: 0,
-            scale: 0.5 + Math.random() * 0.5,
+            scale: heart.scale,
           }}
           animate={{
-            y: -100,
+            y: `-10vh`,
             rotate: 360,
-            x: Math.random() * window.innerWidth,
+            x: `${(heart.initialX + 20) % 100}vw`,
           }}
           transition={{
-            duration: 15 + Math.random() * 10,
-            repeat: Number.POSITIVE_INFINITY,
-            delay: i * 2,
+            duration: heart.duration,
+            repeat: Infinity,
+            delay: heart.delay,
             ease: "linear",
           }}
         >
@@ -315,38 +367,38 @@ function EnhancedFloatingElements() {
         </motion.div>
       ))}
 
-      {/* Floating Sparkles */}
-      {[...Array(20)].map((_, i) => (
+      {/* Optimized Floating Sparkles */}
+      {elements.sparkles.map((sparkle) => (
         <motion.div
-          key={`sparkle-${i}`}
+          key={`sparkle-${sparkle.id}`}
           className="absolute"
           style={{
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
+            left: `${sparkle.left}%`,
+            top: `${sparkle.top}%`,
           }}
           animate={{
             scale: [0, 1, 0],
             rotate: [0, 180, 360],
-            opacity: [0, 1, 0],
+            opacity: [0, 0.8, 0],
           }}
           transition={{
-            duration: 4 + Math.random() * 4,
-            repeat: Number.POSITIVE_INFINITY,
-            delay: Math.random() * 8,
+            duration: sparkle.duration,
+            repeat: Infinity,
+            delay: sparkle.delay,
           }}
         >
           <Sparkles className="w-3 h-3 text-pink-400/30" />
         </motion.div>
       ))}
 
-      {/* Floating Music Notes */}
-      {[...Array(8)].map((_, i) => (
+      {/* Optimized Music Notes */}
+      {elements.notes.map((note) => (
         <motion.div
-          key={`note-${i}`}
+          key={`note-${note.id}`}
           className="absolute text-purple-300/20"
           style={{
-            left: `${10 + i * 12}%`,
-            top: `${20 + (i % 3) * 30}%`,
+            left: `${note.left}%`,
+            top: `${note.top}%`,
           }}
           animate={{
             y: [-20, -40, -20],
@@ -354,9 +406,9 @@ function EnhancedFloatingElements() {
             scale: [1, 1.2, 1],
           }}
           transition={{
-            duration: 6 + Math.random() * 4,
-            repeat: Number.POSITIVE_INFINITY,
-            delay: i * 1.5,
+            duration: note.duration,
+            repeat: Infinity,
+            delay: note.delay,
           }}
         >
           <Music className="w-5 h-5" />
@@ -366,24 +418,59 @@ function EnhancedFloatingElements() {
   )
 }
 
-// Advanced Music Player with Visualizer
+// Enhanced Music Player with better controls
 function AdvancedMusicPlayer() {
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentTrack, setCurrentTrack] = useState(0)
   const [volume, setVolume] = useState(0.7)
   const [isMuted, setIsMuted] = useState(false)
+  const [isMinimized, setIsMinimized] = useState(true) //hide initially
   const [mounted, setMounted] = useState(false)
+  const [progress, setProgress] = useState(0)
 
   useEffect(() => {
     setMounted(true)
   }, [])
 
   const soundtrack = [
-    { title: "Ambient Piano & Wind Chimes", artist: "Romantic Instrumentals", duration: "4:32" },
-    { title: "Dil-e-Baadat", artist: "Instrumental Version", duration: "3:45" },
-    { title: "Soft Romantic Melodies", artist: "Love Story OST", duration: "5:12" },
-    { title: "Our Love Theme", artist: "Custom Composition", duration: "4:18" },
+    { title: "Ambient Piano & Wind Chimes", artist: "Romantic Instrumentals", duration: "4:32", durationSeconds: 272 },
+    { title: "Dil-e-Baadat", artist: "Instrumental Version", duration: "3:45", durationSeconds: 225 },
+    { title: "Soft Romantic Melodies", artist: "Love Story OST", duration: "5:12", durationSeconds: 312 },
+    { title: "Our Love Theme", artist: "Custom Composition", duration: "4:18", durationSeconds: 258 },
   ]
+
+  useEffect(() => {
+    if (!isPlaying) return
+
+    const interval = setInterval(() => {
+      setProgress((prev) => {
+        const newProgress = prev + 1
+        if (newProgress >= soundtrack[currentTrack].durationSeconds) {
+          setCurrentTrack((prev) => (prev + 1) % soundtrack.length)
+          return 0
+        }
+        return newProgress
+      })
+    }, 1000)
+
+    return () => clearInterval(interval)
+  }, [isPlaying, currentTrack])
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60)
+    const secs = seconds % 60
+    return `${mins}:${secs.toString().padStart(2, '0')}`
+  }
+
+  const handleShare = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: 'Our Love Story',
+        text: `Currently listening to: ${soundtrack[currentTrack].title}`,
+        url: window.location.href,
+      })
+    }
+  }
 
   if (!mounted) return null
 
@@ -391,103 +478,172 @@ function AdvancedMusicPlayer() {
     <motion.div
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="fixed top-6 right-6 z-50 bg-white/95 backdrop-blur-xl rounded-2xl p-4 shadow-2xl border border-pink-200/50 min-w-[300px]"
+      className={`fixed top-6 right-6 z-50 bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-pink-200/50 transition-all duration-300 ${
+        isMinimized ? 'w-16 h-16' : 'min-w-[320px]'
+      }`}
     >
-      <div className="space-y-4">
-        {/* Current Track Display */}
-        <div className="text-center">
-          <div className="flex items-center justify-center space-x-2 mb-2">
-            <Headphones className="w-5 h-5 text-pink-600" />
-            <span className="text-sm font-medium text-gray-700">Now Playing</span>
-          </div>
-          <h4 className="font-semibold text-gray-900 text-sm">{soundtrack[currentTrack].title}</h4>
-          <p className="text-xs text-gray-600">{soundtrack[currentTrack].artist}</p>
-        </div>
-
-        {/* Visualizer */}
-        <div className="flex justify-center items-end space-x-1 h-12">
-          {[...Array(20)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="w-1 bg-gradient-to-t from-pink-500 via-rose-400 to-red-400 rounded-full"
-              animate={
-                isPlaying
-                  ? {
-                      height: [4, Math.random() * 40 + 8, 4],
-                    }
-                  : { height: 4 }
-              }
-              transition={{
-                duration: 0.5 + Math.random() * 0.5,
-                repeat: isPlaying ? Number.POSITIVE_INFINITY : 0,
-                delay: i * 0.05,
-              }}
-            />
-          ))}
-        </div>
-
-        {/* Controls */}
-        <div className="flex items-center justify-between">
-          <Button
-            size="sm"
-            variant="ghost"
-            onClick={() => setCurrentTrack((prev) => (prev - 1 + soundtrack.length) % soundtrack.length)}
-            className="w-8 h-8 p-0 text-gray-600 hover:text-pink-600"
+      {isMinimized ? (
+        <button
+          onClick={() => setIsMinimized(false)}
+          className="w-full h-full flex items-center justify-center group"
+          aria-label="Expand music player"
+        >
+          <motion.div
+            animate={isPlaying ? { rotate: 360 } : {}}
+            transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
           >
-            ⏮
-          </Button>
+            <Headphones className="w-8 h-8 text-pink-600 group-hover:scale-110 transition-transform" />
+          </motion.div>
+        </button>
+      ) : (
+        <div className="space-y-4 p-4">
+          {/* Header with minimize button */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <Headphones className="w-5 h-5 text-pink-600" />
+              <span className="text-sm font-medium text-gray-700">Now Playing</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={handleShare}
+                className="w-8 h-8 p-0 text-gray-600 hover:text-pink-600"
+                aria-label="Share current track"
+              >
+                <Share2 className="w-4 h-4" />
+              </Button>
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={() => setIsMinimized(true)}
+                className="w-8 h-8 p-0 text-gray-600 hover:text-pink-600"
+                aria-label="Minimize player"
+              >
+                <Eye className="w-4 h-4" />
+              </Button>
+            </div>
+          </div>
 
-          <Button
-            size="sm"
-            onClick={() => setIsPlaying(!isPlaying)}
-            className="bg-gradient-to-r from-pink-500 to-rose-600 hover:from-pink-600 hover:to-rose-700 text-white rounded-full w-12 h-12 p-0 shadow-lg"
-          >
-            {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
-          </Button>
+          {/* Current Track Display */}
+          <div className="text-center">
+            <h4 className="font-semibold text-gray-900 text-sm truncate" title={soundtrack[currentTrack].title}>
+              {soundtrack[currentTrack].title}
+            </h4>
+            <p className="text-xs text-gray-600 truncate" title={soundtrack[currentTrack].artist}>
+              {soundtrack[currentTrack].artist}
+            </p>
+          </div>
 
-          <Button
-            size="sm"
-            variant="ghost"
-            onClick={() => setCurrentTrack((prev) => (prev + 1) % soundtrack.length)}
-            className="w-8 h-8 p-0 text-gray-600 hover:text-pink-600"
-          >
-            ⏭
-          </Button>
-        </div>
+          {/* Enhanced Visualizer */}
+          <div className="flex justify-center items-end space-x-1 h-12" aria-hidden="true">
+            {Array.from({ length: 20 }, (_, i) => (
+              <motion.div
+                key={i}
+                className="w-1 bg-gradient-to-t from-pink-500 via-rose-400 to-red-400 rounded-full"
+                animate={
+                  isPlaying
+                    ? {
+                        height: [4, Math.random() * 40 + 8, 4],
+                      }
+                    : { height: 4 }
+                }
+                transition={{
+                  duration: 0.5 + Math.random() * 0.5,
+                  repeat: isPlaying ? Infinity : 0,
+                  delay: i * 0.05,
+                }}
+              />
+            ))}
+          </div>
 
-        {/* Volume Control */}
-        <div className="flex items-center space-x-2">
-          <Button size="sm" variant="ghost" onClick={() => setIsMuted(!isMuted)} className="w-6 h-6 p-0 text-gray-600">
-            {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
-          </Button>
-          <div className="flex-1 h-1 bg-gray-200 rounded-full overflow-hidden">
-            <div
-              className="h-full bg-gradient-to-r from-pink-500 to-rose-600 transition-all duration-300"
-              style={{ width: `${isMuted ? 0 : volume * 100}%` }}
-            />
+          {/* Enhanced Controls */}
+          <div className="flex items-center justify-between">
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => setCurrentTrack((prev) => (prev - 1 + soundtrack.length) % soundtrack.length)}
+              className="w-8 h-8 p-0 text-gray-600 hover:text-pink-600"
+              aria-label="Previous track"
+            >
+              ⏮
+            </Button>
+
+            <Button
+              size="sm"
+              onClick={() => setIsPlaying(!isPlaying)}
+              className="bg-gradient-to-r from-pink-500 to-rose-600 hover:from-pink-600 hover:to-rose-700 text-white rounded-full w-12 h-12 p-0 shadow-lg"
+              aria-label={isPlaying ? "Pause" : "Play"}
+            >
+              {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
+            </Button>
+
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => setCurrentTrack((prev) => (prev + 1) % soundtrack.length)}
+              className="w-8 h-8 p-0 text-gray-600 hover:text-pink-600"
+              aria-label="Next track"
+            >
+              ⏭
+            </Button>
+          </div>
+
+          {/* Volume Control */}
+          <div className="flex items-center space-x-2">
+            <Button 
+              size="sm" 
+              variant="ghost" 
+              onClick={() => setIsMuted(!isMuted)} 
+              className="w-6 h-6 p-0 text-gray-600"
+              aria-label={isMuted ? "Unmute" : "Mute"}
+            >
+              {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+            </Button>
+            <div className="flex-1 relative">
+              <input
+                type="range"
+                min="0"
+                max="100"
+                value={isMuted ? 0 : volume * 100}
+                onChange={(e) => setVolume(Number(e.target.value) / 100)}
+                className="w-full h-1 bg-gray-200 rounded-full appearance-none cursor-pointer"
+                style={{
+                  background: `linear-gradient(to right, #ec4899 0%, #ec4899 ${isMuted ? 0 : volume * 100}%, #e5e7eb ${isMuted ? 0 : volume * 100}%, #e5e7eb 100%)`
+                }}
+                aria-label="Volume control"
+              />
+            </div>
+          </div>
+
+          {/* Enhanced Progress Bar */}
+          <div className="space-y-1">
+            <div className="relative">
+              <input
+                type="range"
+                min="0"
+                max={soundtrack[currentTrack].durationSeconds}
+                value={progress}
+                onChange={(e) => setProgress(Number(e.target.value))}
+                className="w-full h-1 bg-gray-200 rounded-full appearance-none cursor-pointer"
+                style={{
+                  background: `linear-gradient(to right, #ec4899 0%, #ec4899 ${(progress / soundtrack[currentTrack].durationSeconds) * 100}%, #e5e7eb ${(progress / soundtrack[currentTrack].durationSeconds) * 100}%, #e5e7eb 100%)`
+                }}
+                aria-label="Track progress"
+              />
+            </div>
+            <div className="flex justify-between text-xs text-gray-500">
+              <span>{formatTime(progress)}</span>
+              <span>{soundtrack[currentTrack].duration}</span>
+            </div>
           </div>
         </div>
-
-        {/* Progress Bar */}
-        <div className="space-y-1">
-          <div className="h-1 bg-gray-200 rounded-full overflow-hidden">
-            <motion.div
-              className="h-full bg-gradient-to-r from-pink-500 to-rose-600"
-              animate={isPlaying ? { width: ["0%", "100%"] } : { width: "0%" }}
-              transition={{ duration: 30, ease: "linear", repeat: isPlaying ? Number.POSITIVE_INFINITY : 0 }}
-            />
-          </div>
-          <div className="flex justify-between text-xs text-gray-500">
-            <span>0:00</span>
-            <span>{soundtrack[currentTrack].duration}</span>
-          </div>
-        </div>
-      </div>
+      )}
     </motion.div>
   )
 }
 
-// Cinematic Hero Section
+// Enhanced Cinematic Hero Section
 function CinematicHero() {
   const { scrollY } = useScroll()
   const y = useTransform(scrollY, [0, 1000], [0, 300])
@@ -495,11 +651,12 @@ function CinematicHero() {
   const scale = useTransform(scrollY, [0, 800], [1, 1.1])
   const [mounted, setMounted] = useState(false)
   const [currentQuote, setCurrentQuote] = useState(0)
+  const [showStats, setShowStats] = useState(false)
 
   const romanticQuotes = [
     "A Love That Chose Us",
     "Written in the Stars",
-    "From Strangers to Soulmates",
+    "From Strangers to Soulmates", 
     "Our Beautiful Beginning",
     "Forever Starts Here",
   ]
@@ -509,52 +666,65 @@ function CinematicHero() {
     const interval = setInterval(() => {
       setCurrentQuote((prev) => (prev + 1) % romanticQuotes.length)
     }, 3000)
-    return () => clearInterval(interval)
-  }, [romanticQuotes.length])
 
-  const handleScrollToStory = () => {
-    if (typeof window !== "undefined") {
-      window.scrollTo({ top: window.innerHeight, behavior: "smooth" })
+    const statsTimer = setTimeout(() => setShowStats(true), 2000)
+
+    return () => {
+      clearInterval(interval)
+      clearTimeout(statsTimer)
     }
-  }
+  }, [])
+
+  const handleScrollToStory = useCallback(() => {
+    if (typeof window !== "undefined") {
+      const vh = window.innerHeight || 800
+      window.scrollTo({ top: vh, behavior: "smooth" })
+    }
+  }, [])
+
+  const stats = [
+    { number: "10", label: "Chapters", icon: BookOpen, color: "from-blue-500 to-blue-600" },
+    { number: "2+", label: "Years", icon: Calendar, color: "from-green-500 to-green-600" },
+    { number: "∞", label: "Memories", icon: Heart, color: "from-pink-500 to-pink-600" },
+    { number: "1", label: "Love Story", icon: Star, color: "from-yellow-500 to-yellow-600" },
+  ]
 
   return (
-    <motion.section
-      className="relative min-h-screen flex items-center justify-center overflow-hidden"
-      style={mounted ? { y, opacity } : {}}
-    >
-      {/* Cinematic Background */}
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      {/* Enhanced Background with better performance */}
       <motion.div
         className="absolute inset-0 bg-gradient-to-br from-pink-100 via-rose-100 to-red-100"
-        style={mounted ? { scale } : {}}
+        style={mounted ? { scale, y } : {}}
       >
         <div className="absolute inset-0 bg-[url('/placeholder.svg?height=1080&width=1920&text=Romantic+Cinematic+Background')] bg-cover bg-center opacity-30" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
       </motion.div>
 
-      {/* Particle System */}
-      <div className="absolute inset-0">
-        {[...Array(50)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-1 h-1 bg-pink-400/30 rounded-full"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-            animate={{
-              scale: [0, 1, 0],
-              opacity: [0, 1, 0],
-              y: [0, -100, -200],
-            }}
-            transition={{
-              duration: 8 + Math.random() * 4,
-              repeat: Number.POSITIVE_INFINITY,
-              delay: Math.random() * 8,
-            }}
-          />
-        ))}
-      </div>
+      {/* Optimized Particle System */}
+      {mounted && (
+        <div className="absolute inset-0" aria-hidden="true">
+          {Array.from({ length: 30 }, (_, i) => (
+            <motion.div
+              key={i}
+              className="absolute w-1 h-1 bg-pink-400/30 rounded-full"
+              style={{
+                left: `${(i * 3.33) % 100}%`,
+                top: `${(i * 7.14) % 100}%`,
+              }}
+              animate={{
+                scale: [0, 1, 0],
+                opacity: [0, 1, 0],
+                y: [0, -100, -200],
+              }}
+              transition={{
+                duration: 8 + (i % 4),
+                repeat: Infinity,
+                delay: i * 0.2,
+              }}
+            />
+          ))}
+        </div>
+      )}
 
       <div className="relative z-10 text-center px-4 max-w-7xl">
         <motion.div
@@ -562,7 +732,7 @@ function CinematicHero() {
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 2, ease: "easeOut" }}
         >
-          {/* Main Title with Cinematic Effect */}
+          {/* Main Title with improved animation */}
           <div className="relative h-40 md:h-48 flex items-center justify-center mb-12">
             <AnimatePresence mode="wait">
               <motion.h1
@@ -571,7 +741,7 @@ function CinematicHero() {
                 animate={{ opacity: 1, y: 0, rotateX: 0 }}
                 exit={{ opacity: 0, y: -100, rotateX: 90 }}
                 transition={{ duration: 1.2, ease: "easeOut" }}
-                className="text-6xl md:text-8xl lg:text-9xl font-serif font-bold"
+                className="text-4xl md:text-6xl lg:text-8xl font-serif font-bold"
                 style={{
                   background: "linear-gradient(135deg, #ec4899, #f43f5e, #dc2626, #f59e0b)",
                   WebkitBackgroundClip: "text",
@@ -585,7 +755,7 @@ function CinematicHero() {
             </AnimatePresence>
           </div>
 
-          {/* Subtitle with Typewriter Effect */}
+          {/* Enhanced Subtitle */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -593,7 +763,7 @@ function CinematicHero() {
             className="space-y-6 mb-16"
           >
             <motion.p
-              className="text-3xl md:text-4xl text-gray-700 font-light italic leading-relaxed"
+              className="text-2xl md:text-3xl text-gray-700 font-light italic leading-relaxed"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.2, duration: 0.8 }}
@@ -601,7 +771,7 @@ function CinematicHero() {
               "From Beawar and Sarasar to Jaipur... from strangers to soulmates"
             </motion.p>
             <motion.p
-              className="text-xl md:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed"
+              className="text-lg md:text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.4, duration: 0.8 }}
@@ -611,79 +781,82 @@ function CinematicHero() {
             </motion.p>
           </motion.div>
 
-          {/* Interactive Elements */}
+          {/* Enhanced Love Statistics with better animations */}
+          <AnimatePresence>
+            {showStats && (
+              <motion.div
+                initial={{ y: 50, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 1 }}
+                className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-12"
+              >
+                {stats.map((stat, index) => {
+                  const IconComponent = stat.icon
+                  return (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                      animate={{ opacity: 1, scale: 1, y: 0 }}
+                      transition={{ delay: 0.2 + index * 0.1, duration: 0.6 }}
+                      whileHover={{ scale: 1.05, y: -5 }}
+                      className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-pink-200/50 hover:shadow-2xl transition-all duration-300 group cursor-pointer"
+                    >
+                      <div className={`w-12 h-12 bg-gradient-to-br ${stat.color} rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300`}>
+                        <IconComponent className="w-6 h-6 text-white" />
+                      </div>
+                      <div className="text-3xl font-bold text-gray-900 mb-2">{stat.number}</div>
+                      <div className="text-gray-600 font-medium">{stat.label}</div>
+                    </motion.div>
+                  )
+                })}
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Enhanced Call to Action */}
           <motion.div
             initial={{ y: 50, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 2, duration: 1 }}
-            className="space-y-12"
+            transition={{ delay: 2.5, duration: 1 }}
+            className="space-y-8"
           >
-            {/* Love Statistics */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-              {[
-                { number: "10", label: "Chapters", icon: BookOpen },
-                { number: "2+", label: "Years", icon: Calendar },
-                { number: "∞", label: "Memories", icon: Heart },
-                { number: "1", label: "Love Story", icon: Star },
-              ].map((stat, index) => {
-                const IconComponent = stat.icon
-                return (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 2.2 + index * 0.1, duration: 0.6 }}
-                    className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-pink-200/50 hover:shadow-2xl transition-all duration-300"
-                  >
-                    <div className="w-12 h-12 bg-gradient-to-br from-pink-500 to-rose-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <IconComponent className="w-6 h-6 text-white" />
-                    </div>
-                    <div className="text-3xl font-bold text-gray-900 mb-2">{stat.number}</div>
-                    <div className="text-gray-600 font-medium">{stat.label}</div>
-                  </motion.div>
-                )
-              })}
-            </div>
-
-            {/* Call to Action */}
             <Button
               size="lg"
               onClick={handleScrollToStory}
-              className="bg-gradient-to-r from-pink-500 via-rose-500 to-red-500 hover:from-pink-600 hover:via-rose-600 hover:to-red-600 text-white px-20 py-8 text-2xl rounded-full shadow-2xl border-0 transition-all duration-500 hover:scale-105 group relative overflow-hidden"
+              className="bg-gradient-to-r from-pink-500 via-rose-500 to-red-500 hover:from-pink-600 hover:via-rose-600 hover:to-red-600 text-white px-16 py-6 text-xl rounded-full shadow-2xl border-0 transition-all duration-500 hover:scale-105 group relative overflow-hidden"
             >
               <motion.div
                 className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent"
                 animate={{ x: [-100, 300] }}
-                transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
               />
               Begin Our Story
               <motion.div
                 animate={{ x: [0, 8, 0] }}
-                transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
+                transition={{ duration: 2, repeat: Infinity }}
                 className="ml-4 group-hover:scale-110 transition-transform duration-300"
               >
-                <BookOpen className="w-8 h-8" />
+                <BookOpen className="w-6 h-6" />
               </motion.div>
             </Button>
 
-            {/* Decorative Hearts */}
+            {/* Decorative Hearts with improved performance */}
             <motion.div
               className="flex justify-center space-x-4"
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
-              transition={{ delay: 2.8, duration: 0.8 }}
+              transition={{ delay: 3, duration: 0.8 }}
             >
-              {[...Array(9)].map((_, i) => (
+              {Array.from({ length: 7 }, (_, i) => (
                 <motion.div
                   key={i}
                   animate={{
                     scale: [1, 1.4, 1],
                     opacity: [0.6, 1, 0.6],
-                    rotate: [0, 360],
                   }}
                   transition={{
                     duration: 4,
-                    repeat: Number.POSITIVE_INFINITY,
+                    repeat: Infinity,
                     delay: i * 0.3,
                   }}
                   className="text-pink-400"
@@ -701,11 +874,11 @@ function CinematicHero() {
         className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 3 }}
+        transition={{ delay: 3.5 }}
       >
         <motion.div
           animate={{ y: [0, 15, 0] }}
-          transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
+          transition={{ duration: 2, repeat: Infinity }}
           className="flex flex-col items-center space-y-3 text-pink-600"
         >
           <span className="text-sm font-medium bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg">
@@ -718,18 +891,19 @@ function CinematicHero() {
           </div>
         </motion.div>
       </motion.div>
-    </motion.section>
+    </section>
   )
 }
 
-// Enhanced Story Chapter with Interactive Elements
+// Enhanced Story Chapter with better performance and features
 function EnhancedStoryChapter({ chapter, index }: { chapter: (typeof storyChapters)[0]; index: number }) {
-  const ref = useRef(null)
+  const ref = useRef<HTMLElement>(null)
   const isInView = useInView(ref, { once: true, margin: "-50px" })
   const isEven = index % 2 === 0
   const [showMemories, setShowMemories] = useState(false)
   const [showVoiceNote, setShowVoiceNote] = useState(false)
   const [heartbeatActive, setHeartbeatActive] = useState(false)
+  const [imageFullscreen, setImageFullscreen] = useState(false)
 
   const IconComponent = chapter.icon
 
@@ -741,11 +915,27 @@ function EnhancedStoryChapter({ chapter, index }: { chapter: (typeof storyChapte
   const y = useTransform(scrollYProgress, [0, 1], [100, -100])
   const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0])
 
+  const handleShareChapter = useCallback(() => {
+    if (navigator.share) {
+      navigator.share({
+        title: `${chapter.title} - Our Love Story`,
+        text: chapter.subtitle,
+        url: `${window.location.href}#chapter-${chapter.id}`,
+      })
+    }
+  }, [chapter])
+
+  const handleDownloadImage = useCallback(() => {
+    // In a real app, this would download the chapter image
+    console.log(`Downloading image for ${chapter.title}`)
+  }, [chapter.title])
+
   return (
     <motion.section
+      id={`chapter-${chapter.id}`}
       ref={ref}
       className={`relative min-h-screen flex items-center py-24 bg-gradient-to-br ${chapter.bgColor} overflow-hidden`}
-      style={{ opacity }}
+      style={{ opacity, position: "relative" }}
     >
       {/* Enhanced Background Pattern */}
       <div className="absolute inset-0">
@@ -758,14 +948,14 @@ function EnhancedStoryChapter({ chapter, index }: { chapter: (typeof storyChapte
           />
         </div>
 
-        {/* Floating Elements */}
-        {[...Array(15)].map((_, i) => (
+        {/* Optimized floating elements */}
+        {Array.from({ length: 8 }, (_, i) => (
           <motion.div
             key={i}
             className="absolute"
             style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
+              left: `${(i * 12.5) % 100}%`,
+              top: `${(i * 17.5) % 100}%`,
             }}
             animate={{
               y: [0, -30, 0],
@@ -774,9 +964,9 @@ function EnhancedStoryChapter({ chapter, index }: { chapter: (typeof storyChapte
               opacity: [0.1, 0.3, 0.1],
             }}
             transition={{
-              duration: 8 + Math.random() * 4,
-              repeat: Number.POSITIVE_INFINITY,
-              delay: Math.random() * 5,
+              duration: 8 + (i % 3),
+              repeat: Infinity,
+              delay: i * 0.5,
             }}
           >
             <div className="w-2 h-2 bg-pink-400/20 rounded-full" />
@@ -807,11 +997,11 @@ function EnhancedStoryChapter({ chapter, index }: { chapter: (typeof storyChapte
                     <motion.div
                       className="absolute inset-0 bg-white/20"
                       animate={{ rotate: [0, 360] }}
-                      transition={{ duration: 8, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+                      transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
                     />
                     <IconComponent className="w-10 h-10 text-white relative z-10" />
                   </motion.div>
-                  <div>
+                  <div className="flex-1">
                     <motion.p
                       className="text-sm font-medium text-gray-600 uppercase tracking-wider mb-2"
                       initial={{ opacity: 0, y: 20 }}
@@ -821,7 +1011,7 @@ function EnhancedStoryChapter({ chapter, index }: { chapter: (typeof storyChapte
                       {chapter.chapter}
                     </motion.p>
                     <motion.h2
-                      className="text-4xl lg:text-6xl font-serif text-gray-900 leading-tight"
+                      className="text-3xl lg:text-5xl font-serif text-gray-900 leading-tight"
                       initial={{ opacity: 0, y: 30 }}
                       animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
                       transition={{ delay: 0.5 }}
@@ -829,7 +1019,7 @@ function EnhancedStoryChapter({ chapter, index }: { chapter: (typeof storyChapte
                       {chapter.title}
                     </motion.h2>
                     <motion.p
-                      className="text-xl text-gray-600 italic mt-2"
+                      className="text-lg text-gray-600 italic mt-2"
                       initial={{ opacity: 0, y: 20 }}
                       animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
                       transition={{ delay: 0.6 }}
@@ -839,37 +1029,38 @@ function EnhancedStoryChapter({ chapter, index }: { chapter: (typeof storyChapte
                   </div>
                 </div>
 
-                {/* Enhanced Metadata */}
-                <div className="flex flex-wrap items-center gap-4 text-sm">
+                {/* Enhanced Metadata with better responsiveness */}
+                <div className="flex flex-wrap items-center gap-3 text-sm">
                   <motion.div
-                    className="flex items-center bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg border border-pink-200/50"
+                    className="flex items-center bg-white/90 backdrop-blur-sm px-3 py-2 rounded-full shadow-lg border border-pink-200/50"
                     whileHover={{ scale: 1.05 }}
                   >
                     <MapPin className="w-4 h-4 mr-2 text-pink-500" />
-                    {chapter.location}
+                    <span className="truncate max-w-[120px]">{chapter.location}</span>
                   </motion.div>
                   <motion.div
-                    className="flex items-center bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg border border-rose-200/50"
+                    className="flex items-center bg-white/90 backdrop-blur-sm px-3 py-2 rounded-full shadow-lg border border-rose-200/50"
                     whileHover={{ scale: 1.05 }}
                   >
                     <Clock className="w-4 h-4 mr-2 text-rose-500" />
-                    {chapter.date}
+                    <span className="truncate max-w-[100px]">{chapter.date}</span>
                   </motion.div>
                   <motion.div
-                    className="flex items-center bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg border border-purple-200/50"
+                    className="flex items-center bg-white/90 backdrop-blur-sm px-3 py-2 rounded-full shadow-lg border border-purple-200/50"
                     whileHover={{ scale: 1.05 }}
                   >
                     <Music className="w-4 h-4 mr-2 text-purple-500" />
-                    {chapter.mood}
+                    <span className="truncate max-w-[100px]">{chapter.mood}</span>
                   </motion.div>
                   <motion.button
-                    className="flex items-center bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg border border-red-200/50 hover:bg-red-50 transition-colors"
+                    className="flex items-center bg-white/90 backdrop-blur-sm px-3 py-2 rounded-full shadow-lg border border-red-200/50 hover:bg-red-50 transition-colors"
                     onClick={() => setHeartbeatActive(!heartbeatActive)}
                     whileHover={{ scale: 1.05 }}
+                    aria-label={`${heartbeatActive ? 'Stop' : 'Start'} heartbeat animation`}
                   >
                     <motion.div
                       animate={heartbeatActive ? { scale: [1, 1.3, 1] } : {}}
-                      transition={{ duration: 0.6, repeat: heartbeatActive ? Number.POSITIVE_INFINITY : 0 }}
+                      transition={{ duration: 0.6, repeat: heartbeatActive ? Infinity : 0 }}
                     >
                       <Heart className="w-4 h-4 mr-2 text-red-500 fill-current" />
                     </motion.div>
@@ -878,108 +1069,136 @@ function EnhancedStoryChapter({ chapter, index }: { chapter: (typeof storyChapte
                 </div>
               </div>
 
-              {/* Enhanced Story Content */}
-              <div className="space-y-8">
+              {/* Enhanced Story Content with better readability */}
+              <div className="space-y-6">
                 {chapter.content.map((paragraph, pIndex) => (
                   <motion.div
                     key={pIndex}
                     initial={{ opacity: 0, y: 30 }}
                     animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-                    transition={{ duration: 0.8, delay: 0.6 + pIndex * 0.2 }}
+                    transition={{ duration: 0.8, delay: 0.6 + pIndex * 0.1 }}
                     className="relative"
                   >
                     <motion.p
-                      className="text-lg md:text-xl text-gray-700 leading-relaxed font-light italic pl-8 relative"
+                      className="text-base md:text-lg text-gray-700 leading-relaxed font-light italic pl-8 relative"
                       whileHover={{ x: 5 }}
                       transition={{ duration: 0.3 }}
                     >
-                      <Quote className="w-6 h-6 text-pink-400 absolute left-0 top-0" />
+                      <Quote className="w-5 h-5 text-pink-400 absolute left-0 top-0 flex-shrink-0" />
                       {paragraph}
                     </motion.p>
                   </motion.div>
                 ))}
               </div>
 
-              {/* Interactive Elements */}
-              <div className="space-y-6">
-                {/* Memories Button */}
-                <motion.button
-                  onClick={() => setShowMemories(!showMemories)}
-                  className="flex items-center space-x-3 bg-white/90 backdrop-blur-sm px-6 py-3 rounded-2xl shadow-lg border border-pink-200/50 hover:shadow-xl transition-all duration-300 group"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <Camera className="w-5 h-5 text-pink-500 group-hover:scale-110 transition-transform" />
-                  <span className="font-medium text-gray-700">View Memories</span>
-                  <motion.div animate={{ rotate: showMemories ? 180 : 0 }} transition={{ duration: 0.3 }}>
-                    <ArrowDown className="w-4 h-4 text-gray-500" />
-                  </motion.div>
-                </motion.button>
+              {/* Enhanced Interactive Elements */}
+              <div className="space-y-4">
+                <div className="flex flex-wrap gap-3">
+                  {/* Memories Button */}
+                  <motion.button
+                    onClick={() => setShowMemories(!showMemories)}
+                    className="flex items-center space-x-2 bg-white/90 backdrop-blur-sm px-4 py-3 rounded-2xl shadow-lg border border-pink-200/50 hover:shadow-xl transition-all duration-300 group"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    aria-expanded={showMemories}
+                    aria-label="Toggle memories view"
+                  >
+                    <Camera className="w-4 h-4 text-pink-500 group-hover:scale-110 transition-transform" />
+                    <span className="font-medium text-gray-700 text-sm">Memories</span>
+                    <motion.div animate={{ rotate: showMemories ? 180 : 0 }} transition={{ duration: 0.3 }}>
+                      <ArrowDown className="w-4 h-4 text-gray-500" />
+                    </motion.div>
+                  </motion.button>
 
-                {/* Voice Note Button */}
-                <motion.button
-                  onClick={() => setShowVoiceNote(!showVoiceNote)}
-                  className="flex items-center space-x-3 bg-white/90 backdrop-blur-sm px-6 py-3 rounded-2xl shadow-lg border border-purple-200/50 hover:shadow-xl transition-all duration-300 group"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <Mic className="w-5 h-5 text-purple-500 group-hover:scale-110 transition-transform" />
-                  <span className="font-medium text-gray-700">Voice Note</span>
-                  {showVoiceNote && (
-                    <div className="flex space-x-1">
-                      {[...Array(4)].map((_, i) => (
-                        <motion.div
-                          key={i}
-                          className="w-1 h-4 bg-purple-400 rounded-full"
-                          animate={{ height: [4, 16, 4] }}
-                          transition={{
-                            duration: 0.8,
-                            repeat: Number.POSITIVE_INFINITY,
-                            delay: i * 0.2,
-                          }}
-                        />
-                      ))}
-                    </div>
-                  )}
-                </motion.button>
+                  {/* Voice Note Button */}
+                  <motion.button
+                    onClick={() => setShowVoiceNote(!showVoiceNote)}
+                    className="flex items-center space-x-2 bg-white/90 backdrop-blur-sm px-4 py-3 rounded-2xl shadow-lg border border-purple-200/50 hover:shadow-xl transition-all duration-300 group"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    aria-expanded={showVoiceNote}
+                    aria-label="Toggle voice note"
+                  >
+                    <Mic className="w-4 h-4 text-purple-500 group-hover:scale-110 transition-transform" />
+                    <span className="font-medium text-gray-700 text-sm">Voice Note</span>
+                    {showVoiceNote && (
+                      <div className="flex space-x-1" aria-hidden="true">
+                        {Array.from({ length: 3 }, (_, i) => (
+                          <motion.div
+                            key={i}
+                            className="w-1 h-3 bg-purple-400 rounded-full"
+                            animate={{ height: [3, 12, 3] }}
+                            transition={{
+                              duration: 0.8,
+                              repeat: Infinity,
+                              delay: i * 0.2,
+                            }}
+                          />
+                        ))}
+                      </div>
+                    )}
+                  </motion.button>
 
-                {/* Song Reference */}
+                  {/* Share Button */}
+                  <motion.button
+                    onClick={handleShareChapter}
+                    className="flex items-center space-x-2 bg-white/90 backdrop-blur-sm px-4 py-3 rounded-2xl shadow-lg border border-blue-200/50 hover:shadow-xl transition-all duration-300 group"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    aria-label="Share this chapter"
+                  >
+                    <Share2 className="w-4 h-4 text-blue-500 group-hover:scale-110 transition-transform" />
+                    <span className="font-medium text-gray-700 text-sm">Share</span>
+                  </motion.button>
+                </div>
+
+                {/* Enhanced Song Reference */}
                 <motion.div
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
                   transition={{ duration: 0.8, delay: 1 }}
-                  className={`bg-gradient-to-r ${chapter.color} p-8 rounded-3xl text-white shadow-2xl relative overflow-hidden`}
+                  className={`bg-gradient-to-r ${chapter.color} p-6 rounded-3xl text-white shadow-2xl relative overflow-hidden`}
                 >
                   <motion.div
-                    className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full"
+                    className="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full"
                     animate={{ rotate: [0, 360] }}
-                    transition={{ duration: 20, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
                     style={{ transform: "translate(50%, -50%)" }}
                   />
                   <div className="flex items-center space-x-4 relative z-10">
                     <motion.div
                       animate={{ rotate: [0, 360] }}
-                      transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+                      transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
                     >
-                      <Headphones className="w-8 h-8" />
+                      <Headphones className="w-6 h-6" />
                     </motion.div>
-                    <div>
-                      <p className="font-bold text-lg">Chapter Soundtrack</p>
-                      <p className="text-white/90 italic text-xl">"{chapter.song}"</p>
+                    <div className="flex-1">
+                      <p className="font-bold text-base">Chapter Soundtrack</p>
+                      <p className="text-white/90 italic text-lg">"{chapter.song}"</p>
                       <p className="text-white/70 text-sm mt-1">Perfect for this moment</p>
                     </div>
+                    {chapter.soundtrack && (
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="text-white hover:bg-white/20 p-2"
+                        aria-label="Open in Spotify"
+                      >
+                        <Music className="w-4 h-4" />
+                      </Button>
+                    )}
                   </div>
                 </motion.div>
               </div>
 
-              {/* Expandable Memories */}
+              {/* Expandable Memories with better layout */}
               <AnimatePresence>
                 {showMemories && (
                   <motion.div
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: "auto" }}
                     exit={{ opacity: 0, height: 0 }}
-                    className="space-y-4 overflow-hidden"
+                    className="space-y-3 overflow-hidden"
                   >
                     {chapter.memories.map((memory, i) => (
                       <motion.div
@@ -987,10 +1206,10 @@ function EnhancedStoryChapter({ chapter, index }: { chapter: (typeof storyChapte
                         initial={{ opacity: 0, x: isEven ? -30 : 30 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: i * 0.1 }}
-                        className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-pink-100"
+                        className="bg-white/95 backdrop-blur-sm rounded-2xl p-4 shadow-lg border border-pink-100"
                       >
-                        <p className="text-gray-700 italic flex items-center text-lg">
-                          <Sparkles className="w-5 h-5 text-pink-400 mr-3 flex-shrink-0" />
+                        <p className="text-gray-700 italic flex items-center text-base">
+                          <Sparkles className="w-4 h-4 text-pink-400 mr-3 flex-shrink-0" />
                           {memory}
                         </p>
                       </motion.div>
@@ -999,7 +1218,7 @@ function EnhancedStoryChapter({ chapter, index }: { chapter: (typeof storyChapte
                 )}
               </AnimatePresence>
 
-              {/* Voice Note Display */}
+              {/* Enhanced Voice Note Display */}
               <AnimatePresence>
                 {showVoiceNote && (
                   <motion.div
@@ -1013,18 +1232,18 @@ function EnhancedStoryChapter({ chapter, index }: { chapter: (typeof storyChapte
                         <Volume2 className="w-6 h-6 text-white" />
                       </div>
                       <div className="flex-1">
-                        <p className="text-gray-800 italic text-lg">"{chapter.voiceNote}"</p>
-                        <div className="flex items-center space-x-2 mt-2">
-                          <div className="flex space-x-1">
-                            {[...Array(20)].map((_, i) => (
+                        <p className="text-gray-800 italic text-base">"{chapter.voiceNote}"</p>
+                        <div className="flex items-center space-x-2 mt-3">
+                          <div className="flex space-x-1" aria-hidden="true">
+                            {Array.from({ length: 15 }, (_, i) => (
                               <div
                                 key={i}
-                                className="w-1 h-6 bg-purple-400 rounded-full"
-                                style={{ height: `${Math.random() * 24 + 8}px` }}
+                                className="w-1 bg-purple-400 rounded-full"
+                                style={{ height: `${Math.random() * 16 + 4}px` }}
                               />
                             ))}
                           </div>
-                          <span className="text-sm text-gray-600">0:15</span>
+                          <span className="text-sm text-gray-600 ml-2">0:15</span>
                         </div>
                       </div>
                     </div>
@@ -1044,42 +1263,59 @@ function EnhancedStoryChapter({ chapter, index }: { chapter: (typeof storyChapte
               style={{ y }}
             >
               <Card className="overflow-hidden shadow-2xl border-0 bg-white/95 backdrop-blur-sm hover:shadow-pink-500/20 transition-all duration-700">
-                <div className="relative h-96 lg:h-[500px] overflow-hidden">
+                <div className="relative h-80 lg:h-[400px] overflow-hidden">
                   <Image
                     src={chapter.image || "/placeholder.svg"}
-                    alt={chapter.title}
+                    alt={`${chapter.title} - ${chapter.subtitle}`}
                     fill
                     className="object-cover transition-transform duration-1000 group-hover:scale-110"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
 
                   {/* Enhanced Overlays */}
-                  <div className="absolute top-6 left-6">
+                  <div className="absolute top-4 left-4">
                     <motion.div
-                      className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/30"
+                      className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/30"
                       animate={{ rotate: [0, 360] }}
-                      transition={{ duration: 20, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+                      transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
                     >
-                      <span className="text-white font-bold text-2xl">{chapter.id}</span>
+                      <span className="text-white font-bold text-xl">{chapter.id}</span>
                     </motion.div>
                   </div>
 
-                  <div className="absolute top-6 right-6">
-                    <motion.div
-                      className="bg-white/20 backdrop-blur-sm rounded-full p-3 border border-white/30"
+                  <div className="absolute top-4 right-4 flex space-x-2">
+                    <motion.button
+                      onClick={() => setImageFullscreen(true)}
+                      className="bg-white/20 backdrop-blur-sm rounded-full p-2 border border-white/30 hover:bg-white/30 transition-colors"
                       whileHover={{ scale: 1.1 }}
+                      aria-label="View image fullscreen"
                     >
-                      <Heart className="w-6 h-6 text-white fill-current" />
-                    </motion.div>
+                      <Maximize className="w-4 h-4 text-white" />
+                    </motion.button>
+                    <motion.button
+                      onClick={handleDownloadImage}
+                      className="bg-white/20 backdrop-blur-sm rounded-full p-2 border border-white/30 hover:bg-white/30 transition-colors"
+                      whileHover={{ scale: 1.1 }}
+                      aria-label="Download image"
+                    >
+                      <Download className="w-4 h-4 text-white" />
+                    </motion.button>
                   </div>
 
-                  {/* Weather Indicator */}
-                  <div className="absolute bottom-6 left-6 right-6">
+                  {/* Weather and Emotion Indicator */}
+                  <div className="absolute bottom-4 left-4 right-4">
                     <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-4 space-y-2">
-                      <p className="text-gray-900 font-bold text-center text-lg italic">"{chapter.mood}"</p>
-                      <div className="flex items-center justify-center space-x-2 text-sm text-gray-600">
-                        <span>🌤️</span>
-                        <span>{chapter.weather}</span>
+                      <p className="text-gray-900 font-bold text-center text-base italic">"{chapter.mood}"</p>
+                      <div className="flex items-center justify-between text-sm text-gray-600">
+                        <div className="flex items-center space-x-1">
+                          <span>🌤️</span>
+                          <span className="truncate">{chapter.weather}</span>
+                        </div>
+                        <div className="flex items-center space-x-1">
+                          <span>💖</span>
+                          <span className="truncate">{chapter.emotion}</span>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -1088,35 +1324,74 @@ function EnhancedStoryChapter({ chapter, index }: { chapter: (typeof storyChapte
 
               {/* Enhanced Decorative Elements */}
               <motion.div
-                className="absolute -top-6 -right-6 w-12 h-12 bg-pink-400 rounded-full opacity-60"
+                className="absolute -top-4 -right-4 w-8 h-8 bg-pink-400 rounded-full opacity-60"
                 animate={{ scale: [1, 1.2, 1], rotate: [0, 180, 360] }}
-                transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY }}
+                transition={{ duration: 4, repeat: Infinity }}
               />
               <motion.div
-                className="absolute -bottom-6 -left-6 w-8 h-8 bg-rose-400 rounded-full opacity-40"
+                className="absolute -bottom-4 -left-4 w-6 h-6 bg-rose-400 rounded-full opacity-40"
                 animate={{ scale: [1, 1.3, 1], rotate: [360, 180, 0] }}
-                transition={{ duration: 6, repeat: Number.POSITIVE_INFINITY }}
-              />
-              <motion.div
-                className="absolute top-1/2 -right-4 w-6 h-6 bg-red-400 rounded-full opacity-50"
-                animate={{ y: [-10, 10, -10], x: [-5, 5, -5] }}
-                transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY }}
+                transition={{ duration: 6, repeat: Infinity }}
               />
             </motion.div>
           </div>
         </div>
       </div>
+
+      {/* Fullscreen Image Modal */}
+      <AnimatePresence>
+        {imageFullscreen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4"
+            onClick={() => setImageFullscreen(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.8 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0.8 }}
+              className="relative max-w-4xl max-h-full"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <Image
+                src={chapter.image || "/placeholder.svg"}
+                alt={`${chapter.title} - Fullscreen`}
+                width={800}
+                height={600}
+                className="rounded-lg shadow-2xl max-w-full max-h-full object-contain"
+              />
+              <Button
+                onClick={() => setImageFullscreen(false)}
+                className="absolute top-4 right-4 bg-white/20 hover:bg-white/30 text-white rounded-full p-2"
+                aria-label="Close fullscreen"
+              >
+                ✕
+              </Button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.section>
   )
 }
 
-// Spectacular Final Chapter
+// Enhanced Final Chapter with better effects
 function SpectacularFinalChapter() {
-  const ref = useRef(null)
+  const ref = useRef<HTMLElement>(null)
   const isInView = useInView(ref, { once: true })
   const [showMessage, setShowMessage] = useState(false)
   const [showFireworks, setShowFireworks] = useState(false)
   const [mounted, setMounted] = useState(false)
+  const [fireworkPositions] = useState(() => 
+    Array.from({ length: 10 }, (_, i) => ({
+      id: i,
+      x: 20 + (i * 8) % 60,
+      y: 20 + (i * 13) % 40,
+      delay: i * 0.3,
+    }))
+  )
 
   useEffect(() => {
     setMounted(true)
@@ -1125,7 +1400,7 @@ function SpectacularFinalChapter() {
   useEffect(() => {
     if (isInView && mounted) {
       const messageTimer = setTimeout(() => setShowMessage(true), 2000)
-      const fireworksTimer = setTimeout(() => setShowFireworks(true), 3000)
+      const fireworksTimer = setTimeout(()=> setShowFireworks(true), 3000)
       return () => {
         clearTimeout(messageTimer)
         clearTimeout(fireworksTimer)
@@ -1143,60 +1418,60 @@ function SpectacularFinalChapter() {
     >
       {/* Enhanced Starry Background */}
       {mounted && (
-        <div className="absolute inset-0">
-          {[...Array(200)].map((_, i) => (
+        <div className="absolute inset-0" aria-hidden="true">
+          {Array.from({ length: 100 }, (_, i) => (
             <motion.div
               key={i}
               className="absolute bg-white rounded-full"
               style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                width: `${Math.random() * 3 + 1}px`,
-                height: `${Math.random() * 3 + 1}px`,
+                left: `${(i * 3.7) % 100}%`,
+                top: `${(i * 7.13) % 100}%`,
+                width: `${(i % 3) + 1}px`,
+                height: `${(i % 3) + 1}px`,
               }}
               animate={{
                 opacity: [0.3, 1, 0.3],
                 scale: [1, 1.5, 1],
               }}
               transition={{
-                duration: 3 + Math.random() * 4,
-                repeat: Number.POSITIVE_INFINITY,
-                delay: Math.random() * 5,
+                duration: 3 + (i % 4),
+                repeat: Infinity,
+                delay: (i % 10) * 0.5,
               }}
             />
           ))}
         </div>
       )}
 
-      {/* Fireworks */}
+      {/* Optimized Fireworks */}
       {showFireworks && mounted && (
         <div className="absolute inset-0 pointer-events-none">
-          {[...Array(15)].map((_, i) => (
+          {fireworkPositions.map((firework) => (
             <motion.div
-              key={i}
+              key={firework.id}
               className="absolute"
-              initial={{
-                x: Math.random() * window.innerWidth,
-                y: Math.random() * window.innerHeight * 0.6 + window.innerHeight * 0.2,
+              style={{
+                left: `${firework.x}%`,
+                top: `${firework.y}%`,
               }}
             >
-              {[...Array(20)].map((_, j) => (
+              {Array.from({ length: 16 }, (_, j) => (
                 <motion.div
                   key={j}
-                  className="absolute w-4 h-4 rounded-full"
+                  className="absolute w-3 h-3 rounded-full"
                   style={{
                     backgroundColor: ["#ff6b9d", "#feca57", "#48dbfb", "#ff9ff3", "#54a0ff"][j % 5],
                   }}
                   initial={{ x: 0, y: 0, opacity: 1, scale: 1 }}
                   animate={{
-                    x: Math.cos((j * 18 * Math.PI) / 180) * (100 + Math.random() * 100),
-                    y: Math.sin((j * 18 * Math.PI) / 180) * (100 + Math.random() * 100),
+                    x: Math.cos((j * 22.5 * Math.PI) / 180) * (60 + Math.random() * 40),
+                    y: Math.sin((j * 22.5 * Math.PI) / 180) * (60 + Math.random() * 40),
                     opacity: 0,
                     scale: 0,
                   }}
                   transition={{
-                    duration: 2 + Math.random(),
-                    delay: i * 0.3 + Math.random() * 0.5,
+                    duration: 2 + Math.random() * 0.5,
+                    delay: firework.delay + Math.random() * 0.5,
                     ease: "easeOut",
                   }}
                 />
@@ -1213,7 +1488,7 @@ function SpectacularFinalChapter() {
           transition={{ duration: 2, delay: 0.5 }}
         >
           <motion.h1
-            className="text-7xl md:text-9xl lg:text-[12rem] font-serif text-white mb-16 drop-shadow-2xl"
+            className="text-5xl md:text-7xl lg:text-8xl font-serif text-white mb-16 drop-shadow-2xl"
             animate={{
               textShadow: [
                 "0 0 30px #f472b6, 0 0 60px #ec4899, 0 0 90px #dc2626",
@@ -1221,7 +1496,7 @@ function SpectacularFinalChapter() {
                 "0 0 30px #f472b6, 0 0 60px #ec4899, 0 0 90px #dc2626",
               ],
             }}
-            transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY }}
+            transition={{ duration: 4, repeat: Infinity }}
           >
             Always Yours
           </motion.h1>
@@ -1233,16 +1508,16 @@ function SpectacularFinalChapter() {
             className="space-y-12 mb-20"
           >
             <motion.p
-              className="text-3xl md:text-4xl text-white/90 font-light italic leading-relaxed max-w-5xl mx-auto"
+              className="text-2xl md:text-3xl text-white/90 font-light italic leading-relaxed max-w-4xl mx-auto"
               animate={{ scale: [1, 1.02, 1] }}
-              transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY }}
+              transition={{ duration: 4, repeat: Infinity }}
             >
               "This website is not a gift. It's a mirror of everything we've been, survived, and still dream of."
             </motion.p>
             <motion.p
-              className="text-2xl md:text-3xl text-white/80 font-light"
+              className="text-xl md:text-2xl text-white/80 font-light"
               animate={{ opacity: [0.8, 1, 0.8] }}
-              transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY }}
+              transition={{ duration: 3, repeat: Infinity }}
             >
               And this is just the beginning.
             </motion.p>
@@ -1254,26 +1529,26 @@ function SpectacularFinalChapter() {
                 initial={{ opacity: 0, y: 100, scale: 0.8 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 100, scale: 0.8 }}
-                className="bg-white/10 backdrop-blur-2xl rounded-3xl p-16 border border-white/20 shadow-2xl max-w-6xl mx-auto"
+                className="bg-white/10 backdrop-blur-2xl rounded-3xl p-12 border border-white/20 shadow-2xl max-w-5xl mx-auto"
               >
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}>
-                  <div className="flex justify-center mb-12">
+                  <div className="flex justify-center mb-8">
                     <motion.div
-                      className="w-24 h-24 bg-gradient-to-br from-pink-500 to-rose-600 rounded-full flex items-center justify-center relative overflow-hidden"
+                      className="w-20 h-20 bg-gradient-to-br from-pink-500 to-rose-600 rounded-full flex items-center justify-center relative overflow-hidden"
                       animate={{ rotate: [0, 360] }}
-                      transition={{ duration: 8, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+                      transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
                     >
                       <motion.div
                         className="absolute inset-0 bg-white/20"
                         animate={{ scale: [1, 1.2, 1], opacity: [0.2, 0.5, 0.2] }}
-                        transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
+                        transition={{ duration: 2, repeat: Infinity }}
                       />
-                      <Heart className="w-12 h-12 text-white fill-current relative z-10" />
+                      <Heart className="w-10 h-10 text-white fill-current relative z-10" />
                     </motion.div>
                   </div>
 
                   <motion.p
-                    className="text-white text-2xl md:text-3xl leading-relaxed italic mb-12 max-w-5xl mx-auto"
+                    className="text-white text-xl md:text-2xl leading-relaxed italic mb-8 max-w-4xl mx-auto"
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.8 }}
@@ -1285,14 +1560,14 @@ function SpectacularFinalChapter() {
                   </motion.p>
 
                   <motion.div
-                    className="flex items-center justify-center space-x-6 text-pink-300"
+                    className="flex items-center justify-center space-x-4 text-pink-300"
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 1.2 }}
                   >
-                    <Star className="w-8 h-8 fill-current" />
-                    <span className="text-xl font-medium">With all my love, always and forever</span>
-                    <Star className="w-8 h-8 fill-current" />
+                    <Star className="w-6 h-6 fill-current" />
+                    <span className="text-lg font-medium">With all my love, always and forever</span>
+                    <Star className="w-6 h-6 fill-current" />
                   </motion.div>
                 </motion.div>
               </motion.div>
@@ -1300,12 +1575,12 @@ function SpectacularFinalChapter() {
           </AnimatePresence>
 
           <motion.div
-            className="flex justify-center space-x-4 mt-16"
+            className="flex justify-center space-x-3 mt-16"
             initial={{ scale: 0 }}
             animate={isInView ? { scale: 1 } : { scale: 0 }}
             transition={{ delay: 3, type: "spring", stiffness: 200 }}
           >
-            {[...Array(13)].map((_, i) => (
+            {Array.from({ length: 9 }, (_, i) => (
               <motion.div
                 key={i}
                 animate={{
@@ -1315,11 +1590,11 @@ function SpectacularFinalChapter() {
                 }}
                 transition={{
                   duration: 5,
-                  repeat: Number.POSITIVE_INFINITY,
+                  repeat: Infinity,
                   delay: i * 0.4,
                 }}
               >
-                <Heart className="w-10 h-10 text-pink-300 fill-current" />
+                <Heart className="w-8 h-8 text-pink-300 fill-current" />
               </motion.div>
             ))}
           </motion.div>
@@ -1331,8 +1606,41 @@ function SpectacularFinalChapter() {
 
 // Main Component
 export default function UltimateRomanticLoveStory() {
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    // Simulate loading time for better UX
+    const timer = setTimeout(() => setLoading(false), 1500)
+    return () => clearTimeout(timer)
+  }, [])
+
+  if (loading) {
+    return (
+      <div className="fixed inset-0 bg-gradient-to-br from-pink-100 via-rose-100 to-red-100 flex items-center justify-center z-50">
+        <motion.div
+          className="text-center space-y-6"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+        >
+          <motion.div
+            className="w-16 h-16 border-4 border-pink-400 border-t-transparent rounded-full mx-auto"
+            animate={{ rotate: 360 }}
+            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+          />
+          <motion.h2
+            className="text-2xl font-serif text-gray-700"
+            animate={{ opacity: [0.5, 1, 0.5] }}
+            transition={{ duration: 2, repeat: Infinity }}
+          >
+            Loading Our Love Story...
+          </motion.h2>
+        </motion.div>
+      </div>
+    )
+  }
+
   return (
-    <div className="relative">
+    <div className="relative" role="main">
       <EnhancedFloatingElements />
       <AdvancedMusicPlayer />
 
