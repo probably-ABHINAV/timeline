@@ -347,7 +347,7 @@ function EnhancedFloatingElements() {
           className="absolute"
           initial={{
             x: `${heart.initialX}vw`,
-            y: `${heart.initialY}vh`,
+            y: heart.initialY + "vh",
             rotate: 0,
             scale: heart.scale,
           }}
