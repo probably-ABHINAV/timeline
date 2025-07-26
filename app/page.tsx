@@ -343,7 +343,7 @@ function EnhancedFloatingElements() {
       {/* Optimized Floating Hearts */}
       {elements.hearts.map((heart) => (
         <motion.div
-          key={`heart-${heart.id}`}
+          key={"heart-" + heart.id + ""}
           className="absolute"
           initial={{
             x: heart.initialX + "vw",
@@ -370,7 +370,7 @@ function EnhancedFloatingElements() {
       {/* Optimized Floating Sparkles */}
       {elements.sparkles.map((sparkle) => (
         <motion.div
-          key={`sparkle-${sparkle.id}`}
+          key={"sparkle-" + sparkle.id + ""}
           className="absolute"
           style={{
             left: `sparkle.left + "%",
@@ -394,7 +394,7 @@ function EnhancedFloatingElements() {
       {/* Optimized Music Notes */}
       {elements.notes.map((note) => (
         <motion.div
-          key={`note-${note.id}`}
+          key={"note-" + note.id + ""}
           className="absolute text-purple-300/20"
           style={{
             left: `note.left + "%",
@@ -656,7 +656,7 @@ function CinematicHero() {
                       whileHover={{ scale: 1.05, y: -5 }}
                       className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-pink-200/50 hover:shadow-2xl transition-all duration-300 group cursor-pointer"
                     >
-                      <div className={`w-12 h-12 bg-gradient-to-br ${stat.color} rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300`}>
+                      <div className={"w-12 h-12 bg-gradient-to-br " + stat.color + " rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300"}>
                         <IconComponent className="w-6 h-6 text-white" />
                       </div>
                       <div className="text-3xl font-bold text-gray-900 mb-2">{stat.number}</div>
@@ -793,7 +793,7 @@ function EnhancedStoryChapter({ chapter, index }: { chapter: (typeof storyChapte
     <motion.section
       id={`chapter-${chapter.id}`}
       ref={ref}
-      className={`relative min-h-screen flex items-center py-24 bg-gradient-to-br ${chapter.bgColor} overflow-hidden`}
+      className={"relative min-h-screen flex items-center py-24 bg-gradient-to-br " + chapter.bgColor + " overflow-hidden"}
       style={{ opacity }}
     >
       {/* Enhanced Background Pattern */}
@@ -835,7 +835,7 @@ function EnhancedStoryChapter({ chapter, index }: { chapter: (typeof storyChapte
 
       <div className="container mx-auto px-4 relative z-10">
         <div
-          className={`flex flex-col lg:flex-row items-center gap-16 ${isEven ? "lg:flex-row" : "lg:flex-row-reverse"}`}
+          className={"flex flex-col lg:flex-row items-center gap-16 " + isEven ? "lg:flex-row" : "lg:flex-row-reverse" + ""}
         >
           {/* Enhanced Content Side */}
           <div className="flex-1 max-w-2xl">
@@ -849,7 +849,7 @@ function EnhancedStoryChapter({ chapter, index }: { chapter: (typeof storyChapte
               <div className="space-y-6">
                 <div className="flex items-center space-x-6">
                   <motion.div
-                    className={`w-20 h-20 bg-gradient-to-br ${chapter.color} rounded-full flex items-center justify-center shadow-2xl relative overflow-hidden`}
+                    className={"w-20 h-20 bg-gradient-to-br " + chapter.color + " rounded-full flex items-center justify-center shadow-2xl relative overflow-hidden"}
                     whileHover={{ scale: 1.1, rotate: 360 }}
                     transition={{ duration: 0.6 }}
                   >
@@ -915,7 +915,7 @@ function EnhancedStoryChapter({ chapter, index }: { chapter: (typeof storyChapte
                     className="flex items-center bg-white/90 backdrop-blur-sm px-3 py-2 rounded-full shadow-lg border border-red-200/50 hover:bg-red-50 transition-colors"
                     onClick={() => setHeartbeatActive(!heartbeatActive)}
                     whileHover={{ scale: 1.05 }}
-                    aria-label={`${heartbeatActive ? 'Stop' : 'Start'} heartbeat animation`}
+                    aria-label={"" + heartbeatActive ? 'Stop' : 'Start' + " heartbeat animation"}
                   >
                     <motion.div
                       animate={heartbeatActive ? { scale: [1, 1.3, 1] } : {}}
@@ -1016,7 +1016,7 @@ function EnhancedStoryChapter({ chapter, index }: { chapter: (typeof storyChapte
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
                   transition={{ duration: 0.8, delay: 1 }}
-                  className={`bg-gradient-to-r ${chapter.color} p-6 rounded-3xl text-white shadow-2xl relative overflow-hidden`}
+                  className={"bg-gradient-to-r " + chapter.color + " p-6 rounded-3xl text-white shadow-2xl relative overflow-hidden"}
                 >
                   <motion.div
                     className="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full"
@@ -1098,7 +1098,7 @@ function EnhancedStoryChapter({ chapter, index }: { chapter: (typeof storyChapte
                               <div
                                 key={i}
                                 className="w-1 bg-purple-400 rounded-full"
-                                style={{ height: `${Math.random() * 16 + 4}px` }}
+                                style={{ height: Math.random() * 16 + 4 + "px" }}
                               />
                             ))}
                           </div>
@@ -1125,7 +1125,7 @@ function EnhancedStoryChapter({ chapter, index }: { chapter: (typeof storyChapte
                 <div className="relative h-80 lg:h-[400px] overflow-hidden">
                   <Image
                     src={chapter.image || "/placeholder.svg"}
-                    alt={`${chapter.title} - ${chapter.subtitle}`}
+                    alt={"" + chapter.title + " - ${chapter.subtitle}"}
                     fill
                     className="object-cover transition-transform duration-1000 group-hover:scale-110"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -1216,7 +1216,7 @@ function EnhancedStoryChapter({ chapter, index }: { chapter: (typeof storyChapte
             >
               <Image
                 src={chapter.image || "/placeholder.svg"}
-                alt={`${chapter.title} - Fullscreen`}
+                alt={"" + chapter.title + " - Fullscreen"}
                 width={800}
                 height={600}
                 className="rounded-lg shadow-2xl max-w-full max-h-full object-contain"
@@ -1285,8 +1285,8 @@ function SpectacularFinalChapter() {
               style={{
                 left: `(i * 3.7) % 100 + "%",
                 top: `(i * 7.13) % 100 + "%",
-                width: `${(i % 3) + 1}px`,
-                height: `${(i % 3) + 1}px`,
+                width: (i % 3) + 1 + "px",
+                height: (i % 3) + 1 + "px",
               }}
               animate={{
                 opacity: [0.3, 1, 0.3],
