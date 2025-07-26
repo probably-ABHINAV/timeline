@@ -373,8 +373,8 @@ function EnhancedFloatingElements() {
           key={`sparkle-${sparkle.id}`}
           className="absolute"
           style={{
-            left: `${sparkle.left}%`,
-            top: `${sparkle.top}%`,
+            left: `sparkle.left + "%",
+            top: `sparkle.top + "%",
           }}
           animate={{
             scale: [0, 1, 0],
@@ -397,8 +397,8 @@ function EnhancedFloatingElements() {
           key={`note-${note.id}`}
           className="absolute text-purple-300/20"
           style={{
-            left: `${note.left}%`,
-            top: `${note.top}%`,
+            left: `note.left + "%",
+            top: `note.top + "%",
           }}
           animate={{
             y: [-20, -40, -20],
@@ -420,340 +420,80 @@ function EnhancedFloatingElements() {
 
 // Enhanced Music Player with better controls
 function AdvancedMusicPlayer() {
-  const [isPlaying, setIsPlaying] = useState(false)
-  const [currentTrack, setCurrentTrack] = useState(0)
-  const [volume, setVolume] = useState(0.7)
-  const [isMuted, setIsMuted] = useState(false)
-  const [isMinimized, setIsMinimized] = useState(true) //hide initially
-  const [mounted, setMounted] = useState(false)
-  const [progress, setProgress] = useState(0)
-  const [audioContext, setAudioContext] = useState<AudioContext | null>(null)
-  const [gainNode, setGainNode] = useState<GainNode | null>(null)
-  const [oscillator, setOscillator] = useState<OscillatorNode | null>(null)
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [volume, setVolume] = useState(0.7);
+  const [isMuted, setIsMuted] = useState(false);
+  const [isMinimized, setIsMinimized] = useState(true);
+  const [progress, setProgress] = useState(0);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    setMounted(true)
-    
-    // Initialize Web Audio API for background music simulation
-    const initAudio = async () => {
-      try {
-        if (typeof window !== 'undefined' && window.AudioContext) {
-          const context = new AudioContext()
-          const gain = context.createGain()
-          gain.connect(context.destination)
-          setAudioContext(context)
-          setGainNode(gain)
-        }
-      } catch (error) {
-        console.log('Audio context initialization failed:', error)
-      }
-    }
-
-    initAudio()
+    const audio = new Audio("/music/sample.mp3"); // Replace with actual audio path
+    audio.loop = true;
+    audio.volume = volume;
+    audioRef.current = audio;
 
     return () => {
-      // Cleanup will be handled when component unmounts
-    }
-  }, [])
-
-  const soundtrack = [
-    { 
-      title: "Ambient Piano & Wind Chimes", 
-      artist: "Romantic Instrumentals", 
-      duration: "4:32", 
-      durationSeconds: 272,
-      frequency: 261.63 // C4
-    },
-    { 
-      title: "Dil-e-Baadat", 
-      artist: "Instrumental Version", 
-      duration: "3:45", 
-      durationSeconds: 225,
-      frequency: 293.66 // D4
-    },
-    { 
-      title: "Soft Romantic Melodies", 
-      artist: "Love Story OST", 
-      duration: "5:12", 
-      durationSeconds: 312,
-      frequency: 329.63 // E4
-    },
-    { 
-      title: "Our Love Theme", 
-      artist: "Custom Composition", 
-      duration: "4:18", 
-      durationSeconds: 258,
-      frequency: 349.23 // F4
-    },
-  ]
-
-  // Start/stop audio generation
-  useEffect(() => {
-    if (!audioContext || !gainNode) return
-
-    if (isPlaying && !oscillator) {
-      try {
-        const osc = audioContext.createOscillator()
-        osc.type = 'sine'
-        osc.frequency.setValueAtTime(soundtrack[currentTrack].frequency, audioContext.currentTime)
-        osc.connect(gainNode)
-        osc.start()
-        setOscillator(osc)
-      } catch (error) {
-        console.log('Audio context error:', error)
-      }
-    } else if (!isPlaying && oscillator) {
-      try {
-        oscillator.stop()
-        setOscillator(null)
-      } catch (error) {
-        console.log('Oscillator stop error:', error)
-      }
-    }
-
-    return () => {
-      if (oscillator) {
-        try {
-          oscillator.stop()
-        } catch (e) {
-          // Oscillator already stopped
-        }
-      }
-    }
-  }, [isPlaying, audioContext, gainNode, currentTrack])
-
-  // Update volume
-  useEffect(() => {
-    if (gainNode) {
-      gainNode.gain.setValueAtTime(isMuted ? 0 : volume * 0.1, audioContext?.currentTime || 0)
-    }
-  }, [volume, isMuted, gainNode, audioContext])
+      audio.pause();
+      audioRef.current = null;
+    };
+  }, []);
 
   useEffect(() => {
-    if (!isPlaying) return
-
     const interval = setInterval(() => {
-      setProgress((prev) => {
-        const newProgress = prev + 1
-        if (newProgress >= soundtrack[currentTrack].durationSeconds) {
-          setCurrentTrack((prev) => (prev + 1) % soundtrack.length)
-          return 0
-        }
-        return newProgress
-      })
-    }, 1000)
-
-    return () => clearInterval(interval)
-  }, [isPlaying, currentTrack])
-
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60)
-    const secs = seconds % 60
-    return `${mins}:${secs.toString().padStart(2, '0')}`
-  }
-
-  const handleShare = () => {
-    try {
-      if (typeof window !== 'undefined' && navigator.share) {
-        navigator.share({
-          title: 'Our Love Story',
-          text: `Currently listening to: ${soundtrack[currentTrack].title}`,
-          url: window.location.href,
-        }).catch(err => console.log('Share cancelled'))
+      if (audioRef.current && isPlaying) {
+        setProgress((audioRef.current.currentTime / audioRef.current.duration) * 100 || 0);
       }
-    } catch (error) {
-      console.log('Share not supported')
-    }
-  }
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [isPlaying]);
 
-  if (!mounted) return null
+  const togglePlay = () => {
+    if (!audioRef.current) return;
+    if (isPlaying) {
+      audioRef.current.pause();
+    } else {
+      audioRef.current.play().catch((e) => console.error("Playback error:", e));
+    }
+    setIsPlaying(!isPlaying);
+  };
+
+  const changeVolume = (val: number) => {
+    if (audioRef.current) {
+      audioRef.current.volume = val;
+    }
+    setVolume(val);
+    if (val === 0) setIsMuted(true);
+    else setIsMuted(false);
+  };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className={`fixed top-6 right-6 z-50 bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-pink-200/50 transition-all duration-300 ${
-        isMinimized ? 'w-16 h-16' : 'min-w-[320px]'
-      }`}
-    >
-      {isMinimized ? (
-        <button
-          onClick={() => setIsMinimized(false)}
-          className="w-full h-full flex items-center justify-center group"
-          aria-label="Expand music player"
-        >
-          <motion.div
-            animate={isPlaying ? { rotate: 360 } : {}}
-            transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-          >
-            <Headphones className="w-8 h-8 text-pink-600 group-hover:scale-110 transition-transform" />
-          </motion.div>
-        </button>
-      ) : (
-        <div className="space-y-4 p-4">
-          {/* Header with minimize button */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <Headphones className="w-5 h-5 text-pink-600" />
-              <span className="text-sm font-medium text-gray-700">Now Playing</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Button
-                size="sm"
-                variant="ghost"
-                onClick={handleShare}
-                className="w-8 h-8 p-0 text-gray-600 hover:text-pink-600"
-                aria-label="Share current track"
-              >
-                <Share2 className="w-4 h-4" />
-              </Button>
-              <Button
-                size="sm"
-                variant="ghost"
-                onClick={() => setIsMinimized(true)}
-                className="w-8 h-8 p-0 text-gray-600 hover:text-pink-600"
-                aria-label="Minimize player"
-              >
-                <Eye className="w-4 h-4" />
-              </Button>
-            </div>
-          </div>
-
-          {/* Current Track Display */}
-          <div className="text-center">
-            <h4 className="font-semibold text-gray-900 text-sm truncate" title={soundtrack[currentTrack].title}>
-              {soundtrack[currentTrack].title}
-            </h4>
-            <p className="text-xs text-gray-600 truncate" title={soundtrack[currentTrack].artist}>
-              {soundtrack[currentTrack].artist}
-            </p>
-          </div>
-
-          {/* Enhanced Visualizer */}
-          <div className="flex justify-center items-end space-x-1 h-12" aria-hidden="true">
-            {Array.from({ length: 20 }, (_, i) => (
-              <motion.div
-                key={i}
-                className="w-1 bg-gradient-to-t from-pink-500 via-rose-400 to-red-400 rounded-full"
-                animate={
-                  isPlaying
-                    ? {
-                        height: [4, Math.random() * 40 + 8, 4],
-                      }
-                    : { height: 4 }
-                }
-                transition={{
-                  duration: 0.5 + Math.random() * 0.5,
-                  repeat: isPlaying ? Infinity : 0,
-                  delay: i * 0.05,
-                }}
-              />
-            ))}
-          </div>
-
-          {/* Enhanced Controls */}
-          <div className="flex items-center justify-between">
-            <Button
-              size="sm"
-              variant="ghost"
-              onClick={() => {
-                if (oscillator) {
-                  oscillator.stop()
-                  setOscillator(null)
-                }
-                setCurrentTrack((prev) => (prev - 1 + soundtrack.length) % soundtrack.length)
-                setProgress(0)
-              }}
-              className="w-8 h-8 p-0 text-gray-600 hover:text-pink-600"
-              aria-label="Previous track"
-            >
-              ⏮
-            </Button>
-
-            <Button
-              size="sm"
-              onClick={() => {
-                if (audioContext?.state === 'suspended') {
-                  audioContext.resume()
-                }
-                setIsPlaying(!isPlaying)
-              }}
-              className="bg-gradient-to-r from-pink-500 to-rose-600 hover:from-pink-600 hover:to-rose-700 text-white rounded-full w-12 h-12 p-0 shadow-lg"
-              aria-label={isPlaying ? "Pause" : "Play"}
-            >
-              {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
-            </Button>
-
-            <Button
-              size="sm"
-              variant="ghost"
-              onClick={() => {
-                if (oscillator) {
-                  oscillator.stop()
-                  setOscillator(null)
-                }
-                setCurrentTrack((prev) => (prev + 1) % soundtrack.length)
-                setProgress(0)
-              }}
-              className="w-8 h-8 p-0 text-gray-600 hover:text-pink-600"
-              aria-label="Next track"
-            >
-              ⏭
-            </Button>
-          </div>
-
-          {/* Volume Control */}
-          <div className="flex items-center space-x-2">
-            <Button 
-              size="sm" 
-              variant="ghost" 
-              onClick={() => setIsMuted(!isMuted)} 
-              className="w-6 h-6 p-0 text-gray-600"
-              aria-label={isMuted ? "Unmute" : "Mute"}
-            >
-              {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
-            </Button>
-            <div className="flex-1 relative">
-              <input
-                type="range"
-                min="0"
-                max="100"
-                value={isMuted ? 0 : volume * 100}
-                onChange={(e) => setVolume(Number(e.target.value) / 100)}
-                className="w-full h-1 bg-gray-200 rounded-full appearance-none cursor-pointer"
-                style={{
-                  background: `linear-gradient(to right, #ec4899 0%, #ec4899 ${isMuted ? 0 : volume * 100}%, #e5e7eb ${isMuted ? 0 : volume * 100}%, #e5e7eb 100%)`
-                }}
-                aria-label="Volume control"
-              />
-            </div>
-          </div>
-
-          {/* Enhanced Progress Bar */}
-          <div className="space-y-1">
-            <div className="relative">
-              <input
-                type="range"
-                min="0"
-                max={soundtrack[currentTrack].durationSeconds}
-                value={progress}
-                onChange={(e) => setProgress(Number(e.target.value))}
-                className="w-full h-1 bg-gray-200 rounded-full appearance-none cursor-pointer"
-                style={{
-                  background: `linear-gradient(to right, #ec4899 0%, #ec4899 ${(progress / soundtrack[currentTrack].durationSeconds) * 100}%, #e5e7eb ${(progress / soundtrack[currentTrack].durationSeconds) * 100}%, #e5e7eb 100%)`
-                }}
-                aria-label="Track progress"
-              />
-            </div>
-            <div className="flex justify-between text-xs text-gray-500">
-              <span>{formatTime(progress)}</span>
-              <span>{soundtrack[currentTrack].duration}</span>
-            </div>
-          </div>
-        </div>
-      )}
-    </motion.div>
-  )
+    <div className="fixed bottom-0 right-0 m-4 p-4 bg-black text-white rounded-2xl shadow-lg w-[300px]">
+      <div className="flex justify-between items-center">
+        <button onClick={togglePlay}>{isPlaying ? "Pause" : "Play"}</button>
+        <input
+          type="range"
+          min={0}
+          max={1}
+          step={0.01}
+          value={volume}
+          onChange={(e) => changeVolume(Number(e.target.value))}
+        />
+      </div>
+      <input
+        type="range"
+        min={0}
+        max={100}
+        value={progress}
+        onChange={(e) => {
+          const seekTime = (Number(e.target.value) / 100) * (audioRef.current?.duration || 0);
+          if (audioRef.current) audioRef.current.currentTime = seekTime;
+          setProgress(Number(e.target.value));
+        }}
+        className="w-full mt-2"
+      />
+    </div>
+  );
 }
 
 // Enhanced Cinematic Hero Section
@@ -802,8 +542,7 @@ function CinematicHero() {
     { number: "1", label: "Love Story", icon: Star, color: "from-yellow-500 to-yellow-600" },
   ]
 
-  ```text
-return (
+  return (
     <section 
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
     >
@@ -824,8 +563,8 @@ return (
               key={i}
               className="absolute w-1 h-1 bg-pink-400/30 rounded-full"
               style={{
-                left: `${(i * 3.33) % 100}%`,
-                top: `${(i * 7.14) % 100}%`,
+                left: `(i * 3.33) % 100 + "%",
+                top: `(i * 7.14) % 100 + "%",
               }}
               animate={{
                 scale: [0, 1, 0],
@@ -1074,8 +813,8 @@ function EnhancedStoryChapter({ chapter, index }: { chapter: (typeof storyChapte
             key={i}
             className="absolute"
             style={{
-              left: `${(i * 12.5) % 100}%`,
-              top: `${(i * 17.5) % 100}%`,
+              left: `(i * 12.5) % 100 + "%",
+              top: `(i * 17.5) % 100 + "%",
             }}
             animate={{
               y: [0, -30, 0],
@@ -1544,8 +1283,8 @@ function SpectacularFinalChapter() {
               key={i}
               className="absolute bg-white rounded-full"
               style={{
-                left: `${(i * 3.7) % 100}%`,
-                top: `${(i * 7.13) % 100}%`,
+                left: `(i * 3.7) % 100 + "%",
+                top: `(i * 7.13) % 100 + "%",
                 width: `${(i % 3) + 1}px`,
                 height: `${(i % 3) + 1}px`,
               }}
@@ -1571,8 +1310,8 @@ function SpectacularFinalChapter() {
               key={firework.id}
               className="absolute"
               style={{
-                left: `${firework.x}%`,
-                top: `${firework.y}%`,
+                left: `firework.x + "%",
+                top: `firework.y + "%",
               }}
             >
               {Array.from({ length: 16 }, (_, j) => (
