@@ -332,6 +332,8 @@ function EnhancedFloatingElements() {
     }
   })
 
+
+export default function Page() {
   useEffect(() => {
     setMounted(true)
   }, [])
@@ -1559,4 +1561,5 @@ export default function UltimateRomanticLoveStory() {
       </div>
     </ErrorBoundary>
   )
+}
 }
