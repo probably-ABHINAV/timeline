@@ -41,12 +41,12 @@ const storyChapters = [
     chapter: "Chapter 1",
     title: "That First Glimpse",
     subtitle: "When destiny wore a school uniform",
-    date: "June 2022",
-    location: "JPHS Jaipur",
+    date: "July 12, 2022",
+    location: "Tuition Center, Jaipur",
     content: [
-      "It was a regular day in June. Jaipur was new, unfamiliar, buzzing with unknown faces. And then, I saw you.",
+      "It was July 12th, 2022. Jaipur was new, unfamiliar, buzzing with unknown faces. And then, I saw you.",
       "In a place neither of us were supposed to be — a tuition center that wasn't yours, but still, somehow became ours.",
-      "Two outsiders in a new city, from Beawar and Sarasar — maybe that's why we noticed each other first.",
+      "Two outsiders in a new city, from Beawar and Salasar — maybe that's why we noticed each other first.",
       "And just like that, something shifted. Without a word, without a reason — you became a thought that refused to leave.",
     ],
     color: "from-rose-300 via-pink-400 to-rose-500",
@@ -54,7 +54,7 @@ const storyChapters = [
     icon: Clock,
     mood: "Serendipitous",
     song: "Serendipity - BTS",
-    image: "/placeholder.svg?height=600&width=800&text=First+Meeting+at+JPHS",
+    image: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=800&h=600&fit=crop&crop=center",
     memories: ["Unfamiliar faces", "Two outsiders", "A thought that refused to leave"],
     weather: "Warm June afternoon",
     heartbeat: 72,
@@ -66,14 +66,14 @@ const storyChapters = [
     id: 2,
     chapter: "Chapter 2",
     title: "Friends, Almost Enemies, and Something More",
-    subtitle: "12:47 AM - The message that changed everything",
+    subtitle: "12:56 AM - The message that changed everything",
     date: "July 31st, 2023",
     location: "Late Night Messages",
     content: [
       "From conversations in school… to misunderstandings that turned us into strangers…",
-      "From a proposal rejected… to late-night thoughts where I'd wonder if you were okay.",
+      "From being apart… to late-night thoughts where I'd wonder if you were okay.",
       "And then came your birthday — July 31st, 2023.",
-      "I waited till 12:47 AM, heart racing, words trembling. I sent a message — flirty, heartfelt, hoping we could restart.",
+      "I waited till 12:56 AM, heart racing, words trembling. I sent a message — flirty, heartfelt, hoping we could restart.",
       "And you didn't walk away.",
     ],
     color: "from-amber-300 via-orange-400 to-red-400",
@@ -81,11 +81,11 @@ const storyChapters = [
     icon: MessageCircle,
     mood: "Hopeful Reconnection",
     song: "Perfect - Ed Sheeran",
-    image: "/placeholder.svg?height=600&width=800&text=Birthday+Message+12:47+AM",
+    image: "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=800&h=600&fit=crop&crop=center",
     memories: ["Heart racing", "Words trembling", "You didn't walk away"],
     weather: "Midnight silence",
     heartbeat: 95,
-    voiceNote: "12:47 AM... I was so nervous typing that message...",
+    voiceNote: "12:56 AM... I was so nervous typing that message...",
     emotion: "Hope",
     soundtrack: "https://open.spotify.com/track/example2",
   },
@@ -99,7 +99,7 @@ const storyChapters = [
     content: [
       "We became inseparable. Daily chats, deep secrets, little laughs.",
       "We weren't just talking — we were becoming.",
-      "You once said: 'Love only happens once.'",
+      "You once said: 'I am a one man lady.'",
       "I smiled quietly — because I knew you were already it for me.",
       "Then came the night I confessed. And you did too — even though you'd planned to tell me at farewell.",
       "Love was never loud with us. It just… bloomed.",
@@ -109,7 +109,7 @@ const storyChapters = [
     icon: Heart,
     mood: "Blooming Love",
     song: "Say You Won't Let Go - James Arthur",
-    image: "/placeholder.svg?height=600&width=800&text=Daily+Chats+and+Confessions",
+    image: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=800&h=600&fit=crop&crop=center",
     memories: ["Daily chats", "Deep secrets", "Love just bloomed"],
     weather: "Gentle evening breeze",
     heartbeat: 88,
@@ -135,7 +135,7 @@ const storyChapters = [
     icon: Coffee,
     mood: "Electric Connection",
     song: "Dil-e-Baadat",
-    image: "/placeholder.svg?height=600&width=800&text=Chai+Kapi+First+Kiss",
+    image: "https://images.unsplash.com/photo-1511920170033-f8396924c348?w=800&h=600&fit=crop&crop=center",
     memories: ["Hands brushed", "That laugh", "Pure electricity"],
     weather: "Cozy café warmth",
     heartbeat: 102,
@@ -162,7 +162,7 @@ const storyChapters = [
     icon: Gift,
     mood: "Pure Joy",
     song: "Marry Me - Train",
-    image: "/placeholder.svg?height=600&width=800&text=Proposal+January+19th+2024",
+    image: "https://images.unsplash.com/photo-1465495976277-4387d4b0e4a6?w=800&h=600&fit=crop&crop=center",
     memories: ["Decorated room", "A flower waited", "Your eyes said yes"],
     weather: "Perfect January evening",
     heartbeat: 120,
@@ -187,7 +187,7 @@ const storyChapters = [
     icon: Sparkles,
     mood: "Adventure Together",
     song: "Adventure of a Lifetime - Coldplay",
-    image: "/placeholder.svg?height=600&width=800&text=Fun+Kingdom+Adventures",
+    image: "https://images.unsplash.com/photo-1503457574462-bd27bf96e4d9?w=800&h=600&fit=crop&crop=center",
     memories: ["Empty swings", "You won at Tekken", "Our fingerprints everywhere"],
     weather: "Sunny adventure day",
     heartbeat: 85,
@@ -212,7 +212,7 @@ const storyChapters = [
     icon: BookOpen,
     mood: "Supportive Love",
     song: "Count on Me - Bruno Mars",
-    image: "/placeholder.svg?height=600&width=800&text=Board+Exams+Support",
+    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=600&fit=crop&crop=center",
     memories: ["You made me a CV", "Never stopped believing", "10 minutes were home"],
     weather: "Stressful but supported",
     heartbeat: 78,
@@ -237,7 +237,7 @@ const storyChapters = [
     icon: Gift,
     mood: "Beautiful Surprise",
     song: "Perfect - Ed Sheeran",
-    image: "/placeholder.svg?height=600&width=800&text=Your+Proposal+October+2024",
+    image: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=800&h=600&fit=crop&crop=center",
     memories: ["Bouquet surprise", "We danced", "The necklace I still feel"],
     weather: "Room lit with love",
     heartbeat: 110,
@@ -264,7 +264,7 @@ const storyChapters = [
     icon: Moon,
     mood: "Learning Through Pain",
     song: "Fix You - Coldplay",
-    image: "/placeholder.svg?height=600&width=800&text=Difficult+Times+May+2025",
+    image: "https://images.unsplash.com/photo-1494621930069-4fd4b2e24a11?w=800&h=600&fit=crop&crop=center",
     memories: ["You planned my birthday", "I disappointed you", "Love doesn't end in silence"],
     weather: "Storm clouds",
     heartbeat: 65,
@@ -291,7 +291,7 @@ const storyChapters = [
     icon: Heart,
     mood: "Renewed Hope",
     song: "A Thousand Years - Christina Perri",
-    image: "/placeholder.svg?height=600&width=800&text=New+Beginning+Together",
+    image: "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=800&h=600&fit=crop&crop=center",
     memories: ["Every day I tried", "By God's grace", "You're my future"],
     weather: "New dawn breaking",
     heartbeat: 92,
@@ -427,17 +427,107 @@ function AdvancedMusicPlayer() {
   const [isMinimized, setIsMinimized] = useState(true) //hide initially
   const [mounted, setMounted] = useState(false)
   const [progress, setProgress] = useState(0)
+  const [audioContext, setAudioContext] = useState<AudioContext | null>(null)
+  const [gainNode, setGainNode] = useState<GainNode | null>(null)
+  const [oscillator, setOscillator] = useState<OscillatorNode | null>(null)
 
   useEffect(() => {
     setMounted(true)
+    
+    // Initialize Web Audio API for background music simulation
+    const initAudio = async () => {
+      try {
+        if (typeof window !== 'undefined' && window.AudioContext) {
+          const context = new AudioContext()
+          const gain = context.createGain()
+          gain.connect(context.destination)
+          setAudioContext(context)
+          setGainNode(gain)
+        }
+      } catch (error) {
+        console.log('Audio context initialization failed:', error)
+      }
+    }
+
+    initAudio()
+
+    return () => {
+      // Cleanup will be handled when component unmounts
+    }
   }, [])
 
   const soundtrack = [
-    { title: "Ambient Piano & Wind Chimes", artist: "Romantic Instrumentals", duration: "4:32", durationSeconds: 272 },
-    { title: "Dil-e-Baadat", artist: "Instrumental Version", duration: "3:45", durationSeconds: 225 },
-    { title: "Soft Romantic Melodies", artist: "Love Story OST", duration: "5:12", durationSeconds: 312 },
-    { title: "Our Love Theme", artist: "Custom Composition", duration: "4:18", durationSeconds: 258 },
+    { 
+      title: "Ambient Piano & Wind Chimes", 
+      artist: "Romantic Instrumentals", 
+      duration: "4:32", 
+      durationSeconds: 272,
+      frequency: 261.63 // C4
+    },
+    { 
+      title: "Dil-e-Baadat", 
+      artist: "Instrumental Version", 
+      duration: "3:45", 
+      durationSeconds: 225,
+      frequency: 293.66 // D4
+    },
+    { 
+      title: "Soft Romantic Melodies", 
+      artist: "Love Story OST", 
+      duration: "5:12", 
+      durationSeconds: 312,
+      frequency: 329.63 // E4
+    },
+    { 
+      title: "Our Love Theme", 
+      artist: "Custom Composition", 
+      duration: "4:18", 
+      durationSeconds: 258,
+      frequency: 349.23 // F4
+    },
   ]
+
+  // Start/stop audio generation
+  useEffect(() => {
+    if (!audioContext || !gainNode) return
+
+    if (isPlaying && !oscillator) {
+      try {
+        const osc = audioContext.createOscillator()
+        osc.type = 'sine'
+        osc.frequency.setValueAtTime(soundtrack[currentTrack].frequency, audioContext.currentTime)
+        osc.connect(gainNode)
+        osc.start()
+        setOscillator(osc)
+      } catch (error) {
+        console.log('Audio context error:', error)
+      }
+    } else if (!isPlaying && oscillator) {
+      try {
+        oscillator.stop()
+        setOscillator(null)
+      } catch (error) {
+        console.log('Oscillator stop error:', error)
+      }
+    }
+
+    return () => {
+      if (oscillator) {
+        try {
+          oscillator.stop()
+        } catch (e) {
+          // Oscillator already stopped
+        }
+      }
+    }
+  }, [isPlaying, audioContext, gainNode, currentTrack])
+
+  // Update volume
+  useEffect(() => {
+    if (gainNode) {
+      gainNode.gain.setValueAtTime(isMuted ? 0 : volume * 0.1, audioContext?.currentTime || 0)
+    }
+  }, [volume, isMuted, gainNode, audioContext])
 
   useEffect(() => {
     if (!isPlaying) return
@@ -463,12 +553,16 @@ function AdvancedMusicPlayer() {
   }
 
   const handleShare = () => {
-    if (navigator.share) {
-      navigator.share({
-        title: 'Our Love Story',
-        text: `Currently listening to: ${soundtrack[currentTrack].title}`,
-        url: window.location.href,
-      })
+    try {
+      if (typeof window !== 'undefined' && navigator.share) {
+        navigator.share({
+          title: 'Our Love Story',
+          text: `Currently listening to: ${soundtrack[currentTrack].title}`,
+          url: window.location.href,
+        }).catch(err => console.log('Share cancelled'))
+      }
+    } catch (error) {
+      console.log('Share not supported')
     }
   }
 
@@ -562,7 +656,14 @@ function AdvancedMusicPlayer() {
             <Button
               size="sm"
               variant="ghost"
-              onClick={() => setCurrentTrack((prev) => (prev - 1 + soundtrack.length) % soundtrack.length)}
+              onClick={() => {
+                if (oscillator) {
+                  oscillator.stop()
+                  setOscillator(null)
+                }
+                setCurrentTrack((prev) => (prev - 1 + soundtrack.length) % soundtrack.length)
+                setProgress(0)
+              }}
               className="w-8 h-8 p-0 text-gray-600 hover:text-pink-600"
               aria-label="Previous track"
             >
@@ -571,7 +672,12 @@ function AdvancedMusicPlayer() {
 
             <Button
               size="sm"
-              onClick={() => setIsPlaying(!isPlaying)}
+              onClick={() => {
+                if (audioContext?.state === 'suspended') {
+                  audioContext.resume()
+                }
+                setIsPlaying(!isPlaying)
+              }}
               className="bg-gradient-to-r from-pink-500 to-rose-600 hover:from-pink-600 hover:to-rose-700 text-white rounded-full w-12 h-12 p-0 shadow-lg"
               aria-label={isPlaying ? "Pause" : "Play"}
             >
@@ -581,7 +687,14 @@ function AdvancedMusicPlayer() {
             <Button
               size="sm"
               variant="ghost"
-              onClick={() => setCurrentTrack((prev) => (prev + 1) % soundtrack.length)}
+              onClick={() => {
+                if (oscillator) {
+                  oscillator.stop()
+                  setOscillator(null)
+                }
+                setCurrentTrack((prev) => (prev + 1) % soundtrack.length)
+                setProgress(0)
+              }}
               className="w-8 h-8 p-0 text-gray-600 hover:text-pink-600"
               aria-label="Next track"
             >
@@ -684,19 +797,22 @@ function CinematicHero() {
 
   const stats = [
     { number: "10", label: "Chapters", icon: BookOpen, color: "from-blue-500 to-blue-600" },
-    { number: "2+", label: "Years", icon: Calendar, color: "from-green-500 to-green-600" },
+    { number: "1.9", label: "Years", icon: Calendar, color: "from-green-500 to-green-600" },
     { number: "∞", label: "Memories", icon: Heart, color: "from-pink-500 to-pink-600" },
     { number: "1", label: "Love Story", icon: Star, color: "from-yellow-500 to-yellow-600" },
   ]
 
-  return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+  ```text
+return (
+    <section 
+      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+    >
       {/* Enhanced Background with better performance */}
       <motion.div
         className="absolute inset-0 bg-gradient-to-br from-pink-100 via-rose-100 to-red-100"
         style={mounted ? { scale, y } : {}}
       >
-        <div className="absolute inset-0 bg-[url('/placeholder.svg?height=1080&width=1920&text=Romantic+Cinematic+Background')] bg-cover bg-center opacity-30" />
+        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=1920&h=1080&fit=crop&crop=center')] bg-cover bg-center opacity-30" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
       </motion.div>
 
@@ -768,7 +884,7 @@ function CinematicHero() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.2, duration: 0.8 }}
             >
-              "From Beawar and Sarasar to Jaipur... from strangers to soulmates"
+              "From Beawar and Salasar to Jaipur... from strangers to soulmates"
             </motion.p>
             <motion.p
               className="text-lg md:text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed"
@@ -909,19 +1025,23 @@ function EnhancedStoryChapter({ chapter, index }: { chapter: (typeof storyChapte
 
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ["start end", "end start"],
+    offset: ["start end", "end start"]
   })
 
   const y = useTransform(scrollYProgress, [0, 1], [100, -100])
   const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0])
 
   const handleShareChapter = useCallback(() => {
-    if (navigator.share) {
-      navigator.share({
-        title: `${chapter.title} - Our Love Story`,
-        text: chapter.subtitle,
-        url: `${window.location.href}#chapter-${chapter.id}`,
-      })
+    try {
+      if (typeof window !== 'undefined' && navigator.share) {
+        navigator.share({
+          title: `${chapter.title} - Our Love Story`,
+          text: chapter.subtitle,
+          url: `${window.location.href}#chapter-${chapter.id}`,
+        }).catch(err => console.log('Share cancelled'))
+      }
+    } catch (error) {
+      console.log('Share not supported')
     }
   }, [chapter])
 
@@ -935,7 +1055,7 @@ function EnhancedStoryChapter({ chapter, index }: { chapter: (typeof storyChapte
       id={`chapter-${chapter.id}`}
       ref={ref}
       className={`relative min-h-screen flex items-center py-24 bg-gradient-to-br ${chapter.bgColor} overflow-hidden`}
-      style={{ opacity, position: "relative" }}
+      style={{ opacity }}
     >
       {/* Enhanced Background Pattern */}
       <div className="absolute inset-0">
@@ -1604,6 +1724,51 @@ function SpectacularFinalChapter() {
   )
 }
 
+// Error Boundary Component
+function ErrorBoundary({ children }: { children: React.ReactNode }) {
+  const [hasError, setHasError] = useState(false)
+
+  useEffect(() => {
+    const handleError = (event: ErrorEvent) => {
+      console.error('Error caught by boundary:', event.error)
+      setHasError(true)
+    }
+
+    const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
+      console.log('Promise rejection handled:', event.reason)
+      event.preventDefault()
+      // Don't set error state for minor rejections
+    }
+
+    window.addEventListener('error', handleError)
+    window.addEventListener('unhandledrejection', handleUnhandledRejection)
+
+    return () => {
+      window.removeEventListener('error', handleError)
+      window.removeEventListener('unhandledrejection', handleUnhandledRejection)
+    }
+  }, [])
+
+  if (hasError) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-100 to-rose-100">
+        <div className="text-center space-y-4">
+          <Heart className="w-16 h-16 text-pink-500 mx-auto" />
+          <h2 className="text-2xl font-serif text-gray-800">Something went wrong with our love story</h2>
+          <button 
+            onClick={() => setHasError(false)}
+            className="px-6 py-3 bg-pink-500 text-white rounded-full hover:bg-pink-600 transition-colors"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  return <>{children}</>
+}
+
 // Main Component
 export default function UltimateRomanticLoveStory() {
   const [loading, setLoading] = useState(true)
@@ -1640,17 +1805,19 @@ export default function UltimateRomanticLoveStory() {
   }
 
   return (
-    <div className="relative" role="main">
-      <EnhancedFloatingElements />
-      <AdvancedMusicPlayer />
+    <ErrorBoundary>
+      <div className="relative min-h-screen" role="main">
+        <EnhancedFloatingElements />
+        <AdvancedMusicPlayer />
 
-      <CinematicHero />
+        <CinematicHero />
 
-      {storyChapters.map((chapter, index) => (
-        <EnhancedStoryChapter key={chapter.id} chapter={chapter} index={index} />
-      ))}
+        {storyChapters.map((chapter, index) => (
+          <EnhancedStoryChapter key={chapter.id} chapter={chapter} index={index} />
+        ))}
 
-      <SpectacularFinalChapter />
-    </div>
+        <SpectacularFinalChapter />
+      </div>
+    </ErrorBoundary>
   )
 }
