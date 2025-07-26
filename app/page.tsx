@@ -334,6 +334,7 @@ function EnhancedFloatingElements() {
 
 
 export default function Page() {
+  const [mounted, setMounted] = useState(false);
   useEffect(() => {
     setMounted(true)
   }, [])
