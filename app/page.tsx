@@ -352,7 +352,7 @@ function EnhancedFloatingElements() {
             scale: heart.scale,
           }}
           animate={{
-            y: `-10vh`,
+            y: "-10vh",
             rotate: 360,
             x: (heart.initialX + 20) % 100 + "vw",
           }}
