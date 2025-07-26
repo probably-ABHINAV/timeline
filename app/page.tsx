@@ -346,7 +346,7 @@ function EnhancedFloatingElements() {
           key={`heart-${heart.id}`}
           className="absolute"
           initial={{
-            x: `${heart.initialX}vw`,
+            x: heart.initialX + "vw",
             y: heart.initialY + "vh",
             rotate: 0,
             scale: heart.scale,
@@ -354,7 +354,7 @@ function EnhancedFloatingElements() {
           animate={{
             y: `-10vh`,
             rotate: 360,
-            x: `${(heart.initialX + 20) % 100}vw`,
+            x: (heart.initialX + 20) % 100 + "vw",
           }}
           transition={{
             duration: heart.duration,
