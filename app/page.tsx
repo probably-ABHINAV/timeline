@@ -303,7 +303,7 @@ const storyChapters = [
 
 // Fixed floating elements with stable positions
 function EnhancedFloatingElements() {
-  const [mounted, setMounted] = useState(false)
+  const [floatReady, setFloatReady] = useState(false)
   const [elements] = useState(() => {
     // Generate stable positions on component initialization
     return {
