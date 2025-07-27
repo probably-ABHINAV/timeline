@@ -35,7 +35,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${playfair.variable} ${inter.variable} ${dancing.variable}`}>
+    <html lang="en" className={"" + playfair.variable + " ${inter.variable} ${dancing.variable}"}>
       <body className="font-sans antialiased overflow-x-hidden bg-gradient-to-br from-pink-50 to-rose-50">
         {children}
       </body>

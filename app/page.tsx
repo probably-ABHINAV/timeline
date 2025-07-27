@@ -315,33 +315,6 @@ function EnhancedFloatingElements() {
         duration: 15 + (i % 5) * 2,
         delay: i * 2,
       })),
-  return (
-    <div className="fixed inset-0 pointer-events-none overflow-hidden z-0" role="presentation" aria-hidden="true">
-      {/* Optimized Floating Hearts */}
-      {elements.hearts.map((heart) => (
-        <motion.div
-          key={heart.id}
-          className="absolute text-pink-400 opacity-70"
-          initial={{ scale: 0 }}
-          animate={{ scale: [0, 1, 0] }}
-          transition={{
-            duration: heart.duration,
-            repeat: Infinity,
-            delay: heart.delay,
-          }}
-          style={{
-            left: `${heart.initialX}%`,
-            top: `${heart.initialY}%`,
-            transform: `scale(${heart.scale})`,
-          }}
-        >
-          <Heart className="w-5 h-5 fill-current" />
-        </motion.div>
-      ))}
-    </div>
-  );
-}
-
       sparkles: Array.from({ length: 12 }, (_, i) => ({
         id: i,
         left: (i * 8.33) % 100,
@@ -358,6 +331,35 @@ function EnhancedFloatingElements() {
       })),
     }
   })
+  })
+
+  return (
+    <div className="fixed inset-0 pointer-events-none overflow-hidden z-0" role="presentation" aria-hidden="true">
+      {/* Optimized Floating Hearts */}
+      {elements.hearts.map((heart) => (
+        <motion.div
+          key={heart.id}
+          className="absolute text-pink-400 opacity-70"
+          initial={{ scale: 0 }}
+          animate={{ scale: [0, 1, 0] }}
+          transition={{
+            duration: heart.duration,
+            repeat: Infinity,
+            delay: heart.delay,
+          }}
+          style={{
+            left: heart.initialX + "%",
+            top: heart.initialY + "%",
+            transform: `scale(${heart.scale})`,
+          }}
+        >
+          <Heart className="w-5 h-5 fill-current" />
+        </motion.div>
+      ))}
+    </div>
+  );
+}
+
 
 
 export default function Page() {
