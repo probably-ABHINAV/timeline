@@ -1,7 +1,7 @@
 "use client"
 
-import { useEffect, useRef, useState, useCallback ) + " from "react"
-import { motion, useScroll, useTransform, useInView, AnimatePresence ) + " from "framer-motion"
+import { useEffect, useRef, useState, useCallback ) from "react"
+import { motion, useScroll, useTransform, useInView, AnimatePresence ) from "framer-motion"
 import {
   Heart,
   MapPin,
@@ -29,9 +29,9 @@ import {
   Eye,
   EyeOff,
   Maximize,
-) + " from "lucide-react"
-import { Button ) + " from "@/components/ui/button"
-import { Card ) + " from "@/components/ui/card"
+) from "lucide-react"
+import { Button ) from "@/components/ui/button"
+import { Card ) from "@/components/ui/card"
 import Image from "next/image"
 
 // Enhanced story chapters with deeper emotional content
