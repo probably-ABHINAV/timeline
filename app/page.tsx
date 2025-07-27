@@ -1,7 +1,7 @@
 "use client"
 
-import { useEffect, useRef, useState, useCallback ) from "react"
-import { motion, useScroll, useTransform, useInView, AnimatePresence ) from "framer-motion"
+import { useEffect, useRef, useState, useCallback } from "react"
+import { motion, useScroll, useTransform, useInView, AnimatePresence } from "framer-motion"
 import {
   Heart,
   MapPin,
