@@ -30,8 +30,8 @@ import {
   EyeOff,
   Maximize,
 ) from "lucide-react"
-import { Button ) from "@/components/ui/button"
-import { Card ) from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Card } from "@/components/ui/card"
 import Image from "next/image"
 
 // Enhanced story chapters with deeper emotional content
