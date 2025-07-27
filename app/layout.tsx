@@ -1,5 +1,3 @@
-"use client";
-
 import type React from "react";
 import type { Metadata } from "next";
 import { Playfair_Display, Inter, Dancing_Script } from "next/font/google";

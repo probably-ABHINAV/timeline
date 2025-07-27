@@ -29,7 +29,7 @@ import {
   Eye,
   EyeOff,
   Maximize,
-) from "lucide-react"
+} from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import Image from "next/image"
@@ -61,7 +61,7 @@ const storyChapters = [
     voiceNote: "The moment I first saw you, time stopped...",
     emotion: "Wonder",
     soundtrack: "https://open.spotify.com/track/example1",
-  ) + ",
+  },
   {
     id: 2,
     chapter: "Chapter 2",
@@ -88,7 +88,7 @@ const storyChapters = [
     voiceNote: "12:56 AM... I was so nervous typing that message...",
     emotion: "Hope",
     soundtrack: "https://open.spotify.com/track/example2",
-  ) + ",
+  },
   {
     id: 3,
     chapter: "Chapter 3",
@@ -116,7 +116,7 @@ const storyChapters = [
     voiceNote: "The night we both confessed... magic happened...",
     emotion: "Pure Love",
     soundtrack: "https://open.spotify.com/track/example3",
-  ) + ",
+  },
   {
     id: 4,
     chapter: "Chapter 4",
@@ -142,7 +142,7 @@ const storyChapters = [
     voiceNote: "That first kiss... I still get butterflies thinking about it...",
     emotion: "Electric",
     soundtrack: "https://open.spotify.com/track/example4",
-  ) + ",
+  },
   {
     id: 5,
     chapter: "Chapter 5",
@@ -169,7 +169,7 @@ const storyChapters = [
     voiceNote: "The moment you said yes... my heart exploded with joy...",
     emotion: "Euphoria",
     soundtrack: "https://open.spotify.com/track/example5",
-  ) + ",
+  },
   {
     id: 6,
     chapter: "Chapter 6",
@@ -194,7 +194,7 @@ const storyChapters = [
     voiceNote: "Every adventure with you feels like magic...",
     emotion: "Adventure",
     soundtrack: "https://open.spotify.com/track/example6",
-  ) + ",
+  },
   {
     id: 7,
     chapter: "Chapter 7",
@@ -219,7 +219,7 @@ const storyChapters = [
     voiceNote: "Your support meant everything to me...",
     emotion: "Gratitude",
     soundtrack: "https://open.spotify.com/track/example7",
-  ) + ",
+  },
   {
     id: 8,
     chapter: "Chapter 8",
@@ -244,7 +244,7 @@ const storyChapters = [
     voiceNote: "When you proposed to me... I knew you were forever...",
     emotion: "Bliss",
     soundtrack: "https://open.spotify.com/track/example8",
-  ) + ",
+  },
   {
     id: 9,
     chapter: "Chapter 9",
@@ -271,7 +271,7 @@ const storyChapters = [
     voiceNote: "I'm sorry for the pain I caused... but I never stopped loving you...",
     emotion: "Redemption",
     soundtrack: "https://open.spotify.com/track/example9",
-  ) + ",
+  },
   {
     id: 10,
     chapter: "Chapter 10",
@@ -298,7 +298,7 @@ const storyChapters = [
     voiceNote: "Thank you for giving us another chance... I love you, Beboo...",
     emotion: "Forever",
     soundtrack: "https://open.spotify.com/track/example10",
-  ) + ",
+  },
 ]
 
 // Fixed floating elements with stable positions
@@ -307,147 +307,116 @@ function EnhancedFloatingElements() {
   const [elements] = useState(() => {
     // Generate stable positions on component initialization
     return {
-      hearts: Array.from({ length: 8 ) + ", (_, i) => ({
+      hearts: Array.from({ length: 8 }, (_, i) => ({
         id: i,
         initialX: (i * 12.5) % 100,
         initialY: 100 + (i * 10),
         scale: 0.5 + (i % 3) * 0.25,
         duration: 15 + (i % 5) * 2,
         delay: i * 2,
-      ) + ")),
-      sparkles: Array.from({ length: 12 ) + ", (_, i) => ({
+      })),
+      sparkles: Array.from({ length: 12 }, (_, i) => ({
         id: i,
         left: (i * 8.33) % 100,
         top: (i * 13.7) % 100,
         duration: 4 + (i % 3),
         delay: i * 0.5,
-      ) + ")),
-      notes: Array.from({ length: 6 ) + ", (_, i) => ({
+      })),
+      notes: Array.from({ length: 6 }, (_, i) => ({
         id: i,
         left: 10 + i * 15,
         top: 20 + (i % 3) * 25,
         duration: 6 + (i % 2) * 2,
         delay: i * 1.5,
-      ) + ")),
-    ) + "
-  ) + ")
-  ) + ")
+      })),
+    }
+  })
 
-  return (
-    <div className="fixed inset-0 pointer-events-none overflow-hidden z-0" role="presentation" aria-hidden="true">
-      {/* Optimized Floating Hearts */) + "
-      {elements.hearts.map((heart) => (
-        <motion.div
-          key={heart.id) + "
-          className="absolute text-pink-400 opacity-70"
-          initial={{ scale: 0 ) + ") + "
-          animate={{ scale: [0, 1, 0] ) + ") + "
-          transition={{
-            duration: heart.duration,
-            repeat: Infinity,
-            delay: heart.delay,
-          ) + ") + "
-          style={{
-            left: heart.initialX + "%",
-            top: heart.initialY + "%",
-            transform: `scale(" + str(heart.scale) + ")`,
-          ) + ") + "
-        >
-          <Heart className="w-5 h-5 fill-current" />
-        </motion.div>
-      ))) + "
-    </div>
-  );
-) + "
-
-
-
-export default function Page() {
   useEffect(() => {
     setMounted(true)
-  ) + ", [])
+  }, [])
 
   if (!mounted) return null
 
   return (
     <div className="fixed inset-0 pointer-events-none overflow-hidden z-0" role="presentation" aria-hidden="true">
-      {/* Optimized Floating Hearts */) + "
+      {/* Optimized Floating Hearts */}
       {elements.hearts.map((heart) => (
         <motion.div
-          key={"heart-" + heart.id + "") + "
+          key={`heart-${heart.id}`}
           className="absolute"
           initial={{
-            x: heart.initialX + "vw",
-            y: heart.initialY + "vh",
+            x: `${heart.initialX}vw`,
+            y: `${heart.initialY}vh`,
             rotate: 0,
             scale: heart.scale,
-          ) + ") + "
+          }}
           animate={{
             y: "-10vh",
             rotate: 360,
-            x: (heart.initialX + 20) % 100 + "vw",
-          ) + ") + "
+            x: `${(heart.initialX + 20) % 100}vw`,
+          }}
           transition={{
             duration: heart.duration,
             repeat: Infinity,
             delay: heart.delay,
             ease: "linear",
-          ) + ") + "
+          }}
         >
           <Heart className="w-4 h-4 fill-current text-pink-300/40" />
         </motion.div>
-      ))) + "
+      ))}
 
-      {/* Optimized Floating Sparkles */) + "
+      {/* Optimized Floating Sparkles */}
       {elements.sparkles.map((sparkle) => (
         <motion.div
-          key={"sparkle-" + sparkle.id + "") + "
+          key={`sparkle-${sparkle.id}`}
           className="absolute"
           style={{
-            left: `sparkle.left + "%",
-            top: `sparkle.top + "%",
-          ) + ") + "
+            left: `${sparkle.left}%`,
+            top: `${sparkle.top}%`,
+          }}
           animate={{
             scale: [0, 1, 0],
             rotate: [0, 180, 360],
             opacity: [0, 0.8, 0],
-          ) + ") + "
+          }}
           transition={{
             duration: sparkle.duration,
             repeat: Infinity,
             delay: sparkle.delay,
-          ) + ") + "
+          }}
         >
           <Sparkles className="w-3 h-3 text-pink-400/30" />
         </motion.div>
-      ))) + "
+      ))}
 
-      {/* Optimized Music Notes */) + "
+      {/* Optimized Music Notes */}
       {elements.notes.map((note) => (
         <motion.div
-          key={"note-" + note.id + "") + "
+          key={`note-${note.id}`}
           className="absolute text-purple-300/20"
           style={{
-            left: `note.left + "%",
-            top: `note.top + "%",
-          ) + ") + "
+            left: `${note.left}%`,
+            top: `${note.top}%`,
+          }}
           animate={{
             y: [-20, -40, -20],
             rotate: [0, 10, -10, 0],
             scale: [1, 1.2, 1],
-          ) + ") + "
+          }}
           transition={{
             duration: note.duration,
             repeat: Infinity,
             delay: note.delay,
-          ) + ") + "
+          }}
         >
           <Music className="w-5 h-5" />
         </motion.div>
-      ))) + "
+      ))}
     </div>
   )
-) + "
+}
 
 // Enhanced Music Player with better controls
 function AdvancedMusicPlayer() {
@@ -467,69 +436,69 @@ function AdvancedMusicPlayer() {
     return () => {
       audio.pause();
       audioRef.current = null;
-    ) + ";
-  ) + ", []);
+    };
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
       if (audioRef.current && isPlaying) {
         setProgress((audioRef.current.currentTime / audioRef.current.duration) * 100 || 0);
-      ) + "
-    ) + ", 1000);
+      }
+    }, 1000);
     return () => clearInterval(interval);
-  ) + ", [isPlaying]);
+  }, [isPlaying]);
 
   const togglePlay = () => {
     if (!audioRef.current) return;
     if (isPlaying) {
       audioRef.current.pause();
-    ) + " else {
+    } else {
       audioRef.current.play().catch((e) => console.error("Playback error:", e));
-    ) + "
+    }
     setIsPlaying(!isPlaying);
-  ) + ";
+  };
 
   const changeVolume = (val: number) => {
     if (audioRef.current) {
       audioRef.current.volume = val;
-    ) + "
+    }
     setVolume(val);
     if (val === 0) setIsMuted(true);
     else setIsMuted(false);
-  ) + ";
+  };
 
   return (
     <div className="fixed bottom-0 right-0 m-4 p-4 bg-black text-white rounded-2xl shadow-lg w-[300px]">
       <div className="flex justify-between items-center">
-        <button onClick={togglePlay) + ">{isPlaying ? "Pause" : "Play") + "</button>
+        <button onClick={togglePlay}>{isPlaying ? "Pause" : "Play"}</button>
         <input
           type="range"
-          min={0) + "
-          max={1) + "
-          step={0.01) + "
-          value={volume) + "
-          onChange={(e) => changeVolume(Number(e.target.value))) + "
+          min={0}
+          max={1}
+          step={0.01}
+          value={volume}
+          onChange={(e) => changeVolume(Number(e.target.value))}
         />
       </div>
       <input
         type="range"
-        min={0) + "
-        max={100) + "
-        value={progress) + "
+        min={0}
+        max={100}
+        value={progress}
         onChange={(e) => {
           const seekTime = (Number(e.target.value) / 100) * (audioRef.current?.duration || 0);
           if (audioRef.current) audioRef.current.currentTime = seekTime;
           setProgress(Number(e.target.value));
-        ) + ") + "
+        }}
         className="w-full mt-2"
       />
     </div>
   );
-) + "
+}
 
 // Enhanced Cinematic Hero Section
 function CinematicHero() {
-  const { scrollY ) + " = useScroll()
+  const { scrollY } = useScroll()
   const y = useTransform(scrollY, [0, 1000], [0, 300])
   const opacity = useTransform(scrollY, [0, 800], [1, 0])
   const scale = useTransform(scrollY, [0, 800], [1, 1.1])
@@ -549,84 +518,84 @@ function CinematicHero() {
     setMounted(true)
     const interval = setInterval(() => {
       setCurrentQuote((prev) => (prev + 1) % romanticQuotes.length)
-    ) + ", 3000)
+    }, 3000)
 
     const statsTimer = setTimeout(() => setShowStats(true), 2000)
 
     return () => {
       clearInterval(interval)
       clearTimeout(statsTimer)
-    ) + "
-  ) + ", [])
+    }
+  }, [])
 
   const handleScrollToStory = useCallback(() => {
     if (typeof window !== "undefined") {
       const vh = window.innerHeight || 800
-      window.scrollTo({ top: vh, behavior: "smooth" ) + ")
-    ) + "
-  ) + ", [])
+      window.scrollTo({ top: vh, behavior: "smooth" })
+    }
+  }, [])
 
   const stats = [
-    { number: "10", label: "Chapters", icon: BookOpen, color: "from-blue-500 to-blue-600" ) + ",
-    { number: "1.9", label: "Years", icon: Calendar, color: "from-green-500 to-green-600" ) + ",
-    { number: "∞", label: "Memories", icon: Heart, color: "from-pink-500 to-pink-600" ) + ",
-    { number: "1", label: "Love Story", icon: Star, color: "from-yellow-500 to-yellow-600" ) + ",
+    { number: "10", label: "Chapters", icon: BookOpen, color: "from-blue-500 to-blue-600" },
+    { number: "1.9", label: "Years", icon: Calendar, color: "from-green-500 to-green-600" },
+    { number: "∞", label: "Memories", icon: Heart, color: "from-pink-500 to-pink-600" },
+    { number: "1", label: "Love Story", icon: Star, color: "from-yellow-500 to-yellow-600" },
   ]
 
   return (
     <section 
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
     >
-      {/* Enhanced Background with better performance */) + "
+      {/* Enhanced Background with better performance */}
       <motion.div
         className="absolute inset-0 bg-gradient-to-br from-pink-100 via-rose-100 to-red-100"
-        style={mounted ? { scale, y ) + " : {) + ") + "
+        style={mounted ? { scale, y } : {}}
       >
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=1920&h=1080&fit=crop&crop=center')] bg-cover bg-center opacity-30" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
       </motion.div>
 
-      {/* Optimized Particle System */) + "
+      {/* Optimized Particle System */}
       {mounted && (
         <div className="absolute inset-0" aria-hidden="true">
-          {Array.from({ length: 30 ) + ", (_, i) => (
+          {Array.from({ length: 30 }, (_, i) => (
             <motion.div
-              key={i) + "
+              key={i}
               className="absolute w-1 h-1 bg-pink-400/30 rounded-full"
               style={{
-                left: `(i * 3.33) % 100 + "%",
-                top: `(i * 7.14) % 100 + "%",
-              ) + ") + "
+                left: `${(i * 3.33) % 100}%`,
+                top: `${(i * 7.14) % 100}%`,
+              }}
               animate={{
                 scale: [0, 1, 0],
                 opacity: [0, 1, 0],
                 y: [0, -100, -200],
-              ) + ") + "
+              }}
               transition={{
                 duration: 8 + (i % 4),
                 repeat: Infinity,
                 delay: i * 0.2,
-              ) + ") + "
+              }}
             />
-          ))) + "
+          ))}
         </div>
-      )) + "
+      )}
 
       <div className="relative z-10 text-center px-4 max-w-7xl">
         <motion.div
-          initial={{ scale: 0.8, opacity: 0 ) + ") + "
-          animate={{ scale: 1, opacity: 1 ) + ") + "
-          transition={{ duration: 2, ease: "easeOut" ) + ") + "
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 2, ease: "easeOut" }}
         >
-          {/* Main Title with improved animation */) + "
+          {/* Main Title with improved animation */}
           <div className="relative h-40 md:h-48 flex items-center justify-center mb-12">
             <AnimatePresence mode="wait">
               <motion.h1
-                key={currentQuote) + "
-                initial={{ opacity: 0, y: 100, rotateX: -90 ) + ") + "
-                animate={{ opacity: 1, y: 0, rotateX: 0 ) + ") + "
-                exit={{ opacity: 0, y: -100, rotateX: 90 ) + ") + "
-                transition={{ duration: 1.2, ease: "easeOut" ) + ") + "
+                key={currentQuote}
+                initial={{ opacity: 0, y: 100, rotateX: -90 }}
+                animate={{ opacity: 1, y: 0, rotateX: 0 }}
+                exit={{ opacity: 0, y: -100, rotateX: 90 }}
+                transition={{ duration: 1.2, ease: "easeOut" }}
                 className="text-4xl md:text-6xl lg:text-8xl font-serif font-bold"
                 style={{
                   background: "linear-gradient(135deg, #ec4899, #f43f5e, #dc2626, #f59e0b)",
@@ -634,137 +603,137 @@ function CinematicHero() {
                   WebkitTextFillColor: "transparent",
                   backgroundClip: "text",
                   filter: "drop-shadow(0 4px 8px rgba(236, 72, 153, 0.3))",
-                ) + ") + "
+                }}
               >
-                {romanticQuotes[currentQuote]) + "
+                {romanticQuotes[currentQuote]}
               </motion.h1>
             </AnimatePresence>
           </div>
 
-          {/* Enhanced Subtitle */) + "
+          {/* Enhanced Subtitle */}
           <motion.div
-            initial={{ opacity: 0 ) + ") + "
-            animate={{ opacity: 1 ) + ") + "
-            transition={{ delay: 1, duration: 1 ) + ") + "
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1, duration: 1 }}
             className="space-y-6 mb-16"
           >
             <motion.p
               className="text-2xl md:text-3xl text-gray-700 font-light italic leading-relaxed"
-              initial={{ opacity: 0, y: 30 ) + ") + "
-              animate={{ opacity: 1, y: 0 ) + ") + "
-              transition={{ delay: 1.2, duration: 0.8 ) + ") + "
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.2, duration: 0.8 }}
             >
               "From Beawar and Salasar to Jaipur... from strangers to soulmates"
             </motion.p>
             <motion.p
               className="text-lg md:text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed"
-              initial={{ opacity: 0, y: 30 ) + ") + "
-              animate={{ opacity: 1, y: 0 ) + ") + "
-              transition={{ delay: 1.4, duration: 0.8 ) + ") + "
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.4, duration: 0.8 }}
             >
               Scroll down to experience our love story unfold, chapter by chapter, moment by moment, heartbeat by
               heartbeat 💕
             </motion.p>
           </motion.div>
 
-          {/* Enhanced Love Statistics with better animations */) + "
+          {/* Enhanced Love Statistics with better animations */}
           <AnimatePresence>
             {showStats && (
               <motion.div
-                initial={{ y: 50, opacity: 0 ) + ") + "
-                animate={{ y: 0, opacity: 1 ) + ") + "
-                transition={{ duration: 1 ) + ") + "
+                initial={{ y: 50, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 1 }}
                 className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-12"
               >
                 {stats.map((stat, index) => {
                   const IconComponent = stat.icon
                   return (
                     <motion.div
-                      key={index) + "
-                      initial={{ opacity: 0, scale: 0.8, y: 20 ) + ") + "
-                      animate={{ opacity: 1, scale: 1, y: 0 ) + ") + "
-                      transition={{ delay: 0.2 + index * 0.1, duration: 0.6 ) + ") + "
-                      whileHover={{ scale: 1.05, y: -5 ) + ") + "
+                      key={index}
+                      initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                      animate={{ opacity: 1, scale: 1, y: 0 }}
+                      transition={{ delay: 0.2 + index * 0.1, duration: 0.6 }}
+                      whileHover={{ scale: 1.05, y: -5 }}
                       className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-pink-200/50 hover:shadow-2xl transition-all duration-300 group cursor-pointer"
                     >
-                      <div className={"w-12 h-12 bg-gradient-to-br " + stat.color + " rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300") + ">
+                      <div className={`w-12 h-12 bg-gradient-to-br ${stat.color} rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300`}>
                         <IconComponent className="w-6 h-6 text-white" />
                       </div>
-                      <div className="text-3xl font-bold text-gray-900 mb-2">{stat.number) + "</div>
-                      <div className="text-gray-600 font-medium">{stat.label) + "</div>
+                      <div className="text-3xl font-bold text-gray-900 mb-2">{stat.number}</div>
+                      <div className="text-gray-600 font-medium">{stat.label}</div>
                     </motion.div>
                   )
-                ) + ")) + "
+                })}
               </motion.div>
-            )) + "
+            )}
           </AnimatePresence>
 
-          {/* Enhanced Call to Action */) + "
+          {/* Enhanced Call to Action */}
           <motion.div
-            initial={{ y: 50, opacity: 0 ) + ") + "
-            animate={{ y: 0, opacity: 1 ) + ") + "
-            transition={{ delay: 2.5, duration: 1 ) + ") + "
+            initial={{ y: 50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 2.5, duration: 1 }}
             className="space-y-8"
           >
             <Button
               size="lg"
-              onClick={handleScrollToStory) + "
+              onClick={handleScrollToStory}
               className="bg-gradient-to-r from-pink-500 via-rose-500 to-red-500 hover:from-pink-600 hover:via-rose-600 hover:to-red-600 text-white px-16 py-6 text-xl rounded-full shadow-2xl border-0 transition-all duration-500 hover:scale-105 group relative overflow-hidden"
             >
               <motion.div
                 className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent"
-                animate={{ x: [-100, 300] ) + ") + "
-                transition={{ duration: 3, repeat: Infinity, ease: "linear" ) + ") + "
+                animate={{ x: [-100, 300] }}
+                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
               />
               Begin Our Story
               <motion.div
-                animate={{ x: [0, 8, 0] ) + ") + "
-                transition={{ duration: 2, repeat: Infinity ) + ") + "
+                animate={{ x: [0, 8, 0] }}
+                transition={{ duration: 2, repeat: Infinity }}
                 className="ml-4 group-hover:scale-110 transition-transform duration-300"
               >
                 <BookOpen className="w-6 h-6" />
               </motion.div>
             </Button>
 
-            {/* Decorative Hearts with improved performance */) + "
+            {/* Decorative Hearts with improved performance */}
             <motion.div
               className="flex justify-center space-x-4"
-              initial={{ scale: 0 ) + ") + "
-              animate={{ scale: 1 ) + ") + "
-              transition={{ delay: 3, duration: 0.8 ) + ") + "
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 3, duration: 0.8 }}
             >
-              {Array.from({ length: 7 ) + ", (_, i) => (
+              {Array.from({ length: 7 }, (_, i) => (
                 <motion.div
-                  key={i) + "
+                  key={i}
                   animate={{
                     scale: [1, 1.4, 1],
                     opacity: [0.6, 1, 0.6],
-                  ) + ") + "
+                  }}
                   transition={{
                     duration: 4,
                     repeat: Infinity,
                     delay: i * 0.3,
-                  ) + ") + "
+                  }}
                   className="text-pink-400"
                 >
                   <Heart className="w-6 h-6 fill-current" />
                 </motion.div>
-              ))) + "
+              ))}
             </motion.div>
           </motion.div>
         </motion.div>
       </div>
 
-      {/* Enhanced Scroll Indicator */) + "
+      {/* Enhanced Scroll Indicator */}
       <motion.div
         className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
-        initial={{ opacity: 0 ) + ") + "
-        animate={{ opacity: 1 ) + ") + "
-        transition={{ delay: 3.5 ) + ") + "
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 3.5 }}
       >
         <motion.div
-          animate={{ y: [0, 15, 0] ) + ") + "
-          transition={{ duration: 2, repeat: Infinity ) + ") + "
+          animate={{ y: [0, 15, 0] }}
+          transition={{ duration: 2, repeat: Infinity }}
           className="flex flex-col items-center space-y-3 text-pink-600"
         >
           <span className="text-sm font-medium bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg">
@@ -779,12 +748,12 @@ function CinematicHero() {
       </motion.div>
     </section>
   )
-) + "
+}
 
 // Enhanced Story Chapter with better performance and features
-function EnhancedStoryChapter({ chapter, index ) + ": { chapter: (typeof storyChapters)[0]; index: number ) + ") {
+function EnhancedStoryChapter({ chapter, index }: { chapter: (typeof storyChapters)[0]; index: number }) {
   const ref = useRef<HTMLElement>(null)
-  const isInView = useInView(ref, { once: true, margin: "-50px" ) + ")
+  const isInView = useInView(ref, { once: true, margin: "-50px" })
   const isEven = index % 2 === 0
   const [showMemories, setShowMemories] = useState(false)
   const [showVoiceNote, setShowVoiceNote] = useState(false)
@@ -793,10 +762,10 @@ function EnhancedStoryChapter({ chapter, index ) + ": { chapter: (typeof storyCh
 
   const IconComponent = chapter.icon
 
-  const { scrollYProgress ) + " = useScroll({
+  const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end start"]
-  ) + ")
+  })
 
   const y = useTransform(scrollYProgress, [0, 1], [100, -100])
   const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0])
@@ -805,236 +774,238 @@ function EnhancedStoryChapter({ chapter, index ) + ": { chapter: (typeof storyCh
     try {
       if (typeof window !== 'undefined' && navigator.share) {
         navigator.share({
-          title: `" + str(chapter.title) + " - Our Love Story`,
+          title: `${chapter.title} - Our Love Story`,
           text: chapter.subtitle,
-          url: `" + str(window.location.href) + "#chapter-" + str(chapter.id) + "`,
-        ) + ").catch(err => console.log('Share cancelled'))
-      ) + "
-    ) + " catch (error) {
+          url: `${window.location.href}#chapter-${chapter.id}`,
+        }).catch(err => console.log('Share cancelled'))
+      }
+    } catch (error) {
       console.log('Share not supported')
-    ) + "
-  ) + ", [chapter])
+    }
+  }, [chapter])
 
   const handleDownloadImage = useCallback(() => {
     // In a real app, this would download the chapter image
-    console.log(`Downloading image for " + str(chapter.title) + "`)
-  ) + ", [chapter.title])
+    console.log(`Downloading image for ${chapter.title}`)
+  }, [chapter.title])
 
   return (
     <motion.section
-      id={`chapter-" + str(chapter.id) + "`) + "
-      ref={ref) + "
-      className={"relative min-h-screen flex items-center py-24 bg-gradient-to-br " + chapter.bgColor + " overflow-hidden") + "
-      style={{ opacity ) + ") + "
+      id={`chapter-${chapter.id}`}
+      ref={ref}
+      className={`relative min-h-screen flex items-center py-24 bg-gradient-to-br ${chapter.bgColor} overflow-hidden`}
+      style={{ opacity }}
     >
-      {/* Enhanced Background Pattern */) + "
+      {/* Enhanced Background Pattern */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 opacity-10">
           <div
             className="absolute inset-0"
             style={{
               backgroundImage: `radial-gradient(circle at 25% 25%, rgba(236, 72, 153, 0.1) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(244, 63, 94, 0.1) 0%, transparent 50%)`,
-            ) + ") + "
+            }}
           />
         </div>
 
-        {/* Optimized floating elements */) + "
-        {Array.from({ length: 8 ) + ", (_, i) => (
+        {/* Optimized floating elements */}
+        {Array.from({ length: 8 }, (_, i) => (
           <motion.div
-            key={i) + "
+            key={i}
             className="absolute"
             style={{
-              left: `(i * 12.5) % 100 + "%",
-              top: `(i * 17.5) % 100 + "%",
-            ) + ") + "
+              left: `${(i * 12.5) % 100}%`,
+              top: `${(i * 17.5) % 100}%`,
+            }}
             animate={{
               y: [0, -30, 0],
               rotate: [0, 360],
               scale: [0.5, 1, 0.5],
               opacity: [0.1, 0.3, 0.1],
-            ) + ") + "
+            }}
             transition={{
               duration: 8 + (i % 3),
               repeat: Infinity,
               delay: i * 0.5,
-            ) + ") + "
+            }}
           >
             <div className="w-2 h-2 bg-pink-400/20 rounded-full" />
           </motion.div>
-        ))) + "
+        ))}
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
         <div
-          className={"flex flex-col lg:flex-row items-center gap-16 " + isEven ? "lg:flex-row" : "lg:flex-row-reverse" + "") + "
+          className={`flex flex-col lg:flex-row items-center gap-16 ${isEven ? "lg:flex-row" : "lg:flex-row-reverse"}`}
         >
-          {/* Enhanced Content Side */) + "
+          {/* Enhanced Content Side */}
           <div className="flex-1 max-w-2xl">
             <motion.div
-              initial={{ opacity: 0, x: isEven ? -80 : 80 ) + ") + "
-              animate={isInView ? { opacity: 1, x: 0 ) + " : { opacity: 0, x: isEven ? -80 : 80 ) + ") + "
-              transition={{ duration: 1, delay: 0.2 ) + ") + "
+              initial={{ opacity: 0, x: isEven ? -80 : 80 }}
+              animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: isEven ? -80 : 80 }}
+              transition={{ duration: 1, delay: 0.2 }}
               className="space-y-10"
             >
-              {/* Enhanced Chapter Header */) + "
+              {/* Enhanced Chapter Header */}
               <div className="space-y-6">
                 <div className="flex items-center space-x-6">
                   <motion.div
-                    className={"w-20 h-20 bg-gradient-to-br " + chapter.color + " rounded-full flex items-center justify-center shadow-2xl relative overflow-hidden") + "
-                    whileHover={{ scale: 1.1, rotate: 360 ) + ") + "
-                    transition={{ duration: 0.6 ) + ") + "
+                    className={`w-20 h-20 bg-gradient-to-br ${chapter.color} rounded-full flex items-center justify-center shadow-2xl relative overflow-hidden`}
+                    whileHover={{ scale: 1.1, rotate: 360 }}
+                    transition={{ duration: 0.6 }}
                   >
                     <motion.div
                       className="absolute inset-0 bg-white/20"
-                      animate={{ rotate: [0, 360] ) + ") + "
-                      transition={{ duration: 8, repeat: Infinity, ease: "linear" ) + ") + "
+                      animate={{ rotate: [0, 360] }}
+                      transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
                     />
                     <IconComponent className="w-10 h-10 text-white relative z-10" />
                   </motion.div>
                   <div className="flex-1">
                     <motion.p
                       className="text-sm font-medium text-gray-600 uppercase tracking-wider mb-2"
-                      initial={{ opacity: 0, y: 20 ) + ") + "
-                      animate={isInView ? { opacity: 1, y: 0 ) + " : { opacity: 0, y: 20 ) + ") + "
-                      transition={{ delay: 0.4 ) + ") + "
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                      transition={{ delay: 0.4 }}
                     >
-                      {chapter.chapter) + "
+                      {chapter.chapter}
                     </motion.p>
                     <motion.h2
                       className="text-3xl lg:text-5xl font-serif text-gray-900 leading-tight"
-                      initial={{ opacity: 0, y: 30 ) + ") + "
-                      animate={isInView ? { opacity: 1, y: 0 ) + " : { opacity: 0, y: 30 ) + ") + "
-                      transition={{ delay: 0.5 ) + ") + "
+                      initial={{ opacity: 0, y: 30 }}
+                      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+                      transition={{ delay: 0.5 }}
                     >
-                      {chapter.title) + "
+                      {chapter.title}
                     </motion.h2>
                     <motion.p
                       className="text-lg text-gray-600 italic mt-2"
-                      initial={{ opacity: 0, y: 20 ) + ") + "
-                      animate={isInView ? { opacity: 1, y: 0 ) + " : { opacity: 0, y: 20 ) + ") + "
-                      transition={{ delay: 0.6 ) + ") + "
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                      transition={{ delay: 0.6 }}
                     >
-                      {chapter.subtitle) + "
+                      {chapter.subtitle}
                     </motion.p>
                   </div>
                 </div>
 
-                {/* Enhanced Metadata with better responsiveness */) + "
+                {/* Enhanced Metadata with better responsiveness */}
                 <div className="flex flex-wrap items-center gap-3 text-sm">
                   <motion.div
                     className="flex items-center bg-white/90 backdrop-blur-sm px-3 py-2 rounded-full shadow-lg border border-pink-200/50"
-                    whileHover={{ scale: 1.05 ) + ") + "
+                    whileHover={{ scale: 1.05 }}
                   >
                     <MapPin className="w-4 h-4 mr-2 text-pink-500" />
-                    <span className="truncate max-w-[120px]">{chapter.location) + "</span>
+                    <span className="truncate max-w-[120px]">{chapter.location}</span>
                   </motion.div>
                   <motion.div
                     className="flex items-center bg-white/90 backdrop-blur-sm px-3 py-2 rounded-full shadow-lg border border-rose-200/50"
-                    whileHover={{ scale: 1.05 ) + ") + "
+                    whileHover={{ scale: 1.05 }}
                   >
                     <Clock className="w-4 h-4 mr-2 text-rose-500" />
-                    <span className="truncate max-w-[100px]">{chapter.date) + "</span>
+                    <span className="truncate max-w-[100px]">{chapter.date}</span>
                   </motion.div>
                   <motion.div
                     className="flex items-center bg-white/90 backdrop-blur-sm px-3 py-2 rounded-full shadow-lg border border-purple-200/50"
-                    whileHover={{ scale: 1.05 ) + ") + "
+                    whileHover={{ scale: 1.05 }}
                   >
                     <Music className="w-4 h-4 mr-2 text-purple-500" />
-                    <span className="truncate max-w-[100px]">{chapter.mood) + "</span>
+                    <span className="truncate max-w-[100px]">{chapter.mood}</span>
                   </motion.div>
                   <motion.button
-                    className="flex items-center bg-white/90 backdrop-blur-sm px-3 py-2 rounded-full shadow-lg border border-red-200/50 hover:bg-red-50 transition-colors"
-                    onClick={() => setHeartbeatActive(!heartbeatActive)) + "
-                    whileHover={{ scale: 1.05 ) + ") + "
-                    aria-label={"" + heartbeatActive ? 'Stop' : 'Start' + " heartbeat animation") + "
-                  >
+                      onClick={() => setHeartbeatActive(!heartbeatActive)}
+                      className="flex items-center bg-white/90 backdrop-blur-sm px-3 py-2 rounded-full shadow-lg border border-red-200/50 hover:bg-red-50 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500"
+                      whileHover={{ scale: 1.05 }}
+                      aria-label={`${heartbeatActive ? 'Stop' : 'Start'} heartbeat animation`}
+                      role="button"
+                      tabIndex={0}
+                    >
                     <motion.div
-                      animate={heartbeatActive ? { scale: [1, 1.3, 1] ) + " : {) + ") + "
-                      transition={{ duration: 0.6, repeat: heartbeatActive ? Infinity : 0 ) + ") + "
+                      animate={heartbeatActive ? { scale: [1, 1.3, 1] } : {}}
+                      transition={{ duration: 0.6, repeat: heartbeatActive ? Infinity : 0 }}
                     >
                       <Heart className="w-4 h-4 mr-2 text-red-500 fill-current" />
                     </motion.div>
-                    {chapter.heartbeat) + " BPM
+                    {chapter.heartbeat} BPM
                   </motion.button>
                 </div>
               </div>
 
-              {/* Enhanced Story Content with better readability */) + "
+              {/* Enhanced Story Content with better readability */}
               <div className="space-y-6">
                 {chapter.content.map((paragraph, pIndex) => (
                   <motion.div
-                    key={pIndex) + "
-                    initial={{ opacity: 0, y: 30 ) + ") + "
-                    animate={isInView ? { opacity: 1, y: 0 ) + " : { opacity: 0, y: 30 ) + ") + "
-                    transition={{ duration: 0.8, delay: 0.6 + pIndex * 0.1 ) + ") + "
+                    key={pIndex}
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+                    transition={{ duration: 0.8, delay: 0.6 + pIndex * 0.1 }}
                     className="relative"
                   >
                     <motion.p
                       className="text-base md:text-lg text-gray-700 leading-relaxed font-light italic pl-8 relative"
-                      whileHover={{ x: 5 ) + ") + "
-                      transition={{ duration: 0.3 ) + ") + "
+                      whileHover={{ x: 5 }}
+                      transition={{ duration: 0.3 }}
                     >
                       <Quote className="w-5 h-5 text-pink-400 absolute left-0 top-0 flex-shrink-0" />
-                      {paragraph) + "
+                      {paragraph}
                     </motion.p>
                   </motion.div>
-                ))) + "
+                ))}
               </div>
 
-              {/* Enhanced Interactive Elements */) + "
+              {/* Enhanced Interactive Elements */}
               <div className="space-y-4">
                 <div className="flex flex-wrap gap-3">
-                  {/* Memories Button */) + "
+                  {/* Memories Button */}
                   <motion.button
-                    onClick={() => setShowMemories(!showMemories)) + "
+                    onClick={() => setShowMemories(!showMemories)}
                     className="flex items-center space-x-2 bg-white/90 backdrop-blur-sm px-4 py-3 rounded-2xl shadow-lg border border-pink-200/50 hover:shadow-xl transition-all duration-300 group"
-                    whileHover={{ scale: 1.02 ) + ") + "
-                    whileTap={{ scale: 0.98 ) + ") + "
-                    aria-expanded={showMemories) + "
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    aria-expanded={showMemories}
                     aria-label="Toggle memories view"
                   >
                     <Camera className="w-4 h-4 text-pink-500 group-hover:scale-110 transition-transform" />
                     <span className="font-medium text-gray-700 text-sm">Memories</span>
-                    <motion.div animate={{ rotate: showMemories ? 180 : 0 ) + ") + " transition={{ duration: 0.3 ) + ") + ">
+                    <motion.div animate={{ rotate: showMemories ? 180 : 0 }} transition={{ duration: 0.3 }}>
                       <ArrowDown className="w-4 h-4 text-gray-500" />
                     </motion.div>
                   </motion.button>
 
-                  {/* Voice Note Button */) + "
+                  {/* Voice Note Button */}
                   <motion.button
-                    onClick={() => setShowVoiceNote(!showVoiceNote)) + "
+                    onClick={() => setShowVoiceNote(!showVoiceNote)}
                     className="flex items-center space-x-2 bg-white/90 backdrop-blur-sm px-4 py-3 rounded-2xl shadow-lg border border-purple-200/50 hover:shadow-xl transition-all duration-300 group"
-                    whileHover={{ scale: 1.02 ) + ") + "
-                    whileTap={{ scale: 0.98 ) + ") + "
-                    aria-expanded={showVoiceNote) + "
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    aria-expanded={showVoiceNote}
                     aria-label="Toggle voice note"
                   >
                     <Mic className="w-4 h-4 text-purple-500 group-hover:scale-110 transition-transform" />
                     <span className="font-medium text-gray-700 text-sm">Voice Note</span>
                     {showVoiceNote && (
                       <div className="flex space-x-1" aria-hidden="true">
-                        {Array.from({ length: 3 ) + ", (_, i) => (
+                        {Array.from({ length: 3 }, (_, i) => (
                           <motion.div
-                            key={i) + "
+                            key={i}
                             className="w-1 h-3 bg-purple-400 rounded-full"
-                            animate={{ height: [3, 12, 3] ) + ") + "
+                            animate={{ height: [3, 12, 3] }}
                             transition={{
                               duration: 0.8,
                               repeat: Infinity,
                               delay: i * 0.2,
-                            ) + ") + "
+                            }}
                           />
-                        ))) + "
+                        ))}
                       </div>
-                    )) + "
+                    )}
                   </motion.button>
 
-                  {/* Share Button */) + "
+                  {/* Share Button */}
                   <motion.button
-                    onClick={handleShareChapter) + "
+                    onClick={handleShareChapter}
                     className="flex items-center space-x-2 bg-white/90 backdrop-blur-sm px-4 py-3 rounded-2xl shadow-lg border border-blue-200/50 hover:shadow-xl transition-all duration-300 group"
-                    whileHover={{ scale: 1.02 ) + ") + "
-                    whileTap={{ scale: 0.98 ) + ") + "
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
                     aria-label="Share this chapter"
                   >
                     <Share2 className="w-4 h-4 text-blue-500 group-hover:scale-110 transition-transform" />
@@ -1042,29 +1013,29 @@ function EnhancedStoryChapter({ chapter, index ) + ": { chapter: (typeof storyCh
                   </motion.button>
                 </div>
 
-                {/* Enhanced Song Reference */) + "
+                {/* Enhanced Song Reference */}
                 <motion.div
-                  initial={{ opacity: 0, scale: 0.9 ) + ") + "
-                  animate={isInView ? { opacity: 1, scale: 1 ) + " : { opacity: 0, scale: 0.9 ) + ") + "
-                  transition={{ duration: 0.8, delay: 1 ) + ") + "
-                  className={"bg-gradient-to-r " + chapter.color + " p-6 rounded-3xl text-white shadow-2xl relative overflow-hidden") + "
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
+                  transition={{ duration: 0.8, delay: 1 }}
+                  className={`bg-gradient-to-r ${chapter.color} p-6 rounded-3xl text-white shadow-2xl relative overflow-hidden`}
                 >
                   <motion.div
                     className="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full"
-                    animate={{ rotate: [0, 360] ) + ") + "
-                    transition={{ duration: 20, repeat: Infinity, ease: "linear" ) + ") + "
-                    style={{ transform: "translate(50%, -50%)" ) + ") + "
+                    animate={{ rotate: [0, 360] }}
+                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                    style={{ transform: "translate(50%, -50%)" }}
                   />
                   <div className="flex items-center space-x-4 relative z-10">
                     <motion.div
-                      animate={{ rotate: [0, 360] ) + ") + "
-                      transition={{ duration: 4, repeat: Infinity, ease: "linear" ) + ") + "
+                      animate={{ rotate: [0, 360] }}
+                      transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
                     >
                       <Headphones className="w-6 h-6" />
                     </motion.div>
                     <div className="flex-1">
                       <p className="font-bold text-base">Chapter Soundtrack</p>
-                      <p className="text-white/90 italic text-lg">"{chapter.song) + ""</p>
+                      <p className="text-white/90 italic text-lg">"{chapter.song}"</p>
                       <p className="text-white/70 text-sm mt-1">Perfect for this moment</p>
                     </div>
                     {chapter.soundtrack && (
@@ -1076,45 +1047,45 @@ function EnhancedStoryChapter({ chapter, index ) + ": { chapter: (typeof storyCh
                       >
                         <Music className="w-4 h-4" />
                       </Button>
-                    )) + "
+                    )}
                   </div>
                 </motion.div>
               </div>
 
-              {/* Expandable Memories with better layout */) + "
+              {/* Expandable Memories with better layout */}
               <AnimatePresence>
                 {showMemories && (
                   <motion.div
-                    initial={{ opacity: 0, height: 0 ) + ") + "
-                    animate={{ opacity: 1, height: "auto" ) + ") + "
-                    exit={{ opacity: 0, height: 0 ) + ") + "
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
                     className="space-y-3 overflow-hidden"
                   >
                     {chapter.memories.map((memory, i) => (
                       <motion.div
-                        key={i) + "
-                        initial={{ opacity: 0, x: isEven ? -30 : 30 ) + ") + "
-                        animate={{ opacity: 1, x: 0 ) + ") + "
-                        transition={{ delay: i * 0.1 ) + ") + "
+                        key={i}
+                        initial={{ opacity: 0, x: isEven ? -30 : 30 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: i * 0.1 }}
                         className="bg-white/95 backdrop-blur-sm rounded-2xl p-4 shadow-lg border border-pink-100"
                       >
                         <p className="text-gray-700 italic flex items-center text-base">
                           <Sparkles className="w-4 h-4 text-pink-400 mr-3 flex-shrink-0" />
-                          {memory) + "
+                          {memory}
                         </p>
                       </motion.div>
-                    ))) + "
+                    ))}
                   </motion.div>
-                )) + "
+                )}
               </AnimatePresence>
 
-              {/* Enhanced Voice Note Display */) + "
+              {/* Enhanced Voice Note Display */}
               <AnimatePresence>
                 {showVoiceNote && (
                   <motion.div
-                    initial={{ opacity: 0, scale: 0.9 ) + ") + "
-                    animate={{ opacity: 1, scale: 1 ) + ") + "
-                    exit={{ opacity: 0, scale: 0.9 ) + ") + "
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
                     className="bg-gradient-to-r from-purple-100 to-pink-100 p-6 rounded-2xl border border-purple-200"
                   >
                     <div className="flex items-center space-x-4">
@@ -1122,89 +1093,89 @@ function EnhancedStoryChapter({ chapter, index ) + ": { chapter: (typeof storyCh
                         <Volume2 className="w-6 h-6 text-white" />
                       </div>
                       <div className="flex-1">
-                        <p className="text-gray-800 italic text-base">"{chapter.voiceNote) + ""</p>
+                        <p className="text-gray-800 italic text-base">"{chapter.voiceNote}"</p>
                         <div className="flex items-center space-x-2 mt-3">
                           <div className="flex space-x-1" aria-hidden="true">
-                            {Array.from({ length: 15 ) + ", (_, i) => (
+                            {Array.from({ length: 15 }, (_, i) => (
                               <div
-                                key={i) + "
+                                key={i}
                                 className="w-1 bg-purple-400 rounded-full"
-                                style={{ height: Math.random() * 16 + 4 + "px" ) + ") + "
+                                style={{ height: Math.random() * 16 + 4 + "px" }}
                               />
-                            ))) + "
+                            ))}
                           </div>
                           <span className="text-sm text-gray-600 ml-2">0:15</span>
                         </div>
                       </div>
                     </div>
                   </motion.div>
-                )) + "
+                )}
               </AnimatePresence>
             </motion.div>
           </div>
 
-          {/* Enhanced Visual Side */) + "
+          {/* Enhanced Visual Side */}
           <div className="flex-1 max-w-lg">
             <motion.div
-              initial={{ opacity: 0, scale: 0.8 ) + ") + "
-              animate={isInView ? { opacity: 1, scale: 1 ) + " : { opacity: 0, scale: 0.8 ) + ") + "
-              transition={{ duration: 1, delay: 0.4 ) + ") + "
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
+              transition={{ duration: 1, delay: 0.4 }}
               className="relative group"
-              style={{ y ) + ") + "
+              style={{ y }}
             >
               <Card className="overflow-hidden shadow-2xl border-0 bg-white/95 backdrop-blur-sm hover:shadow-pink-500/20 transition-all duration-700">
                 <div className="relative h-80 lg:h-[400px] overflow-hidden">
                   <Image
-                    src={chapter.image || "/placeholder.svg") + "
-                    alt={"" + chapter.title + " - " + str(chapter.subtitle) + "") + "
+                    src={chapter.image || "/placeholder.svg"}
+                    alt={`${chapter.title} - ${chapter.subtitle}`}
                     fill
                     className="object-cover transition-transform duration-1000 group-hover:scale-110"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
 
-                  {/* Enhanced Overlays */) + "
+                  {/* Enhanced Overlays */}
                   <div className="absolute top-4 left-4">
                     <motion.div
                       className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/30"
-                      animate={{ rotate: [0, 360] ) + ") + "
-                      transition={{ duration: 20, repeat: Infinity, ease: "linear" ) + ") + "
+                      animate={{ rotate: [0, 360] }}
+                      transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
                     >
-                      <span className="text-white font-bold text-xl">{chapter.id) + "</span>
+                      <span className="text-white font-bold text-xl">{chapter.id}</span>
                     </motion.div>
                   </div>
 
                   <div className="absolute top-4 right-4 flex space-x-2">
                     <motion.button
-                      onClick={() => setImageFullscreen(true)) + "
+                      onClick={() => setImageFullscreen(true)}
                       className="bg-white/20 backdrop-blur-sm rounded-full p-2 border border-white/30 hover:bg-white/30 transition-colors"
-                      whileHover={{ scale: 1.1 ) + ") + "
+                      whileHover={{ scale: 1.1 }}
                       aria-label="View image fullscreen"
                     >
                       <Maximize className="w-4 h-4 text-white" />
                     </motion.button>
                     <motion.button
-                      onClick={handleDownloadImage) + "
+                      onClick={handleDownloadImage}
                       className="bg-white/20 backdrop-blur-sm rounded-full p-2 border border-white/30 hover:bg-white/30 transition-colors"
-                      whileHover={{ scale: 1.1 ) + ") + "
+                      whileHover={{ scale: 1.1 }}
                       aria-label="Download image"
                     >
                       <Download className="w-4 h-4 text-white" />
                     </motion.button>
                   </div>
 
-                  {/* Weather and Emotion Indicator */) + "
+                  {/* Weather and Emotion Indicator */}
                   <div className="absolute bottom-4 left-4 right-4">
                     <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-4 space-y-2">
-                      <p className="text-gray-900 font-bold text-center text-base italic">"{chapter.mood) + ""</p>
+                      <p className="text-gray-900 font-bold text-center text-base italic">"{chapter.mood}"</p>
                       <div className="flex items-center justify-between text-sm text-gray-600">
                         <div className="flex items-center space-x-1">
                           <span>🌤️</span>
-                          <span className="truncate">{chapter.weather) + "</span>
+                          <span className="truncate">{chapter.weather}</span>
                         </div>
                         <div className="flex items-center space-x-1">
                           <span>💖</span>
-                          <span className="truncate">{chapter.emotion) + "</span>
+                          <span className="truncate">{chapter.emotion}</span>
                         </div>
                       </div>
                     </div>
@@ -1212,48 +1183,51 @@ function EnhancedStoryChapter({ chapter, index ) + ": { chapter: (typeof storyCh
                 </div>
               </Card>
 
-              {/* Enhanced Decorative Elements */) + "
+              {/* Enhanced Decorative Elements */}
               <motion.div
                 className="absolute -top-4 -right-4 w-8 h-8 bg-pink-400 rounded-full opacity-60"
-                animate={{ scale: [1, 1.2, 1], rotate: [0, 180, 360] ) + ") + "
-                transition={{ duration: 4, repeat: Infinity ) + ") + "
+                animate={{ scale: [1, 1.2, 1], rotate: [0, 180, 360] }}
+                transition={{ duration: 4, repeat: Infinity }}
               />
               <motion.div
                 className="absolute -bottom-4 -left-4 w-6 h-6 bg-rose-400 rounded-full opacity-40"
-                animate={{ scale: [1, 1.3, 1], rotate: [360, 180, 0] ) + ") + "
-                transition={{ duration: 6, repeat: Infinity ) + ") + "
+                animate={{ scale: [1, 1.3, 1], rotate: [360, 180, 0] }}
+                transition={{ duration: 6, repeat: Infinity }}
               />
             </motion.div>
           </div>
         </div>
       </div>
 
-      {/* Fullscreen Image Modal */) + "
+      {/* Fullscreen Image Modal */}
       <AnimatePresence>
         {imageFullscreen && (
           <motion.div
-            initial={{ opacity: 0 ) + ") + "
-            animate={{ opacity: 1 ) + ") + "
-            exit={{ opacity: 0 ) + ") + "
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4"
-            onClick={() => setImageFullscreen(false)) + "
+            onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="fullscreen-image-title"
           >
             <motion.div
-              initial={{ scale: 0.8 ) + ") + "
-              animate={{ scale: 1 ) + ") + "
-              exit={{ scale: 0.8 ) + ") + "
+              initial={{ scale: 0.8 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0.8 }}
               className="relative max-w-4xl max-h-full"
-              onClick={(e) => e.stopPropagation()) + "
+              onClick={(e) => e.stopPropagation()}
             >
               <Image
-                src={chapter.image || "/placeholder.svg") + "
-                alt={"" + chapter.title + " - Fullscreen") + "
-                width={800) + "
-                height={600) + "
+                src={chapter.image || "/placeholder.svg"}
+                alt={`${chapter.title} - Fullscreen`}
+                width={800}
+                height={600}
                 className="rounded-lg shadow-2xl max-w-full max-h-full object-contain"
               />
               <Button
-                onClick={() => setImageFullscreen(false)) + "
+                onClick={() => setImageFullscreen(false)}
                 className="absolute top-4 right-4 bg-white/20 hover:bg-white/30 text-white rounded-full p-2"
                 aria-label="Close fullscreen"
               >
@@ -1261,31 +1235,31 @@ function EnhancedStoryChapter({ chapter, index ) + ": { chapter: (typeof storyCh
               </Button>
             </motion.div>
           </motion.div>
-        )) + "
+        )}
       </AnimatePresence>
     </motion.section>
   )
-) + "
+}
 
 // Enhanced Final Chapter with better effects
 function SpectacularFinalChapter() {
   const ref = useRef<HTMLElement>(null)
-  const isInView = useInView(ref, { once: true ) + ")
+  const isInView = useInView(ref, { once: true })
   const [showMessage, setShowMessage] = useState(false)
   const [showFireworks, setShowFireworks] = useState(false)
   const [mounted, setMounted] = useState(false)
   const [fireworkPositions] = useState(() => 
-    Array.from({ length: 10 ) + ", (_, i) => ({
+    Array.from({ length: 10 }, (_, i) => ({
       id: i,
       x: 20 + (i * 8) % 60,
       y: 20 + (i * 13) % 40,
       delay: i * 0.3,
-    ) + "))
+    }))
   )
 
   useEffect(() => {
     setMounted(true)
-  ) + ", [])
+  }, [])
 
   useEffect(() => {
     if (isInView && mounted) {
@@ -1294,88 +1268,88 @@ function SpectacularFinalChapter() {
       return () => {
         clearTimeout(messageTimer)
         clearTimeout(fireworksTimer)
-      ) + "
-    ) + "
-  ) + ", [isInView, mounted])
+      }
+    }
+  }, [isInView, mounted])
 
   return (
     <motion.section
-      ref={ref) + "
+      ref={ref}
       className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-900 via-rose-900 to-red-900 overflow-hidden"
-      initial={{ opacity: 0 ) + ") + "
-      animate={isInView ? { opacity: 1 ) + " : { opacity: 0 ) + ") + "
-      transition={{ duration: 1.5 ) + ") + "
+      initial={{ opacity: 0 }}
+      animate={isInView ? { opacity: 1 } : { opacity: 0 }}
+      transition={{ duration: 1.5 }}
     >
-      {/* Enhanced Starry Background */) + "
+      {/* Enhanced Starry Background */}
       {mounted && (
         <div className="absolute inset-0" aria-hidden="true">
-          {Array.from({ length: 100 ) + ", (_, i) => (
+          {Array.from({ length: 100 }, (_, i) => (
             <motion.div
-              key={i) + "
+              key={i}
               className="absolute bg-white rounded-full"
               style={{
-                left: `(i * 3.7) % 100 + "%",
-                top: `(i * 7.13) % 100 + "%",
+                left: `${(i * 3.7) % 100}%`,
+                top: `${(i * 7.13) % 100}%`,
                 width: (i % 3) + 1 + "px",
                 height: (i % 3) + 1 + "px",
-              ) + ") + "
+              }}
               animate={{
                 opacity: [0.3, 1, 0.3],
                 scale: [1, 1.5, 1],
-              ) + ") + "
+              }}
               transition={{
                 duration: 3 + (i % 4),
                 repeat: Infinity,
                 delay: (i % 10) * 0.5,
-              ) + ") + "
+              }}
             />
-          ))) + "
+          ))}
         </div>
-      )) + "
+      )}
 
-      {/* Optimized Fireworks */) + "
+      {/* Optimized Fireworks */}
       {showFireworks && mounted && (
         <div className="absolute inset-0 pointer-events-none">
           {fireworkPositions.map((firework) => (
             <motion.div
-              key={firework.id) + "
+              key={firework.id}
               className="absolute"
               style={{
-                left: `firework.x + "%",
-                top: `firework.y + "%",
-              ) + ") + "
+                left: `${firework.x}%`,
+                top: `${firework.y}%`,
+              }}
             >
-              {Array.from({ length: 16 ) + ", (_, j) => (
+              {Array.from({ length: 16 }, (_, j) => (
                 <motion.div
-                  key={j) + "
+                  key={j}
                   className="absolute w-3 h-3 rounded-full"
                   style={{
                     backgroundColor: ["#ff6b9d", "#feca57", "#48dbfb", "#ff9ff3", "#54a0ff"][j % 5],
-                  ) + ") + "
-                  initial={{ x: 0, y: 0, opacity: 1, scale: 1 ) + ") + "
+                  }}
+                  initial={{ x: 0, y: 0, opacity: 1, scale: 1 }}
                   animate={{
                     x: Math.cos((j * 22.5 * Math.PI) / 180) * (60 + Math.random() * 40),
                     y: Math.sin((j * 22.5 * Math.PI) / 180) * (60 + Math.random() * 40),
                     opacity: 0,
                     scale: 0,
-                  ) + ") + "
+                  }}
                   transition={{
                     duration: 2 + Math.random() * 0.5,
                     delay: firework.delay + Math.random() * 0.5,
                     ease: "easeOut",
-                  ) + ") + "
+                  }}
                 />
-              ))) + "
+              ))}
             </motion.div>
-          ))) + "
+          ))}
         </div>
-      )) + "
+      )}
 
       <div className="relative z-10 text-center px-4 max-w-7xl">
         <motion.div
-          initial={{ scale: 0.5, opacity: 0, rotateY: -180 ) + ") + "
-          animate={isInView ? { scale: 1, opacity: 1, rotateY: 0 ) + " : { scale: 0.5, opacity: 0, rotateY: -180 ) + ") + "
-          transition={{ duration: 2, delay: 0.5 ) + ") + "
+          initial={{ scale: 0.5, opacity: 0, rotateY: -180 }}
+          animate={isInView ? { scale: 1, opacity: 1, rotateY: 0 } : { scale: 0.5, opacity: 0, rotateY: -180 }}
+          transition={{ duration: 2, delay: 0.5 }}
         >
           <motion.h1
             className="text-5xl md:text-7xl lg:text-8xl font-serif text-white mb-16 drop-shadow-2xl"
@@ -1385,29 +1359,29 @@ function SpectacularFinalChapter() {
                 "0 0 60px #ec4899, 0 0 90px #f43f5e, 0 0 120px #f59e0b",
                 "0 0 30px #f472b6, 0 0 60px #ec4899, 0 0 90px #dc2626",
               ],
-            ) + ") + "
-            transition={{ duration: 4, repeat: Infinity ) + ") + "
+            }}
+            transition={{ duration: 4, repeat: Infinity }}
           >
             Always Yours
           </motion.h1>
 
           <motion.div
-            initial={{ y: 100, opacity: 0 ) + ") + "
-            animate={isInView ? { y: 0, opacity: 1 ) + " : { y: 100, opacity: 0 ) + ") + "
-            transition={{ delay: 1, duration: 1 ) + ") + "
+            initial={{ y: 100, opacity: 0 }}
+            animate={isInView ? { y: 0, opacity: 1 } : { y: 100, opacity: 0 }}
+            transition={{ delay: 1, duration: 1 }}
             className="space-y-12 mb-20"
           >
             <motion.p
               className="text-2xl md:text-3xl text-white/90 font-light italic leading-relaxed max-w-4xl mx-auto"
-              animate={{ scale: [1, 1.02, 1] ) + ") + "
-              transition={{ duration: 4, repeat: Infinity ) + ") + "
+              animate={{ scale: [1, 1.02, 1] }}
+              transition={{ duration: 4, repeat: Infinity }}
             >
               "This website is not a gift. It's a mirror of everything we've been, survived, and still dream of."
             </motion.p>
             <motion.p
               className="text-xl md:text-2xl text-white/80 font-light"
-              animate={{ opacity: [0.8, 1, 0.8] ) + ") + "
-              transition={{ duration: 3, repeat: Infinity ) + ") + "
+              animate={{ opacity: [0.8, 1, 0.8] }}
+              transition={{ duration: 3, repeat: Infinity }}
             >
               And this is just the beginning.
             </motion.p>
@@ -1416,22 +1390,22 @@ function SpectacularFinalChapter() {
           <AnimatePresence>
             {showMessage && (
               <motion.div
-                initial={{ opacity: 0, y: 100, scale: 0.8 ) + ") + "
-                animate={{ opacity: 1, y: 0, scale: 1 ) + ") + "
-                exit={{ opacity: 0, y: 100, scale: 0.8 ) + ") + "
+                initial={{ opacity: 0, y: 100, scale: 0.8 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 100, scale: 0.8 }}
                 className="bg-white/10 backdrop-blur-2xl rounded-3xl p-12 border border-white/20 shadow-2xl max-w-5xl mx-auto"
               >
-                <motion.div initial={{ opacity: 0 ) + ") + " animate={{ opacity: 1 ) + ") + " transition={{ delay: 0.5 ) + ") + ">
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}>
                   <div className="flex justify-center mb-8">
                     <motion.div
                       className="w-20 h-20 bg-gradient-to-br from-pink-500 to-rose-600 rounded-full flex items-center justify-center relative overflow-hidden"
-                      animate={{ rotate: [0, 360] ) + ") + "
-                      transition={{ duration: 8, repeat: Infinity, ease: "linear" ) + ") + "
+                      animate={{ rotate: [0, 360] }}
+                      transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
                     >
                       <motion.div
                         className="absolute inset-0 bg-white/20"
-                        animate={{ scale: [1, 1.2, 1], opacity: [0.2, 0.5, 0.2] ) + ") + "
-                        transition={{ duration: 2, repeat: Infinity ) + ") + "
+                        animate={{ scale: [1, 1.2, 1], opacity: [0.2, 0.5, 0.2] }}
+                        transition={{ duration: 2, repeat: Infinity }}
                       />
                       <Heart className="w-10 h-10 text-white fill-current relative z-10" />
                     </motion.div>
@@ -1439,9 +1413,9 @@ function SpectacularFinalChapter() {
 
                   <motion.p
                     className="text-white text-xl md:text-2xl leading-relaxed italic mb-8 max-w-4xl mx-auto"
-                    initial={{ opacity: 0, y: 30 ) + ") + "
-                    animate={{ opacity: 1, y: 0 ) + ") + "
-                    transition={{ delay: 0.8 ) + ") + "
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.8 }}
                   >
                     "Happy Birthday, my dearest Beboo! From that first glimpse in Jaipur to every chapter we've written
                     together, you've been my greatest story. Thank you for choosing us, again and again. Here's to
@@ -1451,9 +1425,9 @@ function SpectacularFinalChapter() {
 
                   <motion.div
                     className="flex items-center justify-center space-x-4 text-pink-300"
-                    initial={{ opacity: 0, scale: 0.8 ) + ") + "
-                    animate={{ opacity: 1, scale: 1 ) + ") + "
-                    transition={{ delay: 1.2 ) + ") + "
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 1.2 }}
                   >
                     <Star className="w-6 h-6 fill-current" />
                     <span className="text-lg font-medium">With all my love, always and forever</span>
@@ -1461,54 +1435,54 @@ function SpectacularFinalChapter() {
                   </motion.div>
                 </motion.div>
               </motion.div>
-            )) + "
+            )}
           </AnimatePresence>
 
           <motion.div
             className="flex justify-center space-x-3 mt-16"
-            initial={{ scale: 0 ) + ") + "
-            animate={isInView ? { scale: 1 ) + " : { scale: 0 ) + ") + "
-            transition={{ delay: 3, type: "spring", stiffness: 200 ) + ") + "
+            initial={{ scale: 0 }}
+            animate={isInView ? { scale: 1 } : { scale: 0 }}
+            transition={{ delay: 3, type: "spring", stiffness: 200 }}
           >
-            {Array.from({ length: 9 ) + ", (_, i) => (
+            {Array.from({ length: 9 }, (_, i) => (
               <motion.div
-                key={i) + "
+                key={i}
                 animate={{
                   scale: [1, 1.8, 1],
                   rotate: [0, 360],
                   y: [0, -30, 0],
-                ) + ") + "
+                }}
                 transition={{
                   duration: 5,
                   repeat: Infinity,
                   delay: i * 0.4,
-                ) + ") + "
+                }}
               >
                 <Heart className="w-8 h-8 text-pink-300 fill-current" />
               </motion.div>
-            ))) + "
+            ))}
           </motion.div>
         </motion.div>
       </div>
     </motion.section>
   )
-) + "
+}
 
 // Error Boundary Component
-function ErrorBoundary({ children ) + ": { children: React.ReactNode ) + ") {
+function ErrorBoundary({ children }: { children: React.ReactNode }) {
   const [hasError, setHasError] = useState(false)
 
   useEffect(() => {
     const handleError = (event: ErrorEvent) => {
       console.error('Error caught by boundary:', event.error)
       setHasError(true)
-    ) + "
+    }
 
     const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
       console.log('Promise rejection handled:', event.reason)
       event.preventDefault()
       // Don't set error state for minor rejections
-    ) + "
+    }
 
     window.addEventListener('error', handleError)
     window.addEventListener('unhandledrejection', handleUnhandledRejection)
@@ -1516,8 +1490,8 @@ function ErrorBoundary({ children ) + ": { children: React.ReactNode ) + ") {
     return () => {
       window.removeEventListener('error', handleError)
       window.removeEventListener('unhandledrejection', handleUnhandledRejection)
-    ) + "
-  ) + ", [])
+    }
+  }, [])
 
   if (hasError) {
     return (
@@ -1526,7 +1500,7 @@ function ErrorBoundary({ children ) + ": { children: React.ReactNode ) + ") {
           <Heart className="w-16 h-16 text-pink-500 mx-auto" />
           <h2 className="text-2xl font-serif text-gray-800">Something went wrong with our love story</h2>
           <button 
-            onClick={() => setHasError(false)) + "
+            onClick={() => setHasError(false)}
             className="px-6 py-3 bg-pink-500 text-white rounded-full hover:bg-pink-600 transition-colors"
           >
             Try Again
@@ -1534,10 +1508,10 @@ function ErrorBoundary({ children ) + ": { children: React.ReactNode ) + ") {
         </div>
       </div>
     )
-  ) + "
+  }
 
-  return <>{children) + "</>
-) + "
+  return <>{children}</>
+}
 
 // Main Component
 export default function UltimateRomanticLoveStory() {
@@ -1547,32 +1521,32 @@ export default function UltimateRomanticLoveStory() {
     // Simulate loading time for better UX
     const timer = setTimeout(() => setLoading(false), 1500)
     return () => clearTimeout(timer)
-  ) + ", [])
+  }, [])
 
   if (loading) {
     return (
       <div className="fixed inset-0 bg-gradient-to-br from-pink-100 via-rose-100 to-red-100 flex items-center justify-center z-50">
         <motion.div
           className="text-center space-y-6"
-          initial={{ opacity: 0, scale: 0.8 ) + ") + "
-          animate={{ opacity: 1, scale: 1 ) + ") + "
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
         >
           <motion.div
             className="w-16 h-16 border-4 border-pink-400 border-t-transparent rounded-full mx-auto"
-            animate={{ rotate: 360 ) + ") + "
-            transition={{ duration: 1, repeat: Infinity, ease: "linear" ) + ") + "
+            animate={{ rotate: 360 }}
+            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
           />
           <motion.h2
             className="text-2xl font-serif text-gray-700"
-            animate={{ opacity: [0.5, 1, 0.5] ) + ") + "
-            transition={{ duration: 2, repeat: Infinity ) + ") + "
+            animate={{ opacity: [0.5, 1, 0.5] }}
+            transition={{ duration: 2, repeat: Infinity }}
           >
             Loading Our Love Story...
           </motion.h2>
         </motion.div>
       </div>
     )
-  ) + "
+  }
 
   return (
     <ErrorBoundary>
@@ -1583,14 +1557,11 @@ export default function UltimateRomanticLoveStory() {
         <CinematicHero />
 
         {storyChapters.map((chapter, index) => (
-          <EnhancedStoryChapter key={chapter.id) + " chapter={chapter) + " index={index) + " />
-        ))) + "
+          <EnhancedStoryChapter key={chapter.id} chapter={chapter} index={index} />
+        ))}
 
         <SpectacularFinalChapter />
       </div>
     </ErrorBoundary>
   )
-) + "
-) + "
-}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}
-}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}
+}
