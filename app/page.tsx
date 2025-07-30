@@ -346,27 +346,29 @@ async function updateChapterSoungtracks(playlistId: string, spotifyAPI: any) {
 }
 
 // Spotify Music Player
-function SpotifyMusicPlayer() {
-  const [isPlaying, setIsPlaying] = useState(false)
-  const [currentTrack, setCurrentTrack] = useState(0)
-  const [volume, setVolume] = useState(0.7)
-  const [isMuted, setIsMuted] = useState(false)
-  const [isHidden, setIsHidden] = useState(false)
-  const [progress, setProgress] = useState(0)
-  const [duration, setDuration] = useState(0)
-  const [isLoading, setIsLoading] = useState(false)
-  const [isShuffled, setIsShuffled] = useState(false)
-  const [repeatMode, setRepeatMode] = useState(0) // 0: off, 1: all, 2: one
+const SpotifyMusicPlayer = () => {
   const [isConnected, setIsConnected] = useState(false)
   const [playlistId, setPlaylistId] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const [currentTrack, setCurrentTrack] = useState<any>(null)
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [progress, setProgress] = useState(0)
+  const [duration, setDuration] = useState(0)
+  const [volume, setVolume] = useState(0.7)
+  const [isMuted, setIsMuted] = useState(false)
+  const [currentTime, setCurrentTime] = useState(0)
+  const [isHidden, setIsHidden] = useState(false)
   const [showPlaylistInput, setShowPlaylistInput] = useState(false)
   const [playlistUpdated, setPlaylistUpdated] = useState(false)
-  const [currentTime, setCurrentTime] = useState(0)
-
+  const [isShuffled, setIsShuffled] = useState(false)
+  const [repeatMode, setRepeatMode] = useState(0) // 0: off, 1: all, 2: one
   const playerRef = useRef<any>(null)
-  const deviceId = useRef<string>("")
+  const deviceId = useRef<string | null>(null)
 
-  // Check if user is authenticated
+  // Import the real spotifyAPI at the component level
+  const { spotifyAPI } = useSpotify()
+
+  // Check authentication status on mount
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const token = localStorage.getItem('spotify_access_token')
@@ -510,7 +512,7 @@ function SpotifyMusicPlayer() {
       }, 1000)
       return () => clearInterval(timer)
     }
-  }, [isPlaying, currentTrack?.uri, spotifyAPI])
+  }, [isPlaying, currentTrack?.uri])
 
   // Toggle Button - Always visible
   const ToggleButton = () => (
@@ -538,9 +540,6 @@ function SpotifyMusicPlayer() {
       </Button>
     </motion.div>
   )
-
-    // Import the real spotifyAPI
-  const { spotifyAPI } = useSpotify()
 
   const handleSpotifyConnect = () => {
     if (typeof window !== 'undefined') {

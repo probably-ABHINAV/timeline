@@ -4,8 +4,9 @@
 import { useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { spotifyAPI } from '@/lib/spotify'
+import { Suspense } from 'react'
 
-export default function SpotifyCallback() {
+function SpotifyCallbackContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading')
@@ -13,6 +14,9 @@ export default function SpotifyCallback() {
 
   useEffect(() => {
     const handleCallback = async () => {
+      // Ensure we're on the client side
+      if (typeof window === 'undefined') return
+
       const code = searchParams.get('code')
       const state = searchParams.get('state')
       const error = searchParams.get('error')
@@ -113,6 +117,23 @@ export default function SpotifyCallback() {
         )}
       </div>
     </div>
+  )
+}
+
+export default function SpotifyCallback() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-green-100">
+        <div className="bg-white p-8 rounded-lg shadow-lg text-center max-w-md w-full mx-4">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
+          <h2 className="text-xl font-semibold text-gray-800 mb-2">
+            Loading...
+          </h2>
+        </div>
+      </div>
+    }>
+      <SpotifyCallbackContent />
+    </Suspense>
   )
 }
 

@@ -43,9 +43,14 @@ class SpotifyAPI {
       this.accessToken = localStorage.getItem('spotify_access_token') || null
     }
     
-    // Validate required environment variables
-    if (!this.clientId) {
-      console.warn('NEXT_PUBLIC_SPOTIFY_CLIENT_ID is not set')
+    // Only warn in development
+    if (process.env.NODE_ENV === 'development') {
+      if (!this.clientId) {
+        console.warn('NEXT_PUBLIC_SPOTIFY_CLIENT_ID is not set')
+      }
+      if (!this.clientSecret) {
+        console.warn('SPOTIFY_CLIENT_SECRET is not set')
+      }
     }
   }
 
