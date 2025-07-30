@@ -60,7 +60,7 @@ const storyChapters = [
     mood: "Serendipitous",
     song: "Serendipity - BTS",
     spotifyTrack: "4u4ZPyHj0qlWLKqPcP8jhY",
-    image: "/images/chapter1.jpg",
+    image: "/images/WhatsApp Image 2025-07-30 at 01.28.38_0dd6c667_1753845432857.jpg",
     memories: ["Unfamiliar faces", "Two outsiders", "A thought that refused to leave"],
     weather: "Warm June afternoon",
     heartbeat: 72,
@@ -86,7 +86,7 @@ const storyChapters = [
     icon: MessageCircle,
     mood: "Hopeful Reconnection",
     song: "Falling Like the Stars - James Arthur",
-    image: "/images/chapter2.jpg",
+    image: "/images/WhatsApp Image 2025-07-30 at 01.28.42_72d5d2f3_1753845432858.jpg",
     memories: ["Heart racing", "Words trembling", "You didn't walk away"],
     weather: "Midnight silence",
     heartbeat: 95,
@@ -113,7 +113,7 @@ const storyChapters = [
     icon: Heart,
     mood: "Blooming Love",
     song: "Say You Won't Let Go - James Arthur",
-    image: "/images/chapter3.jpg",
+    image: "/images/WhatsApp Image 2025-07-30 at 01.28.39_7a4b4af6_1753845432857.jpg",
     memories: ["Daily chats", "Deep secrets", "Love just bloomed"],
     weather: "Gentle evening breeze",
     heartbeat: 88,
@@ -138,7 +138,7 @@ const storyChapters = [
     icon: Coffee,
     mood: "Electric Connection", 
     song: "Dil-e-Baadat",
-    image: "/images/chapter4.jpg",
+    image: "/images/WhatsApp Image 2025-07-30 at 01.28.43_0fd13c2f_1753845432858.jpg",
     memories: ["Hands brushed", "That laugh", "Pure electricity"],
     weather: "Cozy café warmth",
     heartbeat: 102,
@@ -164,7 +164,7 @@ const storyChapters = [
     icon: Gift,
     mood: "Pure Joy",
     song: "Marry Me - Train",
-    image: "/images/chapter5.jpg",
+    image: "/images/WhatsApp Image 2025-07-30 at 01.28.45_8b6207bc_1753845432860.jpg",
     memories: ["Decorated room", "A flower waited", "Your eyes said yes"],
     weather: "Perfect January evening",
     heartbeat: 120,
@@ -188,7 +188,7 @@ const storyChapters = [
     icon: Sparkles,
     mood: "Adventure Together",
     song: "Adventure of a Lifetime - Coldplay",
-    image: "/images/chapter6.jpg",
+    image: "/images/WhatsApp Image 2025-07-30 at 01.28.46_9b277a80_1753845432860.jpg",
     memories: ["Empty swings", "You won at Tekken", "Our fingerprints everywhere"],
     weather: "Sunny adventure day",
     heartbeat: 85,
@@ -212,7 +212,7 @@ const storyChapters = [
     icon: BookOpen,
     mood: "Supportive Love",
     song: "Count on Me - Bruno Mars",
-    image: "/images/chapter7.jpg",
+    image: "/images/WhatsApp Image 2025-07-30 at 01.28.44_63c3fb5b_1753845432859.jpg",
     memories: ["You made me a CV", "Never stopped believing", "10 minutes were home"],
     weather: "Stressful but supported",
     heartbeat: 78,
@@ -236,7 +236,7 @@ const storyChapters = [
     icon: Gift,
     mood: "Beautiful Surprise",
     song: "Thinking Out Loud - Ed Sheeran",
-    image: "/images/chapter8.jpg",
+    image: "/images/WhatsApp Image 2025-07-30 at 01.36.08_ede97f2e_1753845432861.jpg",
     memories: ["Bouquet surprise", "We danced", "The necklace I still feel"],
     weather: "Room lit with love",
     heartbeat: 110,
@@ -262,7 +262,7 @@ const storyChapters = [
     icon: Moon,
     mood: "Learning Through Pain",
     song: "Fix You - Coldplay",
-    image: "/images/chapter9.jpg",
+    image: "/images/WhatsApp Image 2025-07-30 at 01.36.07_2ba2ec18_1753845432861.jpg",
     memories: ["You planned my birthday", "I disappointed you", "Love doesn't end in silence"],
     weather: "Storm clouds",
     heartbeat: 65,
@@ -288,7 +288,7 @@ const storyChapters = [
     icon: Heart,
     mood: "Renewed Hope",
     song: "A Thousand Years - Christina Perri",
-    image: "/images/chapter10.jpg",
+    image: "/images/WhatsApp Image 2025-07-30 at 01.37.07_de2cc6c6_1753845432862.jpg",
     memories: ["Every day I tried", "By God's grace", "You're my future"],
     weather: "New dawn breaking",
     heartbeat: 92,
@@ -378,7 +378,12 @@ const SpotifyMusicPlayer = () => {
 
   // Initialize Spotify Web Playback SDK
   useEffect(() => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== 'undefined' && isConnected) {
+      // Check if script already exists
+      if (document.querySelector('script[src="https://sdk.scdn.co/spotify-player.js"]')) {
+        return
+      }
+
       const script = document.createElement('script')
       script.src = 'https://sdk.scdn.co/spotify-player.js'
       script.async = true
@@ -388,87 +393,164 @@ const SpotifyMusicPlayer = () => {
         const token = localStorage.getItem('spotify_access_token')
         if (!token) {
           console.log('No Spotify access token available')
+          setIsConnected(false)
           return
         }
 
-        const player = new window.Spotify.Player({
-          name: 'Our Love Story Player',
-          getOAuthToken: (cb: (token: string) => void) => { cb(token) },
-          volume: volume
-        })
+        try {
+          const player = new window.Spotify.Player({
+            name: 'Our Love Story Player',
+            getOAuthToken: (cb: (token: string) => void) => { 
+              const currentToken = localStorage.getItem('spotify_access_token')
+              if (currentToken) {
+                cb(currentToken)
+              }
+            },
+            volume: volume
+          })
 
-        player.addListener('ready', ({ device_id }: { device_id: string }) => {
-          console.log('Ready with Device ID', device_id)
-          deviceId.current = device_id
-        })
+          player.addListener('ready', ({ device_id }: { device_id: string }) => {
+            console.log('Ready with Device ID', device_id)
+            deviceId.current = device_id
+            setIsConnected(true)
+          })
 
-        player.addListener('not_ready', ({ device_id }: { device_id: string }) => {
-          console.log('Device ID has gone offline', device_id)
-        })
+          player.addListener('not_ready', ({ device_id }: { device_id: string }) => {
+            console.log('Device ID has gone offline', device_id)
+            setIsConnected(false)
+          })
 
-        player.addListener('player_state_changed', (state: any) => {
-          if (!state) return
-          setIsPlaying(!state.paused)
-          setProgress(state.position)
-          setDuration(state.duration)
-        })
+          player.addListener('player_state_changed', (state: any) => {
+            if (!state) return
+            
+            setCurrentTrack(state.track_window.current_track)
+            setIsPlaying(!state.paused)
+            setProgress(state.position)
+            setDuration(state.duration)
+          })
 
-        player.addListener('initialization_error', ({ message }: { message: string }) => {
-          console.error('Failed to initialize:', message)
-        })
+          player.addListener('initialization_error', ({ message }: { message: string }) => {
+            console.error('Failed to initialize:', message)
+            setIsConnected(false)
+          })
 
-        player.addListener('authentication_error', ({ message }: { message: string }) => {
-          console.error('Failed to authenticate:', message)
-        })
+          player.addListener('authentication_error', ({ message }: { message: string }) => {
+            console.error('Failed to authenticate:', message)
+            setIsConnected(false)
+            localStorage.removeItem('spotify_access_token')
+          })
 
-        player.addListener('account_error', ({ message }: { message: string }) => {
-          console.error('Failed to validate Spotify account:', message)
-        })
+          player.addListener('account_error', ({ message }: { message: string }) => {
+            console.error('Failed to validate Spotify account:', message)
+            setIsConnected(false)
+          })
 
-        player.addListener('playback_error', ({ message }: { message: string }) => {
-          console.error('Failed to perform playback:', message)
-        })
+          player.addListener('playback_error', ({ message }: { message: string }) => {
+            console.error('Failed to perform playback:', message)
+          })
 
-        player.connect().then((success: boolean) => {
-          if (success) {
-            console.log('Successfully connected to Spotify!')
-          }
-        })
+          player.connect().then((success: boolean) => {
+            if (success) {
+              console.log('Successfully connected to Spotify!')
+              setIsConnected(true)
+            } else {
+              console.error('Failed to connect to Spotify')
+              setIsConnected(false)
+            }
+          }).catch((error) => {
+            console.error('Spotify connection error:', error)
+            setIsConnected(false)
+          })
 
-        playerRef.current = player
+          playerRef.current = player
+        } catch (error) {
+          console.error('Error creating Spotify player:', error)
+          setIsConnected(false)
+        }
       }
 
       return () => {
         // Cleanup
         if (playerRef.current) {
-          playerRef.current.disconnect()
+          try {
+            playerRef.current.disconnect()
+          } catch (error) {
+            console.log('Error disconnecting player:', error)
+          }
           playerRef.current = null
-        }
-
-        if (document.body.contains(script)) {
-          document.body.removeChild(script)
         }
       }
     }
-  }, [volume])
+  }, [volume, isConnected])
 
   const togglePlay = async () => {
     if (!playerRef.current) {
       console.warn('Spotify player not initialized')
+      if (isConnected) {
+        alert('Spotify player is still loading. Please wait a moment and try again.')
+      } else {
+        alert('Please connect to Spotify first to play music.')
+      }
       return
     }
+    
     setIsLoading(true)
     try {
-      await playerRef.current.togglePlay()
+      const state = await playerRef.current.getCurrentState()
+      if (!state) {
+        console.log('No current playback state')
+        // Try to start playback with a default track from your playlist
+        const firstTrack = playlistTracks[0]
+        if (firstTrack) {
+          await playSpecificTrack(firstTrack.id)
+        } else {
+          alert('Please add some tracks to your playlist first.')
+        }
+      } else {
+        await playerRef.current.togglePlay()
+      }
     } catch (error) {
       console.error('Playback error:', error)
-      setIsLoading(false)
-      // Fallback: try to reinitialize player
-      if (error instanceof Error && error.message.includes('authentication')) {
-        setIsConnected(false)
+      
+      if (error instanceof Error) {
+        if (error.message.includes('authentication') || error.message.includes('401')) {
+          setIsConnected(false)
+          localStorage.removeItem('spotify_access_token')
+          alert('Spotify authentication expired. Please reconnect.')
+        } else if (error.message.includes('Premium')) {
+          alert('Spotify Web Playback requires a Spotify Premium account.')
+        } else {
+          alert('Playback error occurred. Please try again.')
+        }
       }
     } finally {
       setIsLoading(false)
+    }
+  }
+
+  const playSpecificTrack = async (trackId: string) => {
+    if (!deviceId.current || !spotifyAPI.isAuthenticated()) {
+      console.log('Device or authentication not available')
+      return
+    }
+
+    try {
+      const response = await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId.current}`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('spotify_access_token')}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          uris: [`spotify:track:${trackId}`]
+        })
+      })
+
+      if (!response.ok) {
+        throw new Error(`Failed to play track: ${response.status}`)
+      }
+    } catch (error) {
+      console.error('Error playing specific track:', error)
     }
   }
 
@@ -512,7 +594,7 @@ const SpotifyMusicPlayer = () => {
       }, 1000)
       return () => clearInterval(timer)
     }
-  }, [isPlaying, currentTrack?.uri])
+  }, [isPlaying, currentTrack?.uri, spotifyAPI])
 
   // Toggle Button - Always visible
   const ToggleButton = () => (
@@ -660,11 +742,14 @@ const SpotifyMusicPlayer = () => {
             {/* Track Info */}
             <div className="flex-1 min-w-0">
               <h3 className="font-semibold text-sm truncate">
-                {playlistTracks[currentTrack]?.name || "Our Love Playlist"}
+                {currentTrack?.name || playlistTracks[0]?.name || "Our Love Playlist"}
               </h3>
               <p className="text-white/70 text-xs truncate">
-                {playlistTracks[currentTrack]?.artist || "Chapter Soundtrack"}
+                {currentTrack?.artists?.map(a => a.name).join(', ') || playlistTracks[0]?.artist || "Chapter Soundtrack"}
               </p>
+              {!isConnected && (
+                <p className="text-yellow-400 text-xs">Not connected to Spotify</p>
+              )}
             </div>
           </div>
 
@@ -1454,9 +1539,39 @@ function EnhancedStoryChapter({ chapter, index }: { chapter: (typeof storyChapte
                       variant="ghost"
                       className="text-white hover:bg-white/20 p-2"
                       aria-label="Play on Spotify"
-                      onClick={() => {
-                        // In a real implementation, this would trigger Spotify playback
-                        console.log(`Playing ${chapter.song}`)
+                      onClick={async () => {
+                        if (chapter.spotifyTrack) {
+                          try {
+                            // Use the same playSpecificTrack logic from the main player
+                            if (!deviceId.current || !spotifyAPI.isAuthenticated()) {
+                              console.log('Device or authentication not available')
+                              window.open(`https://open.spotify.com/track/${chapter.spotifyTrack}`, '_blank')
+                              return
+                            }
+
+                            const response = await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId.current}`, {
+                              method: 'PUT',
+                              headers: {
+                                'Authorization': `Bearer ${localStorage.getItem('spotify_access_token')}`,
+                                'Content-Type': 'application/json',
+                              },
+                              body: JSON.stringify({
+                                uris: [`spotify:track:${chapter.spotifyTrack}`]
+                              })
+                            })
+
+                            if (!response.ok) {
+                              throw new Error(`Failed to play track: ${response.status}`)
+                            }
+                          } catch (error) {
+                            console.error('Error playing chapter track:', error)
+                            // Fallback: open in Spotify app/web
+                            window.open(`https://open.spotify.com/track/${chapter.spotifyTrack}`, '_blank')
+                          }
+                        } else {
+                          console.log(`Playing ${chapter.song}`)
+                          alert('Please connect to Spotify and update your playlist to play chapter soundtracks!')
+                        }
                       }}
                     >
                       <Play className="w-4 h-4" />
