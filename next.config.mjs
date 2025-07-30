@@ -1,3 +1,4 @@
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   eslint: {
@@ -8,12 +9,10 @@ const nextConfig = {
   },
   images: {
     unoptimized: true,
+    domains: ['images.unsplash.com', 'i.scdn.co', 'mosaic.scdn.co'],
   },
   experimental: {
     serverComponentsExternalPackages: [],
-  },
-  async rewrites() {
-    return []
   },
 }
 

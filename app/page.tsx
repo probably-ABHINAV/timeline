@@ -29,12 +29,17 @@ import {
   Eye,
   EyeOff,
   Maximize,
+  SkipForward,
+  SkipBack,
+  Shuffle,
+  Repeat,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import Image from "next/image"
+import { useSpotify } from "@/lib/spotify"
 
-// Enhanced story chapters with deeper emotional content
+// Enhanced story chapters with Spotify tracks and real photos
 const storyChapters = [
   {
     id: 1,
@@ -54,17 +59,17 @@ const storyChapters = [
     icon: Clock,
     mood: "Serendipitous",
     song: "Serendipity - BTS",
-    image: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=800&h=600&fit=crop&crop=center",
+    spotifyTrack: "4u4ZPyHj0qlWLKqPcP8jhY",
+    image: "/images/chapter1.jpg",
     memories: ["Unfamiliar faces", "Two outsiders", "A thought that refused to leave"],
     weather: "Warm June afternoon",
     heartbeat: 72,
     voiceNote: "The moment I first saw you, time stopped...",
     emotion: "Wonder",
-    soundtrack: "https://open.spotify.com/track/example1",
   },
   {
     id: 2,
-    chapter: "Chapter 2",
+    chapter: "Chapter 2", 
     title: "Friends, Almost Enemies, and Something More",
     subtitle: "12:56 AM - The message that changed everything",
     date: "July 31st, 2023",
@@ -80,14 +85,13 @@ const storyChapters = [
     bgColor: "from-amber-50 via-orange-50 to-red-100",
     icon: MessageCircle,
     mood: "Hopeful Reconnection",
-    song: "Perfect - Ed Sheeran",
-    image: "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=800&h=600&fit=crop&crop=center",
+    song: "Falling Like the Stars - James Arthur",
+    image: "/images/chapter2.jpg",
     memories: ["Heart racing", "Words trembling", "You didn't walk away"],
     weather: "Midnight silence",
     heartbeat: 95,
     voiceNote: "12:56 AM... I was so nervous typing that message...",
     emotion: "Hope",
-    soundtrack: "https://open.spotify.com/track/example2",
   },
   {
     id: 3,
@@ -109,13 +113,12 @@ const storyChapters = [
     icon: Heart,
     mood: "Blooming Love",
     song: "Say You Won't Let Go - James Arthur",
-    image: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=800&h=600&fit=crop&crop=center",
+    image: "/images/chapter3.jpg",
     memories: ["Daily chats", "Deep secrets", "Love just bloomed"],
     weather: "Gentle evening breeze",
     heartbeat: 88,
     voiceNote: "The night we both confessed... magic happened...",
     emotion: "Pure Love",
-    soundtrack: "https://open.spotify.com/track/example3",
   },
   {
     id: 4,
@@ -133,15 +136,14 @@ const storyChapters = [
     color: "from-red-400 via-pink-500 to-rose-600",
     bgColor: "from-red-50 via-pink-50 to-rose-100",
     icon: Coffee,
-    mood: "Electric Connection",
+    mood: "Electric Connection", 
     song: "Dil-e-Baadat",
-    image: "https://images.unsplash.com/photo-1511920170033-f8396924c348?w=800&h=600&fit=crop&crop=center",
+    image: "/images/chapter4.jpg",
     memories: ["Hands brushed", "That laugh", "Pure electricity"],
     weather: "Cozy café warmth",
     heartbeat: 102,
     voiceNote: "That first kiss... I still get butterflies thinking about it...",
     emotion: "Electric",
-    soundtrack: "https://open.spotify.com/track/example4",
   },
   {
     id: 5,
@@ -162,13 +164,12 @@ const storyChapters = [
     icon: Gift,
     mood: "Pure Joy",
     song: "Marry Me - Train",
-    image: "https://images.unsplash.com/photo-1465495976277-4387d4b0e4a6?w=800&h=600&fit=crop&crop=center",
+    image: "/images/chapter5.jpg",
     memories: ["Decorated room", "A flower waited", "Your eyes said yes"],
     weather: "Perfect January evening",
     heartbeat: 120,
     voiceNote: "The moment you said yes... my heart exploded with joy...",
     emotion: "Euphoria",
-    soundtrack: "https://open.spotify.com/track/example5",
   },
   {
     id: 6,
@@ -187,13 +188,12 @@ const storyChapters = [
     icon: Sparkles,
     mood: "Adventure Together",
     song: "Adventure of a Lifetime - Coldplay",
-    image: "https://images.unsplash.com/photo-1503457574462-bd27bf96e4d9?w=800&h=600&fit=crop&crop=center",
+    image: "/images/chapter6.jpg",
     memories: ["Empty swings", "You won at Tekken", "Our fingerprints everywhere"],
     weather: "Sunny adventure day",
     heartbeat: 85,
     voiceNote: "Every adventure with you feels like magic...",
     emotion: "Adventure",
-    soundtrack: "https://open.spotify.com/track/example6",
   },
   {
     id: 7,
@@ -212,13 +212,12 @@ const storyChapters = [
     icon: BookOpen,
     mood: "Supportive Love",
     song: "Count on Me - Bruno Mars",
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=600&fit=crop&crop=center",
+    image: "/images/chapter7.jpg",
     memories: ["You made me a CV", "Never stopped believing", "10 minutes were home"],
     weather: "Stressful but supported",
     heartbeat: 78,
     voiceNote: "Your support meant everything to me...",
     emotion: "Gratitude",
-    soundtrack: "https://open.spotify.com/track/example7",
   },
   {
     id: 8,
@@ -236,14 +235,13 @@ const storyChapters = [
     bgColor: "from-purple-50 via-pink-50 to-rose-100",
     icon: Gift,
     mood: "Beautiful Surprise",
-    song: "Perfect - Ed Sheeran",
-    image: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=800&h=600&fit=crop&crop=center",
+    song: "Thinking Out Loud - Ed Sheeran",
+    image: "/images/chapter8.jpg",
     memories: ["Bouquet surprise", "We danced", "The necklace I still feel"],
     weather: "Room lit with love",
     heartbeat: 110,
     voiceNote: "When you proposed to me... I knew you were forever...",
     emotion: "Bliss",
-    soundtrack: "https://open.spotify.com/track/example8",
   },
   {
     id: 9,
@@ -264,13 +262,12 @@ const storyChapters = [
     icon: Moon,
     mood: "Learning Through Pain",
     song: "Fix You - Coldplay",
-    image: "https://images.unsplash.com/photo-1494621930069-4fd4b2e24a11?w=800&h=600&fit=crop&crop=center",
+    image: "/images/chapter9.jpg",
     memories: ["You planned my birthday", "I disappointed you", "Love doesn't end in silence"],
     weather: "Storm clouds",
     heartbeat: 65,
     voiceNote: "I'm sorry for the pain I caused... but I never stopped loving you...",
     emotion: "Redemption",
-    soundtrack: "https://open.spotify.com/track/example9",
   },
   {
     id: 10,
@@ -291,21 +288,344 @@ const storyChapters = [
     icon: Heart,
     mood: "Renewed Hope",
     song: "A Thousand Years - Christina Perri",
-    image: "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=800&h=600&fit=crop&crop=center",
+    image: "/images/chapter10.jpg",
     memories: ["Every day I tried", "By God's grace", "You're my future"],
     weather: "New dawn breaking",
     heartbeat: 92,
     voiceNote: "Thank you for giving us another chance... I love you, Beboo...",
     emotion: "Forever",
-    soundtrack: "https://open.spotify.com/track/example10",
   },
 ]
+
+// Spotify tracks mapped to chapters
+const playlistTracks = [
+  { id: "4u4ZPyHj0qlWLKqPcP8jhY", name: "Serendipity", artist: "BTS", chapterId: 1 },
+  { id: "0tgVpDi06FyKpA1z0VMD4v", name: "Perfect", artist: "Ed Sheeran", chapterId: 2 },
+  { id: "5jAIKlJ1aOSVCaX3JCqPJ1", name: "Say You Won't Let Go", artist: "James Arthur", chapterId: 3 },
+  { id: "4Dvkj6JhhA12EX05fT7y2e", name: "Dil-e-Baadat", artist: "Sufi", chapterId: 4 },
+  { id: "1PXE4b6Q7fOTwVqZ2LrN0g", name: "Marry Me", artist: "Train", chapterId: 5 },
+  { id: "0yLdNVWF3Srea0uzk55zFn", name: "Adventure of a Lifetime", artist: "Coldplay", chapterId: 6 },
+  { id: "5xTuCKoYN6xf9YdXFxJPxj", name: "Count on Me", artist: "Bruno Mars", chapterId: 7 },
+  { id: "0tgVpDi06FyKpA1z0VMD4v", name: "Perfect", artist: "Ed Sheeran", chapterId: 8 },
+  { id: "0BOyJrImj3xevGJRsQA0yy", name: "Fix You", artist: "Coldplay", chapterId: 9 },
+  { id: "2QdrK7dJaCksxnpgwSdx4F", name: "A Thousand Years", artist: "Christina Perri", chapterId: 10 },
+]
+
+// Spotify Music Player
+function SpotifyMusicPlayer() {
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [currentTrack, setCurrentTrack] = useState(0)
+  const [volume, setVolume] = useState(0.7)
+  const [isMuted, setIsMuted] = useState(false)
+  const [isMinimized, setIsMinimized] = useState(false)
+  const [progress, setProgress] = useState(0)
+  const [duration, setDuration] = useState(0)
+  const [isLoading, setIsLoading] = useState(false)
+  const [isShuffled, setIsShuffled] = useState(false)
+  const [repeatMode, setRepeatMode] = useState(0) // 0: off, 1: all, 2: one
+  const [isConnected, setIsConnected] = useState(false)
+
+  const playerRef = useRef<any>(null)
+  const deviceId = useRef<string>("")
+
+  // Check if user is authenticated
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const token = localStorage.getItem('spotify_access_token')
+      setIsConnected(!!token)
+    }
+  }, [])
+
+  // Initialize Spotify Web Playback SDK
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const script = document.createElement('script')
+      script.src = 'https://sdk.scdn.co/spotify-player.js'
+      script.async = true
+      document.body.appendChild(script)
+
+      window.onSpotifyWebPlaybackSDKReady = () => {
+        const token = process.env.NEXT_PUBLIC_SPOTIFY_ACCESS_TOKEN // You'll need to set this
+        if (!token) return
+
+        const player = new window.Spotify.Player({
+          name: 'Our Love Story Player',
+          getOAuthToken: (cb: (token: string) => void) => { cb(token) },
+          volume: volume
+        })
+
+        player.addListener('ready', ({ device_id }: { device_id: string }) => {
+          console.log('Ready with Device ID', device_id)
+          deviceId.current = device_id
+        })
+
+        player.addListener('not_ready', ({ device_id }: { device_id: string }) => {
+          console.log('Device ID has gone offline', device_id)
+        })
+
+        player.addListener('player_state_changed', (state: any) => {
+          if (!state) return
+          setIsPlaying(!state.paused)
+          setProgress(state.position)
+          setDuration(state.duration)
+        })
+
+        player.connect()
+        playerRef.current = player
+      }
+
+      return () => {
+        document.body.removeChild(script)
+      }
+    }
+  }, [])
+
+  const togglePlay = async () => {
+    if (!playerRef.current) return
+    setIsLoading(true)
+    try {
+      await playerRef.current.togglePlay()
+    } catch (error) {
+      console.error('Playback error:', error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const nextTrack = () => {
+    if (!playerRef.current) return
+    playerRef.current.nextTrack()
+  }
+
+  const prevTrack = () => {
+    if (!playerRef.current) return
+    playerRef.current.previousTrack()
+  }
+
+  const setVolumeLevel = (vol: number) => {
+    if (!playerRef.current) return
+    playerRef.current.setVolume(vol)
+    setVolume(vol)
+    setIsMuted(vol === 0)
+  }
+
+  const toggleMute = () => {
+    const newMuted = !isMuted
+    setIsMuted(newMuted)
+    if (newMuted) {
+      setVolumeLevel(0)
+    } else {
+      setVolumeLevel(volume || 0.7)
+    }
+  }
+
+  const formatTime = (ms: number) => {
+    const seconds = Math.floor(ms / 1000)
+    const mins = Math.floor(seconds / 60)
+    const secs = seconds % 60
+    return `${mins}:${secs.toString().padStart(2, '0')}`
+  }
+
+  if (isMinimized) {
+    return (
+      <motion.div 
+        className="fixed bottom-4 right-4 z-50"
+        initial={{ scale: 0 }}
+        animate={{ scale: 1 }}
+      >
+        <Button
+          onClick={() => setIsMinimized(false)}
+          className="w-16 h-16 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 shadow-xl hover:shadow-2xl transition-all duration-300"
+          aria-label="Open music player"
+        >
+          <Music className="w-8 h-8 text-white" />
+        </Button>
+      </motion.div>
+    )
+  }
+
+    // Import the real spotifyAPI
+  const { spotifyAPI } = useSpotify()
+
+  const handleSpotifyConnect = () => {
+    if (typeof window !== 'undefined') {
+      window.location.href = spotifyAPI.getAuthUrl()
+    }
+  }
+
+  return (
+    <motion.div 
+      className="fixed bottom-0 left-0 right-0 bg-black/95 backdrop-blur-xl text-white p-4 border-t border-white/10 z-50"
+      initial={{ y: 100 }}
+      animate={{ y: 0 }}
+      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+    >
+      <div className="max-w-7xl mx-auto">
+        {/* Main Player Controls */}
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center space-x-4 flex-1">
+          <motion.div 
+          className="bg-black/90 backdrop-blur-sm rounded-lg p-4 text-white"
+          initial={{ opacity: 0, y: 100 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          {!isConnected && (
+            <div className="text-center mb-4">
+              <button
+                onClick={handleSpotifyConnect}
+                className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors flex items-center gap-2 mx-auto"
+              >
+                <Music className="h-4 w-4" />
+                Connect to Spotify
+              </button>
+            </div>
+          )}
+</motion.div>
+            {/* Album Art */}
+            <motion.div 
+              className="w-14 h-14 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center relative overflow-hidden"
+              animate={{ rotate: isPlaying ? 360 : 0 }}
+              transition={{ duration: 8, repeat: isPlaying ? Infinity : 0, ease: "linear" }}
+            >
+              <Music className="w-6 h-6 text-white" />
+            </motion.div>
+
+            {/* Track Info */}
+            <div className="flex-1 min-w-0">
+              <h3 className="font-semibold text-sm truncate">
+                {playlistTracks[currentTrack]?.name || "Our Love Playlist"}
+              </h3>
+              <p className="text-white/70 text-xs truncate">
+                {playlistTracks[currentTrack]?.artist || "Chapter Soundtrack"}
+              </p>
+            </div>
+          </div>
+
+          {/* Main Controls */}
+          <div className="flex items-center space-x-3">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setIsShuffled(!isShuffled)}
+              className={`p-2 ${isShuffled ? 'text-green-400' : 'text-white/70'} hover:text-white`}
+              aria-label="Toggle shuffle"
+            >
+              <Shuffle className="w-4 h-4" />
+            </Button>
+
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={prevTrack}
+              className="p-2 text-white/70 hover:text-white"
+              aria-label="Previous track"
+            >
+              <SkipBack className="w-5 h-5" />
+            </Button>
+
+            <Button
+              onClick={togglePlay}
+              disabled={isLoading}
+              className="w-12 h-12 rounded-full bg-white text-black hover:bg-white/90 transition-all duration-200"
+              aria-label={isPlaying ? "Pause" : "Play"}
+            >
+              {isLoading ? (
+                <motion.div
+                  className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full"
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                />
+              ) : isPlaying ? (
+                <Pause className="w-5 h-5" />
+              ) : (
+                <Play className="w-5 h-5 ml-0.5" />
+              )}
+            </Button>
+
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={nextTrack}
+              className="p-2 text-white/70 hover:text-white"
+              aria-label="Next track"
+            >
+              <SkipForward className="w-5 h-5" />
+            </Button>
+
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setRepeatMode((prev) => (prev + 1) % 3)}
+              className={`p-2 ${repeatMode > 0 ? 'text-green-400' : 'text-white/70'} hover:text-white`}
+              aria-label="Toggle repeat"
+            >
+              <Repeat className="w-4 h-4" />
+              {repeatMode === 2 && (
+                <span className="absolute -top-1 -right-1 w-2 h-2 bg-green-400 rounded-full" />
+              )}
+            </Button>
+          </div>
+
+          {/* Volume & Minimize */}
+          <div className="flex items-center space-x-3 ml-4">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={toggleMute}
+              className="p-2 text-white/70 hover:text-white"
+              aria-label="Toggle mute"
+            >
+              {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+            </Button>
+
+            <input
+              type="range"
+              min={0}
+              max={1}
+              step={0.01}
+              value={isMuted ? 0 : volume}
+              onChange={(e) => setVolumeLevel(Number(e.target.value))}
+              className="w-20 h-1 bg-white/20 rounded-lg appearance-none cursor-pointer"
+            />
+
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setIsMinimized(true)}
+              className="p-2 text-white/70 hover:text-white"
+              aria-label="Minimize player"
+            >
+              <ArrowDown className="w-4 h-4" />
+            </Button>
+          </div>
+        </div>
+
+        {/* Progress Bar */}
+        <div className="flex items-center space-x-3 text-xs">
+          <span className="text-white/70 min-w-[40px]">
+            {formatTime(progress)}
+          </span>
+          <div className="flex-1 bg-white/20 rounded-full h-1 relative overflow-hidden">
+            <motion.div
+              className="h-full bg-gradient-to-r from-purple-500 to-pink-500 rounded-full"
+              style={{ width: duration ? `${(progress / duration) * 100}%` : '0%' }}
+              transition={{ duration: 0.1 }}
+            />
+          </div>
+          <span className="text-white/70 min-w-[40px]">
+            {formatTime(duration)}
+          </span>
+        </div>
+      </div>
+    </motion.div>
+  )
+}
 
 // Fixed floating elements with stable positions
 function EnhancedFloatingElements() {
   const [mounted, setMounted] = useState(false)
   const [elements] = useState(() => {
-    // Generate stable positions on component initialization
     return {
       hearts: Array.from({ length: 8 }, (_, i) => ({
         id: i,
@@ -416,84 +736,6 @@ function EnhancedFloatingElements() {
       ))}
     </div>
   )
-}
-
-// Enhanced Music Player with better controls
-function AdvancedMusicPlayer() {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [volume, setVolume] = useState(0.7);
-  const [isMuted, setIsMuted] = useState(false);
-  const [isMinimized, setIsMinimized] = useState(true);
-  const [progress, setProgress] = useState(0);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-
-  useEffect(() => {
-    const audio = new Audio("/music/sample.mp3"); // Replace with actual audio path
-    audio.loop = true;
-    audio.volume = volume;
-    audioRef.current = audio;
-
-    return () => {
-      audio.pause();
-      audioRef.current = null;
-    };
-  }, []);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (audioRef.current && isPlaying) {
-        setProgress((audioRef.current.currentTime / audioRef.current.duration) * 100 || 0);
-      }
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [isPlaying]);
-
-  const togglePlay = () => {
-    if (!audioRef.current) return;
-    if (isPlaying) {
-      audioRef.current.pause();
-    } else {
-      audioRef.current.play().catch((e) => console.error("Playback error:", e));
-    }
-    setIsPlaying(!isPlaying);
-  };
-
-  const changeVolume = (val: number) => {
-    if (audioRef.current) {
-      audioRef.current.volume = val;
-    }
-    setVolume(val);
-    if (val === 0) setIsMuted(true);
-    else setIsMuted(false);
-  };
-
-  return (
-    <div className="fixed bottom-0 right-0 m-4 p-4 bg-black text-white rounded-2xl shadow-lg w-[300px]">
-      <div className="flex justify-between items-center">
-        <button onClick={togglePlay}>{isPlaying ? "Pause" : "Play"}</button>
-        <input
-          type="range"
-          min={0}
-          max={1}
-          step={0.01}
-          value={volume}
-          onChange={(e) => changeVolume(Number(e.target.value))}
-        />
-      </div>
-      <input
-        type="range"
-        min={0}
-        max={100}
-        value={progress}
-        onChange={(e) => {
-          const seekTime = (Number(e.target.value) / 100) * (audioRef.current?.duration || 0);
-          if (audioRef.current) audioRef.current.currentTime = seekTime;
-          setProgress(Number(e.target.value));
-        }}
-        className="w-full mt-2"
-      />
-    </div>
-  );
 }
 
 // Enhanced Cinematic Hero Section
@@ -750,7 +992,7 @@ function CinematicHero() {
   )
 }
 
-// Enhanced Story Chapter with better performance and features
+// Enhanced Story Chapter with real photos
 function EnhancedStoryChapter({ chapter, index }: { chapter: (typeof storyChapters)[0]; index: number }) {
   const ref = useRef<HTMLElement>(null)
   const isInView = useInView(ref, { once: true, margin: "-50px" })
@@ -764,7 +1006,8 @@ function EnhancedStoryChapter({ chapter, index }: { chapter: (typeof storyChapte
 
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ["start end", "end start"]
+    offset: ["start end", "end start"],
+    container: ref
   })
 
   const y = useTransform(scrollYProgress, [0, 1], [100, -100])
@@ -785,7 +1028,6 @@ function EnhancedStoryChapter({ chapter, index }: { chapter: (typeof storyChapte
   }, [chapter])
 
   const handleDownloadImage = useCallback(() => {
-    // In a real app, this would download the chapter image
     console.log(`Downloading image for ${chapter.title}`)
   }, [chapter.title])
 
@@ -794,7 +1036,7 @@ function EnhancedStoryChapter({ chapter, index }: { chapter: (typeof storyChapte
       id={`chapter-${chapter.id}`}
       ref={ref}
       className={`relative min-h-screen flex items-center py-24 bg-gradient-to-br ${chapter.bgColor} overflow-hidden`}
-      style={{ opacity }}
+      style={{ opacity, position: 'relative' }}
     >
       {/* Enhanced Background Pattern */}
       <div className="absolute inset-0">
@@ -1038,16 +1280,18 @@ function EnhancedStoryChapter({ chapter, index }: { chapter: (typeof storyChapte
                       <p className="text-white/90 italic text-lg">"{chapter.song}"</p>
                       <p className="text-white/70 text-sm mt-1">Perfect for this moment</p>
                     </div>
-                    {chapter.soundtrack && (
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        className="text-white hover:bg-white/20 p-2"
-                        aria-label="Open in Spotify"
-                      >
-                        <Music className="w-4 h-4" />
-                      </Button>
-                    )}
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="text-white hover:bg-white/20 p-2"
+                      aria-label="Play on Spotify"
+                      onClick={() => {
+                        // In a real implementation, this would trigger Spotify playback
+                        console.log(`Playing ${chapter.song}`)
+                      }}
+                    >
+                      <Play className="w-4 h-4" />
+                    </Button>
                   </div>
                 </motion.div>
               </div>
@@ -1114,7 +1358,7 @@ function EnhancedStoryChapter({ chapter, index }: { chapter: (typeof storyChapte
             </motion.div>
           </div>
 
-          {/* Enhanced Visual Side */}
+          {/* Enhanced Visual Side with Real Photos */}
           <div className="flex-1 max-w-lg">
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
@@ -1126,7 +1370,7 @@ function EnhancedStoryChapter({ chapter, index }: { chapter: (typeof storyChapte
               <Card className="overflow-hidden shadow-2xl border-0 bg-white/95 backdrop-blur-sm hover:shadow-pink-500/20 transition-all duration-700">
                 <div className="relative h-80 lg:h-[400px] overflow-hidden">
                   <Image
-                    src={chapter.image || "/placeholder.svg"}
+                    src={chapter.image}
                     alt={`${chapter.title} - ${chapter.subtitle}`}
                     fill
                     className="object-cover transition-transform duration-1000 group-hover:scale-110"
@@ -1207,7 +1451,7 @@ function EnhancedStoryChapter({ chapter, index }: { chapter: (typeof storyChapte
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4"
-            onClick={(e) => e.stopPropagation()}
+            onClick={() => setImageFullscreen(false)}
             role="dialog"
             aria-modal="true"
             aria-labelledby="fullscreen-image-title"
@@ -1220,7 +1464,7 @@ function EnhancedStoryChapter({ chapter, index }: { chapter: (typeof storyChapte
               onClick={(e) => e.stopPropagation()}
             >
               <Image
-                src={chapter.image || "/placeholder.svg"}
+                src={chapter.image}
                 alt={`${chapter.title} - Fullscreen`}
                 width={800}
                 height={600}
@@ -1481,7 +1725,6 @@ function ErrorBoundary({ children }: { children: React.ReactNode }) {
     const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
       console.log('Promise rejection handled:', event.reason)
       event.preventDefault()
-      // Don't set error state for minor rejections
     }
 
     window.addEventListener('error', handleError)
@@ -1518,7 +1761,6 @@ export default function UltimateRomanticLoveStory() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // Simulate loading time for better UX
     const timer = setTimeout(() => setLoading(false), 1500)
     return () => clearTimeout(timer)
   }, [])
@@ -1552,7 +1794,7 @@ export default function UltimateRomanticLoveStory() {
     <ErrorBoundary>
       <div className="relative min-h-screen" role="main">
         <EnhancedFloatingElements />
-        <AdvancedMusicPlayer />
+        <SpotifyMusicPlayer />
 
         <CinematicHero />
 
