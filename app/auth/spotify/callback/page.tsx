@@ -14,11 +14,20 @@ export default function SpotifyCallback() {
   useEffect(() => {
     const handleCallback = async () => {
       const code = searchParams.get('code')
+      const state = searchParams.get('state')
       const error = searchParams.get('error')
 
       if (error) {
         setStatus('error')
         setError(`Spotify authorization failed: ${error}`)
+        return
+      }
+
+      // Verify state parameter for security
+      const storedState = localStorage.getItem('spotify_oauth_state')
+      if (state !== storedState) {
+        setStatus('error')
+        setError('Invalid state parameter - possible CSRF attack')
         return
       }
 
@@ -32,13 +41,24 @@ export default function SpotifyCallback() {
         await spotifyAPI.exchangeCodeForToken(code)
         setStatus('success')
         
+        // Clean up stored state
+        if (typeof window !== 'undefined') {
+          localStorage.removeItem('spotify_oauth_state')
+        }
+        
         // Redirect back to main page after successful authentication
         setTimeout(() => {
           router.push('/')
         }, 2000)
       } catch (err) {
+        console.error('Spotify authentication error:', err)
         setStatus('error')
         setError(err instanceof Error ? err.message : 'Failed to authenticate with Spotify')
+        
+        // Redirect to home page after error display
+        setTimeout(() => {
+          router.push('/')
+        }, 5000)
       }
     }
 
@@ -95,3 +115,6 @@ export default function SpotifyCallback() {
     </div>
   )
 }
+
+// Force dynamic rendering to prevent prerender errors
+export const dynamic = 'force-dynamic'

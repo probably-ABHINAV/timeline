@@ -42,6 +42,11 @@ class SpotifyAPI {
     if (typeof window !== 'undefined') {
       this.accessToken = localStorage.getItem('spotify_access_token') || null
     }
+    
+    // Validate required environment variables
+    if (!this.clientId) {
+      console.warn('NEXT_PUBLIC_SPOTIFY_CLIENT_ID is not set')
+    }
   }
 
   // Check if user is authenticated
@@ -113,13 +118,28 @@ class SpotifyAPI {
     return response.tracks.items
   }
 
+  async getUserPlaylists(limit: number = 20): Promise<any[]> {
+    const response = await this.makeRequest(`/me/playlists?limit=${limit}`)
+    return response.items
+  }
+
+  async getCurrentUser(): Promise<any> {
+    return this.makeRequest('/me')
+  }
+
   // Get authentication URL for Spotify OAuth
   getAuthUrl(): string {
     if (typeof window === 'undefined') return ''
     
-    const redirectUri = encodeURIComponent(`${window.location.origin}/auth/spotify/callback`)
-    const scopes = encodeURIComponent('streaming user-read-playback-state user-modify-playback-state user-read-email')
+    // Use the correct Replit domain format
+    const origin = window.location.origin
+    const redirectUri = encodeURIComponent(`${origin}/auth/spotify/callback`)
+    const scopes = encodeURIComponent('streaming user-read-playback-state user-modify-playback-state user-read-email user-read-private')
     const state = Math.random().toString(36).substring(7)
+    
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('spotify_oauth_state', state)
+    }
     
     return `https://accounts.spotify.com/authorize?response_type=code&client_id=${this.clientId}&scope=${scopes}&redirect_uri=${redirectUri}&state=${state}`
   }
@@ -160,7 +180,26 @@ declare global {
   interface Window {
     onSpotifyWebPlaybackSDKReady: () => void
     Spotify: {
-      Player: any
+      Player: new (options: {
+        name: string
+        getOAuthToken: (cb: (token: string) => void) => void
+        volume?: number
+      }) => {
+        addListener: (event: string, callback: (data: any) => void) => void
+        removeListener: (event: string, callback?: (data: any) => void) => void
+        connect: () => Promise<boolean>
+        disconnect: () => void
+        getCurrentState: () => Promise<any>
+        setName: (name: string) => Promise<void>
+        setVolume: (volume: number) => Promise<void>
+        pause: () => Promise<void>
+        resume: () => Promise<void>
+        togglePlay: () => Promise<void>
+        seek: (position: number) => Promise<void>
+        previousTrack: () => Promise<void>
+        nextTrack: () => Promise<void>
+        activateElement: () => Promise<void>
+      }
     }
   }
 }

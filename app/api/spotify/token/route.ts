@@ -14,7 +14,13 @@ export async function POST(request: NextRequest) {
     const redirectUri = `${request.nextUrl.origin}/auth/spotify/callback`
 
     if (!clientId || !clientSecret) {
-      return NextResponse.json({ error: 'Spotify credentials not configured' }, { status: 500 })
+      console.error('Missing Spotify credentials:', { 
+        hasClientId: !!clientId, 
+        hasClientSecret: !!clientSecret 
+      })
+      return NextResponse.json({ 
+        error: 'Spotify credentials not configured. Please check environment variables.' 
+      }, { status: 500 })
     }
 
     // Exchange authorization code for access token

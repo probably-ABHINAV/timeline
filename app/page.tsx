@@ -297,8 +297,8 @@ const storyChapters = [
   },
 ]
 
-// Spotify tracks mapped to chapters
-const playlistTracks = [
+// Dynamic Spotify tracks mapped to chapters - will be updated from your playlist
+let playlistTracks = [
   { id: "4u4ZPyHj0qlWLKqPcP8jhY", name: "Serendipity", artist: "BTS", chapterId: 1 },
   { id: "0tgVpDi06FyKpA1z0VMD4v", name: "Perfect", artist: "Ed Sheeran", chapterId: 2 },
   { id: "5jAIKlJ1aOSVCaX3JCqPJ1", name: "Say You Won't Let Go", artist: "James Arthur", chapterId: 3 },
@@ -311,19 +311,57 @@ const playlistTracks = [
   { id: "2QdrK7dJaCksxnpgwSdx4F", name: "A Thousand Years", artist: "Christina Perri", chapterId: 10 },
 ]
 
+// Function to fetch and map your Spotify playlist to chapters
+async function updateChapterSoungtracks(playlistId: string, spotifyAPI: any) {
+  try {
+    if (!spotifyAPI.isAuthenticated()) {
+      console.log('Not authenticated with Spotify')
+      return
+    }
+
+    const tracks = await spotifyAPI.getPlaylistTracks(playlistId)
+
+    if (tracks.length > 0) {
+      // Update playlist tracks with your actual playlist
+      playlistTracks = tracks.slice(0, 10).map((track, index) => ({
+        id: track.id,
+        name: track.name,
+        artist: track.artists.map(artist => artist.name).join(', '),
+        chapterId: index + 1
+      }))
+
+      // Update story chapters with new soundtrack info
+      storyChapters.forEach((chapter, index) => {
+        if (playlistTracks[index]) {
+          chapter.song = `${playlistTracks[index].name} - ${playlistTracks[index].artist}`
+          chapter.spotifyTrack = playlistTracks[index].id
+        }
+      })
+
+      console.log('Updated chapter soundtracks from your Spotify playlist!')
+    }
+  } catch (error) {
+    console.error('Error fetching playlist tracks:', error)
+  }
+}
+
 // Spotify Music Player
 function SpotifyMusicPlayer() {
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentTrack, setCurrentTrack] = useState(0)
   const [volume, setVolume] = useState(0.7)
   const [isMuted, setIsMuted] = useState(false)
-  const [isMinimized, setIsMinimized] = useState(false)
+  const [isHidden, setIsHidden] = useState(false)
   const [progress, setProgress] = useState(0)
   const [duration, setDuration] = useState(0)
   const [isLoading, setIsLoading] = useState(false)
   const [isShuffled, setIsShuffled] = useState(false)
   const [repeatMode, setRepeatMode] = useState(0) // 0: off, 1: all, 2: one
   const [isConnected, setIsConnected] = useState(false)
+  const [playlistId, setPlaylistId] = useState('')
+  const [showPlaylistInput, setShowPlaylistInput] = useState(false)
+  const [playlistUpdated, setPlaylistUpdated] = useState(false)
+  const [currentTime, setCurrentTime] = useState(0)
 
   const playerRef = useRef<any>(null)
   const deviceId = useRef<string>("")
@@ -345,8 +383,11 @@ function SpotifyMusicPlayer() {
       document.body.appendChild(script)
 
       window.onSpotifyWebPlaybackSDKReady = () => {
-        const token = process.env.NEXT_PUBLIC_SPOTIFY_ACCESS_TOKEN // You'll need to set this
-        if (!token) return
+        const token = localStorage.getItem('spotify_access_token')
+        if (!token) {
+          console.log('No Spotify access token available')
+          return
+        }
 
         const player = new window.Spotify.Player({
           name: 'Our Love Story Player',
@@ -370,23 +411,60 @@ function SpotifyMusicPlayer() {
           setDuration(state.duration)
         })
 
-        player.connect()
+        player.addListener('initialization_error', ({ message }: { message: string }) => {
+          console.error('Failed to initialize:', message)
+        })
+
+        player.addListener('authentication_error', ({ message }: { message: string }) => {
+          console.error('Failed to authenticate:', message)
+        })
+
+        player.addListener('account_error', ({ message }: { message: string }) => {
+          console.error('Failed to validate Spotify account:', message)
+        })
+
+        player.addListener('playback_error', ({ message }: { message: string }) => {
+          console.error('Failed to perform playback:', message)
+        })
+
+        player.connect().then((success: boolean) => {
+          if (success) {
+            console.log('Successfully connected to Spotify!')
+          }
+        })
+
         playerRef.current = player
       }
 
       return () => {
-        document.body.removeChild(script)
+        // Cleanup
+        if (playerRef.current) {
+          playerRef.current.disconnect()
+          playerRef.current = null
+        }
+
+        if (document.body.contains(script)) {
+          document.body.removeChild(script)
+        }
       }
     }
-  }, [])
+  }, [volume])
 
   const togglePlay = async () => {
-    if (!playerRef.current) return
+    if (!playerRef.current) {
+      console.warn('Spotify player not initialized')
+      return
+    }
     setIsLoading(true)
     try {
       await playerRef.current.togglePlay()
     } catch (error) {
       console.error('Playback error:', error)
+      setIsLoading(false)
+      // Fallback: try to reinitialize player
+      if (error instanceof Error && error.message.includes('authentication')) {
+        setIsConnected(false)
+      }
     } finally {
       setIsLoading(false)
     }
@@ -425,24 +503,41 @@ function SpotifyMusicPlayer() {
     const secs = seconds % 60
     return `${mins}:${secs.toString().padStart(2, '0')}`
   }
+  useEffect(() => {
+    if (isPlaying && spotifyAPI && currentTrack) {
+      const timer = setInterval(() => {
+        setCurrentTime(prev => Math.min(prev + 1, currentTrack.duration_ms / 1000))
+      }, 1000)
+      return () => clearInterval(timer)
+    }
+  }, [isPlaying, currentTrack?.uri, spotifyAPI])
 
-  if (isMinimized) {
-    return (
-      <motion.div 
-        className="fixed bottom-4 right-4 z-50"
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
+  // Toggle Button - Always visible
+  const ToggleButton = () => (
+    <motion.div 
+      className="fixed bottom-4 right-4 z-50"
+      initial={{ scale: 0 }}
+      animate={{ scale: 1 }}
+      whileHover={{ scale: 1.1 }}
+      whileTap={{ scale: 0.95 }}
+    >
+      <Button
+        onClick={() => setIsHidden(!isHidden)}
+        className={`w-16 h-16 rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center ${
+          isHidden 
+            ? 'bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600' 
+            : 'bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600'
+        }`}
+        aria-label={isHidden ? "Show music player" : "Hide music player"}
       >
-        <Button
-          onClick={() => setIsMinimized(false)}
-          className="w-16 h-16 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 shadow-xl hover:shadow-2xl transition-all duration-300"
-          aria-label="Open music player"
-        >
-          <Music className="w-8 h-8 text-white" />
-        </Button>
-      </motion.div>
-    )
-  }
+        {isHidden ? (
+          <Eye className="w-7 h-7 text-white" />
+        ) : (
+          <EyeOff className="w-7 h-7 text-white" />
+        )}
+      </Button>
+    </motion.div>
+  )
 
     // Import the real spotifyAPI
   const { spotifyAPI } = useSpotify()
@@ -453,13 +548,38 @@ function SpotifyMusicPlayer() {
     }
   }
 
+  const handleUpdatePlaylist = async () => {
+    if (!playlistId.trim()) {
+      alert('Please enter a valid Spotify playlist ID')
+      return
+    }
+
+    setIsLoading(true)
+    try {
+      await updateChapterSoungtracks(playlistId, spotifyAPI)
+      setPlaylistUpdated(true)
+      setShowPlaylistInput(false)
+      alert('Chapter soundtracks updated successfully!')
+    } catch (error) {
+      console.error('Error updating playlist:', error)
+      alert('Error updating playlist. Please check the playlist ID and try again.')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   return (
-    <motion.div 
-      className="fixed bottom-0 left-0 right-0 bg-black/95 backdrop-blur-xl text-white p-4 border-t border-white/10 z-50"
-      initial={{ y: 100 }}
-      animate={{ y: 0 }}
-      transition={{ type: "spring", stiffness: 300, damping: 30 }}
-    >
+    <>
+      <ToggleButton />
+      <AnimatePresence>
+        {!isHidden && (
+          <motion.div 
+            className="fixed bottom-0 left-0 right-0 bg-black/95 backdrop-blur-xl text-white p-4 border-t border-white/10 z-40"
+            initial={{ y: "100%" }}
+            animate={{ y: 0 }}
+            exit={{ y: "100%" }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+          >
       <div className="max-w-7xl mx-auto">
         {/* Main Player Controls */}
         <div className="flex items-center justify-between mb-3">
@@ -479,6 +599,53 @@ function SpotifyMusicPlayer() {
                 <Music className="h-4 w-4" />
                 Connect to Spotify
               </button>
+            </div>
+          )}
+
+          {isConnected && (
+            <div className="mb-4">
+              <div className="flex items-center gap-2 mb-2">
+                <button
+                  onClick={() => setShowPlaylistInput(!showPlaylistInput)}
+                  className="bg-purple-600 hover:bg-purple-700 text-white px-3 py-1 rounded-lg transition-colors flex items-center gap-2 text-sm"
+                >
+                  <Music className="h-3 w-3" />
+                  Update Soundtrack
+                </button>
+                {playlistUpdated && (
+                  <span className="text-green-400 text-xs">✓ Updated</span>
+                )}
+              </div>
+
+              {showPlaylistInput && (
+                <div className="bg-white/10 rounded-lg p-3 space-y-2">
+                  <input
+                    type="text"
+                    value={playlistId}
+                    onChange={(e) => setPlaylistId(e.target.value)}
+                    placeholder="Enter Spotify Playlist ID (e.g., 37i9dQZF1DXcBWIGoYBM5M)"
+                    className="w-full px-3 py-2 bg-white/20 rounded text-white placeholder-white/60 text-sm"
+                  />
+                  <div className="flex gap-2">
+                    <button
+                      onClick={handleUpdatePlaylist}
+                      disabled={isLoading}
+                      className="bg-green-600 hover:bg-green-700 disabled:bg-gray-600 text-white px-3 py-1 rounded text-sm flex items-center gap-1"
+                    >
+                      {isLoading ? 'Updating...' : 'Update'}
+                    </button>
+                    <button
+                      onClick={() => setShowPlaylistInput(false)}
+                      className="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                  <p className="text-white/60 text-xs">
+                    Find your playlist ID in Spotify: Share → Copy link → Extract ID from URL
+                  </p>
+                </div>
+              )}
             </div>
           )}
 </motion.div>
@@ -592,9 +759,9 @@ function SpotifyMusicPlayer() {
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => setIsMinimized(true)}
+              onClick={() => setIsHidden(true)}
               className="p-2 text-white/70 hover:text-white"
-              aria-label="Minimize player"
+              aria-label="Hide player"
             >
               <ArrowDown className="w-4 h-4" />
             </Button>
@@ -618,7 +785,10 @@ function SpotifyMusicPlayer() {
           </span>
         </div>
       </div>
-    </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   )
 }
 
@@ -1077,10 +1247,10 @@ function EnhancedStoryChapter({ chapter, index }: { chapter: (typeof storyChapte
 
       <div className="container mx-auto px-4 relative z-10">
         <div
-          className={`flex flex-col lg:flex-row items-center gap-16 ${isEven ? "lg:flex-row" : "lg:flex-row-reverse"}`}
+          className={`flex flex-col lg:flex-row items-start lg:items-center gap-8 lg:gap-16 ${isEven ? "lg:flex-row" : "lg:flex-row-reverse"}`}
         >
           {/* Enhanced Content Side */}
-          <div className="flex-1 max-w-2xl">
+          <div className="flex-1 max-w-2xl w-full">
             <motion.div
               initial={{ opacity: 0, x: isEven ? -80 : 80 }}
               animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: isEven ? -80 : 80 }}
@@ -1293,8 +1463,7 @@ function EnhancedStoryChapter({ chapter, index }: { chapter: (typeof storyChapte
                       <Play className="w-4 h-4" />
                     </Button>
                   </div>
-                </motion.div>
-              </div>
+                </motion.div>              </div>
 
               {/* Expandable Memories with better layout */}
               <AnimatePresence>
@@ -1359,22 +1528,28 @@ function EnhancedStoryChapter({ chapter, index }: { chapter: (typeof storyChapte
           </div>
 
           {/* Enhanced Visual Side with Real Photos */}
-          <div className="flex-1 max-w-lg">
+          <div className="flex-1 max-w-md lg:max-w-lg">
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
               animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
               transition={{ duration: 1, delay: 0.4 }}
-              className="relative group"
+              className="relative group w-full"
               style={{ y }}
             >
               <Card className="overflow-hidden shadow-2xl border-0 bg-white/95 backdrop-blur-sm hover:shadow-pink-500/20 transition-all duration-700">
-                <div className="relative h-80 lg:h-[400px] overflow-hidden">
+                <div className="relative w-full aspect-[4/5] lg:aspect-[3/4] overflow-hidden">
                   <Image
                     src={chapter.image}
                     alt={`${chapter.title} - ${chapter.subtitle}`}
                     fill
-                    className="object-cover transition-transform duration-1000 group-hover:scale-110"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    className="object-cover object-center transition-transform duration-1000 group-hover:scale-110"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 40vw"
+                    priority={index < 3}
+                    onError={(e) => {
+                      console.error(`Failed to load image for chapter ${chapter.id}:`, chapter.image)
+                      // Fallback to placeholder
+                      e.currentTarget.src = '/placeholder.jpg'
+                    }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
 
@@ -1460,15 +1635,15 @@ function EnhancedStoryChapter({ chapter, index }: { chapter: (typeof storyChapte
               initial={{ scale: 0.8 }}
               animate={{ scale: 1 }}
               exit={{ scale: 0.8 }}
-              className="relative max-w-4xl max-h-full"
+              className="relative max-w-[90vw] max-h-[90vh] w-full h-full flex items-center justify-center"
               onClick={(e) => e.stopPropagation()}
             >
               <Image
                 src={chapter.image}
                 alt={`${chapter.title} - Fullscreen`}
-                width={800}
-                height={600}
-                className="rounded-lg shadow-2xl max-w-full max-h-full object-contain"
+                fill
+                className="rounded-lg shadow-2xl object-contain"
+                sizes="90vw"
               />
               <Button
                 onClick={() => setImageFullscreen(false)}
