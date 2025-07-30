@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useEffect, useRef, useState, useCallback } from "react"
@@ -16,7 +17,6 @@ import {
   Moon,
   Gift,
   BookOpen,
-  Headphones,
   ArrowDown,
   Quote,
   Volume2,
@@ -33,13 +33,14 @@ import {
   SkipBack,
   Shuffle,
   Repeat,
+  Headphones,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import Image from "next/image"
-import { useSpotify } from "@/lib/spotify"
+import LocalMusicPlayer from "@/components/LocalMusicPlayer"
 
-// Enhanced story chapters with Spotify tracks and real photos
+// Enhanced story chapters with local MP3 files
 const storyChapters = [
   {
     id: 1,
@@ -58,8 +59,8 @@ const storyChapters = [
     bgColor: "from-pink-50 via-rose-50 to-pink-100",
     icon: Clock,
     mood: "Serendipitous",
-    song: "Serendipity - BTS",
-    spotifyTrack: "4u4ZPyHj0qlWLKqPcP8jhY",
+    song: "That First Glimpse",
+    audioFile: "/audio/chapter%201_1753863313697.mp3",
     image: "/images/WhatsApp Image 2025-07-30 at 01.28.38_0dd6c667_1753845432857.jpg",
     memories: ["Unfamiliar faces", "Two outsiders", "A thought that refused to leave"],
     weather: "Warm June afternoon",
@@ -85,7 +86,8 @@ const storyChapters = [
     bgColor: "from-amber-50 via-orange-50 to-red-100",
     icon: MessageCircle,
     mood: "Hopeful Reconnection",
-    song: "Falling Like the Stars - James Arthur",
+    song: "Friends, Almost Enemies",
+    audioFile: "/audio/chapter%202_1753863313698.mp3",
     image: "/images/WhatsApp Image 2025-07-30 at 01.28.42_72d5d2f3_1753845432858.jpg",
     memories: ["Heart racing", "Words trembling", "You didn't walk away"],
     weather: "Midnight silence",
@@ -112,7 +114,8 @@ const storyChapters = [
     bgColor: "from-indigo-50 via-purple-50 to-pink-100",
     icon: Heart,
     mood: "Blooming Love",
-    song: "Say You Won't Let Go - James Arthur",
+    song: "Best Friends Who Fell In Love",
+    audioFile: "/audio/chapter%203_1753863313698.mp3",
     image: "/images/WhatsApp Image 2025-07-30 at 01.28.39_7a4b4af6_1753845432857.jpg",
     memories: ["Daily chats", "Deep secrets", "Love just bloomed"],
     weather: "Gentle evening breeze",
@@ -137,7 +140,8 @@ const storyChapters = [
     bgColor: "from-red-50 via-pink-50 to-rose-100",
     icon: Coffee,
     mood: "Electric Connection", 
-    song: "Dil-e-Baadat",
+    song: "First Touches, First Cafés",
+    audioFile: "/audio/chapter%204_1753863313699.mp3",
     image: "/images/WhatsApp Image 2025-07-30 at 01.28.43_0fd13c2f_1753845432858.jpg",
     memories: ["Hands brushed", "That laugh", "Pure electricity"],
     weather: "Cozy café warmth",
@@ -163,7 +167,8 @@ const storyChapters = [
     bgColor: "from-yellow-50 via-amber-50 to-orange-100",
     icon: Gift,
     mood: "Pure Joy",
-    song: "Marry Me - Train",
+    song: "The Day I Proposed",
+    audioFile: "/audio/chapter%205_1753863313699.mp3",
     image: "/images/WhatsApp Image 2025-07-30 at 01.28.45_8b6207bc_1753845432860.jpg",
     memories: ["Decorated room", "A flower waited", "Your eyes said yes"],
     weather: "Perfect January evening",
@@ -187,7 +192,8 @@ const storyChapters = [
     bgColor: "from-blue-50 via-cyan-50 to-teal-100",
     icon: Sparkles,
     mood: "Adventure Together",
-    song: "Adventure of a Lifetime - Coldplay",
+    song: "Fun Kingdom Adventures",
+    audioFile: "/audio/chapter%206_1753863313699.mp3",
     image: "/images/WhatsApp Image 2025-07-30 at 01.28.46_9b277a80_1753845432860.jpg",
     memories: ["Empty swings", "You won at Tekken", "Our fingerprints everywhere"],
     weather: "Sunny adventure day",
@@ -211,7 +217,8 @@ const storyChapters = [
     bgColor: "from-green-50 via-emerald-50 to-teal-100",
     icon: BookOpen,
     mood: "Supportive Love",
-    song: "Count on Me - Bruno Mars",
+    song: "Talks, Exams, and Little Things",
+    audioFile: "/audio/chapter%207_1753863313700.mp3",
     image: "/images/WhatsApp Image 2025-07-30 at 01.28.44_63c3fb5b_1753845432859.jpg",
     memories: ["You made me a CV", "Never stopped believing", "10 minutes were home"],
     weather: "Stressful but supported",
@@ -235,7 +242,8 @@ const storyChapters = [
     bgColor: "from-purple-50 via-pink-50 to-rose-100",
     icon: Gift,
     mood: "Beautiful Surprise",
-    song: "Thinking Out Loud - Ed Sheeran",
+    song: "When You Proposed To Me",
+    audioFile: "/audio/chapter%208_1753863313700.mp3",
     image: "/images/WhatsApp Image 2025-07-30 at 01.36.08_ede97f2e_1753845432861.jpg",
     memories: ["Bouquet surprise", "We danced", "The necklace I still feel"],
     weather: "Room lit with love",
@@ -261,7 +269,8 @@ const storyChapters = [
     bgColor: "from-gray-50 via-slate-50 to-gray-100",
     icon: Moon,
     mood: "Learning Through Pain",
-    song: "Fix You - Coldplay",
+    song: "Where I Broke",
+    audioFile: "/audio/chapter%209_1753863313701.mp3",
     image: "/images/WhatsApp Image 2025-07-30 at 01.36.07_2ba2ec18_1753845432861.jpg",
     memories: ["You planned my birthday", "I disappointed you", "Love doesn't end in silence"],
     weather: "Storm clouds",
@@ -287,7 +296,8 @@ const storyChapters = [
     bgColor: "from-emerald-50 via-green-50 to-teal-100",
     icon: Heart,
     mood: "Renewed Hope",
-    song: "A Thousand Years - Christina Perri",
+    song: "And We Began Again",
+    audioFile: "/audio/chapter%2010_1753863313701.mp3",
     image: "/images/WhatsApp Image 2025-07-30 at 01.37.07_de2cc6c6_1753845432862.jpg",
     memories: ["Every day I tried", "By God's grace", "You're my future"],
     weather: "New dawn breaking",
@@ -296,585 +306,6 @@ const storyChapters = [
     emotion: "Forever",
   },
 ]
-
-// Dynamic Spotify tracks mapped to chapters - will be updated from your playlist
-let playlistTracks = [
-  { id: "4u4ZPyHj0qlWLKqPcP8jhY", name: "Serendipity", artist: "BTS", chapterId: 1 },
-  { id: "0tgVpDi06FyKpA1z0VMD4v", name: "Perfect", artist: "Ed Sheeran", chapterId: 2 },
-  { id: "5jAIKlJ1aOSVCaX3JCqPJ1", name: "Say You Won't Let Go", artist: "James Arthur", chapterId: 3 },
-  { id: "4Dvkj6JhhA12EX05fT7y2e", name: "Dil-e-Baadat", artist: "Sufi", chapterId: 4 },
-  { id: "1PXE4b6Q7fOTwVqZ2LrN0g", name: "Marry Me", artist: "Train", chapterId: 5 },
-  { id: "0yLdNVWF3Srea0uzk55zFn", name: "Adventure of a Lifetime", artist: "Coldplay", chapterId: 6 },
-  { id: "5xTuCKoYN6xf9YdXFxJPxj", name: "Count on Me", artist: "Bruno Mars", chapterId: 7 },
-  { id: "0tgVpDi06FyKpA1z0VMD4v", name: "Perfect", artist: "Ed Sheeran", chapterId: 8 },
-  { id: "0BOyJrImj3xevGJRsQA0yy", name: "Fix You", artist: "Coldplay", chapterId: 9 },
-  { id: "2QdrK7dJaCksxnpgwSdx4F", name: "A Thousand Years", artist: "Christina Perri", chapterId: 10 },
-]
-
-// Function to fetch and map your Spotify playlist to chapters
-async function updateChapterSoungtracks(playlistId: string, spotifyAPI: any) {
-  try {
-    if (!spotifyAPI.isAuthenticated()) {
-      console.log('Not authenticated with Spotify')
-      return
-    }
-
-    const tracks = await spotifyAPI.getPlaylistTracks(playlistId)
-
-    if (tracks.length > 0) {
-      // Update playlist tracks with your actual playlist
-      playlistTracks = tracks.slice(0, 10).map((track, index) => ({
-        id: track.id,
-        name: track.name,
-        artist: track.artists.map(artist => artist.name).join(', '),
-        chapterId: index + 1
-      }))
-
-      // Update story chapters with new soundtrack info
-      storyChapters.forEach((chapter, index) => {
-        if (playlistTracks[index]) {
-          chapter.song = `${playlistTracks[index].name} - ${playlistTracks[index].artist}`
-          chapter.spotifyTrack = playlistTracks[index].id
-        }
-      })
-
-      console.log('Updated chapter soundtracks from your Spotify playlist!')
-    }
-  } catch (error) {
-    console.error('Error fetching playlist tracks:', error)
-  }
-}
-
-// Spotify Music Player
-const SpotifyMusicPlayer = () => {
-  const [isConnected, setIsConnected] = useState(false)
-  const [playlistId, setPlaylistId] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
-  const [currentTrack, setCurrentTrack] = useState<any>(null)
-  const [isPlaying, setIsPlaying] = useState(false)
-  const [progress, setProgress] = useState(0)
-  const [duration, setDuration] = useState(0)
-  const [volume, setVolume] = useState(0.7)
-  const [isMuted, setIsMuted] = useState(false)
-  const [currentTime, setCurrentTime] = useState(0)
-  const [isHidden, setIsHidden] = useState(false)
-  const [showPlaylistInput, setShowPlaylistInput] = useState(false)
-  const [playlistUpdated, setPlaylistUpdated] = useState(false)
-  const [isShuffled, setIsShuffled] = useState(false)
-  const [repeatMode, setRepeatMode] = useState(0) // 0: off, 1: all, 2: one
-  const playerRef = useRef<any>(null)
-  const deviceId = useRef<string | null>(null)
-
-  // Import the real spotifyAPI at the component level
-  const { spotifyAPI } = useSpotify()
-
-  // Check authentication status on mount
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const token = localStorage.getItem('spotify_access_token')
-      setIsConnected(!!token)
-    }
-  }, [])
-
-  // Initialize Spotify Web Playback SDK
-  useEffect(() => {
-    if (typeof window !== 'undefined' && isConnected) {
-      // Check if script already exists
-      if (document.querySelector('script[src="https://sdk.scdn.co/spotify-player.js"]')) {
-        return
-      }
-
-      const script = document.createElement('script')
-      script.src = 'https://sdk.scdn.co/spotify-player.js'
-      script.async = true
-      document.body.appendChild(script)
-
-      window.onSpotifyWebPlaybackSDKReady = () => {
-        const token = localStorage.getItem('spotify_access_token')
-        if (!token) {
-          console.log('No Spotify access token available')
-          setIsConnected(false)
-          return
-        }
-
-        try {
-          const player = new window.Spotify.Player({
-            name: 'Our Love Story Player',
-            getOAuthToken: (cb: (token: string) => void) => { 
-              const currentToken = localStorage.getItem('spotify_access_token')
-              if (currentToken) {
-                cb(currentToken)
-              }
-            },
-            volume: volume
-          })
-
-          player.addListener('ready', ({ device_id }: { device_id: string }) => {
-            console.log('Ready with Device ID', device_id)
-            deviceId.current = device_id
-            setIsConnected(true)
-          })
-
-          player.addListener('not_ready', ({ device_id }: { device_id: string }) => {
-            console.log('Device ID has gone offline', device_id)
-            setIsConnected(false)
-          })
-
-          player.addListener('player_state_changed', (state: any) => {
-            if (!state) return
-            
-            setCurrentTrack(state.track_window.current_track)
-            setIsPlaying(!state.paused)
-            setProgress(state.position)
-            setDuration(state.duration)
-          })
-
-          player.addListener('initialization_error', ({ message }: { message: string }) => {
-            console.error('Failed to initialize:', message)
-            setIsConnected(false)
-          })
-
-          player.addListener('authentication_error', ({ message }: { message: string }) => {
-            console.error('Failed to authenticate:', message)
-            setIsConnected(false)
-            localStorage.removeItem('spotify_access_token')
-          })
-
-          player.addListener('account_error', ({ message }: { message: string }) => {
-            console.error('Failed to validate Spotify account:', message)
-            setIsConnected(false)
-          })
-
-          player.addListener('playback_error', ({ message }: { message: string }) => {
-            console.error('Failed to perform playback:', message)
-          })
-
-          player.connect().then((success: boolean) => {
-            if (success) {
-              console.log('Successfully connected to Spotify!')
-              setIsConnected(true)
-            } else {
-              console.error('Failed to connect to Spotify')
-              setIsConnected(false)
-            }
-          }).catch((error) => {
-            console.error('Spotify connection error:', error)
-            setIsConnected(false)
-          })
-
-          playerRef.current = player
-        } catch (error) {
-          console.error('Error creating Spotify player:', error)
-          setIsConnected(false)
-        }
-      }
-
-      return () => {
-        // Cleanup
-        if (playerRef.current) {
-          try {
-            playerRef.current.disconnect()
-          } catch (error) {
-            console.log('Error disconnecting player:', error)
-          }
-          playerRef.current = null
-        }
-      }
-    }
-  }, [volume, isConnected])
-
-  const togglePlay = async () => {
-    if (!playerRef.current) {
-      console.warn('Spotify player not initialized')
-      if (isConnected) {
-        alert('Spotify player is still loading. Please wait a moment and try again.')
-      } else {
-        alert('Please connect to Spotify first to play music.')
-      }
-      return
-    }
-    
-    setIsLoading(true)
-    try {
-      const state = await playerRef.current.getCurrentState()
-      if (!state) {
-        console.log('No current playback state')
-        // Try to start playback with a default track from your playlist
-        const firstTrack = playlistTracks[0]
-        if (firstTrack) {
-          await playSpecificTrack(firstTrack.id)
-        } else {
-          alert('Please add some tracks to your playlist first.')
-        }
-      } else {
-        await playerRef.current.togglePlay()
-      }
-    } catch (error) {
-      console.error('Playback error:', error)
-      
-      if (error instanceof Error) {
-        if (error.message.includes('authentication') || error.message.includes('401')) {
-          setIsConnected(false)
-          localStorage.removeItem('spotify_access_token')
-          alert('Spotify authentication expired. Please reconnect.')
-        } else if (error.message.includes('Premium')) {
-          alert('Spotify Web Playback requires a Spotify Premium account.')
-        } else {
-          alert('Playback error occurred. Please try again.')
-        }
-      }
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  const playSpecificTrack = async (trackId: string) => {
-    if (!deviceId.current || !spotifyAPI.isAuthenticated()) {
-      console.log('Device or authentication not available')
-      return
-    }
-
-    try {
-      const response = await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId.current}`, {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('spotify_access_token')}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          uris: [`spotify:track:${trackId}`]
-        })
-      })
-
-      if (!response.ok) {
-        throw new Error(`Failed to play track: ${response.status}`)
-      }
-    } catch (error) {
-      console.error('Error playing specific track:', error)
-    }
-  }
-
-  const nextTrack = () => {
-    if (!playerRef.current) return
-    playerRef.current.nextTrack()
-  }
-
-  const prevTrack = () => {
-    if (!playerRef.current) return
-    playerRef.current.previousTrack()
-  }
-
-  const setVolumeLevel = (vol: number) => {
-    if (!playerRef.current) return
-    playerRef.current.setVolume(vol)
-    setVolume(vol)
-    setIsMuted(vol === 0)
-  }
-
-  const toggleMute = () => {
-    const newMuted = !isMuted
-    setIsMuted(newMuted)
-    if (newMuted) {
-      setVolumeLevel(0)
-    } else {
-      setVolumeLevel(volume || 0.7)
-    }
-  }
-
-  const formatTime = (ms: number) => {
-    const seconds = Math.floor(ms / 1000)
-    const mins = Math.floor(seconds / 60)
-    const secs = seconds % 60
-    return `${mins}:${secs.toString().padStart(2, '0')}`
-  }
-  useEffect(() => {
-    if (isPlaying && spotifyAPI && currentTrack) {
-      const timer = setInterval(() => {
-        setCurrentTime(prev => Math.min(prev + 1, currentTrack.duration_ms / 1000))
-      }, 1000)
-      return () => clearInterval(timer)
-    }
-  }, [isPlaying, currentTrack?.uri, spotifyAPI])
-
-  // Toggle Button - Always visible
-  const ToggleButton = () => (
-    <motion.div 
-      className="fixed bottom-4 right-4 z-50"
-      initial={{ scale: 0 }}
-      animate={{ scale: 1 }}
-      whileHover={{ scale: 1.1 }}
-      whileTap={{ scale: 0.95 }}
-    >
-      <Button
-        onClick={() => setIsHidden(!isHidden)}
-        className={`w-16 h-16 rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center ${
-          isHidden 
-            ? 'bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600' 
-            : 'bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600'
-        }`}
-        aria-label={isHidden ? "Show music player" : "Hide music player"}
-      >
-        {isHidden ? (
-          <Eye className="w-7 h-7 text-white" />
-        ) : (
-          <EyeOff className="w-7 h-7 text-white" />
-        )}
-      </Button>
-    </motion.div>
-  )
-
-  const handleSpotifyConnect = () => {
-    if (typeof window !== 'undefined') {
-      window.location.href = spotifyAPI.getAuthUrl()
-    }
-  }
-
-  const handleUpdatePlaylist = async () => {
-    if (!playlistId.trim()) {
-      alert('Please enter a valid Spotify playlist ID')
-      return
-    }
-
-    setIsLoading(true)
-    try {
-      await updateChapterSoungtracks(playlistId, spotifyAPI)
-      setPlaylistUpdated(true)
-      setShowPlaylistInput(false)
-      alert('Chapter soundtracks updated successfully!')
-    } catch (error) {
-      console.error('Error updating playlist:', error)
-      alert('Error updating playlist. Please check the playlist ID and try again.')
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  return (
-    <>
-      <ToggleButton />
-      <AnimatePresence>
-        {!isHidden && (
-          <motion.div 
-            className="fixed bottom-0 left-0 right-0 bg-black/95 backdrop-blur-xl text-white p-4 border-t border-white/10 z-40"
-            initial={{ y: "100%" }}
-            animate={{ y: 0 }}
-            exit={{ y: "100%" }}
-            transition={{ type: "spring", stiffness: 300, damping: 30 }}
-          >
-      <div className="max-w-7xl mx-auto">
-        {/* Main Player Controls */}
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center space-x-4 flex-1">
-          <motion.div 
-          className="bg-black/90 backdrop-blur-sm rounded-lg p-4 text-white"
-          initial={{ opacity: 0, y: 100 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          {!isConnected && (
-            <div className="text-center mb-4">
-              <button
-                onClick={handleSpotifyConnect}
-                className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors flex items-center gap-2 mx-auto"
-              >
-                <Music className="h-4 w-4" />
-                Connect to Spotify
-              </button>
-            </div>
-          )}
-
-          {isConnected && (
-            <div className="mb-4">
-              <div className="flex items-center gap-2 mb-2">
-                <button
-                  onClick={() => setShowPlaylistInput(!showPlaylistInput)}
-                  className="bg-purple-600 hover:bg-purple-700 text-white px-3 py-1 rounded-lg transition-colors flex items-center gap-2 text-sm"
-                >
-                  <Music className="h-3 w-3" />
-                  Update Soundtrack
-                </button>
-                {playlistUpdated && (
-                  <span className="text-green-400 text-xs">✓ Updated</span>
-                )}
-              </div>
-
-              {showPlaylistInput && (
-                <div className="bg-white/10 rounded-lg p-3 space-y-2">
-                  <input
-                    type="text"
-                    value={playlistId}
-                    onChange={(e) => setPlaylistId(e.target.value)}
-                    placeholder="Enter Spotify Playlist ID (e.g., 37i9dQZF1DXcBWIGoYBM5M)"
-                    className="w-full px-3 py-2 bg-white/20 rounded text-white placeholder-white/60 text-sm"
-                  />
-                  <div className="flex gap-2">
-                    <button
-                      onClick={handleUpdatePlaylist}
-                      disabled={isLoading}
-                      className="bg-green-600 hover:bg-green-700 disabled:bg-gray-600 text-white px-3 py-1 rounded text-sm flex items-center gap-1"
-                    >
-                      {isLoading ? 'Updating...' : 'Update'}
-                    </button>
-                    <button
-                      onClick={() => setShowPlaylistInput(false)}
-                      className="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm"
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                  <p className="text-white/60 text-xs">
-                    Find your playlist ID in Spotify: Share → Copy link → Extract ID from URL
-                  </p>
-                </div>
-              )}
-            </div>
-          )}
-</motion.div>
-            {/* Album Art */}
-            <motion.div 
-              className="w-14 h-14 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center relative overflow-hidden"
-              animate={{ rotate: isPlaying ? 360 : 0 }}
-              transition={{ duration: 8, repeat: isPlaying ? Infinity : 0, ease: "linear" }}
-            >
-              <Music className="w-6 h-6 text-white" />
-            </motion.div>
-
-            {/* Track Info */}
-            <div className="flex-1 min-w-0">
-              <h3 className="font-semibold text-sm truncate">
-                {currentTrack?.name || playlistTracks[0]?.name || "Our Love Playlist"}
-              </h3>
-              <p className="text-white/70 text-xs truncate">
-                {currentTrack?.artists?.map(a => a.name).join(', ') || playlistTracks[0]?.artist || "Chapter Soundtrack"}
-              </p>
-              {!isConnected && (
-                <p className="text-yellow-400 text-xs">Not connected to Spotify</p>
-              )}
-            </div>
-          </div>
-
-          {/* Main Controls */}
-          <div className="flex items-center space-x-3">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setIsShuffled(!isShuffled)}
-              className={`p-2 ${isShuffled ? 'text-green-400' : 'text-white/70'} hover:text-white`}
-              aria-label="Toggle shuffle"
-            >
-              <Shuffle className="w-4 h-4" />
-            </Button>
-
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={prevTrack}
-              className="p-2 text-white/70 hover:text-white"
-              aria-label="Previous track"
-            >
-              <SkipBack className="w-5 h-5" />
-            </Button>
-
-            <Button
-              onClick={togglePlay}
-              disabled={isLoading}
-              className="w-12 h-12 rounded-full bg-white text-black hover:bg-white/90 transition-all duration-200"
-              aria-label={isPlaying ? "Pause" : "Play"}
-            >
-              {isLoading ? (
-                <motion.div
-                  className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full"
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                />
-              ) : isPlaying ? (
-                <Pause className="w-5 h-5" />
-              ) : (
-                <Play className="w-5 h-5 ml-0.5" />
-              )}
-            </Button>
-
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={nextTrack}
-              className="p-2 text-white/70 hover:text-white"
-              aria-label="Next track"
-            >
-              <SkipForward className="w-5 h-5" />
-            </Button>
-
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setRepeatMode((prev) => (prev + 1) % 3)}
-              className={`p-2 ${repeatMode > 0 ? 'text-green-400' : 'text-white/70'} hover:text-white`}
-              aria-label="Toggle repeat"
-            >
-              <Repeat className="w-4 h-4" />
-              {repeatMode === 2 && (
-                <span className="absolute -top-1 -right-1 w-2 h-2 bg-green-400 rounded-full" />
-              )}
-            </Button>
-          </div>
-
-          {/* Volume & Minimize */}
-          <div className="flex items-center space-x-3 ml-4">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={toggleMute}
-              className="p-2 text-white/70 hover:text-white"
-              aria-label="Toggle mute"
-            >
-              {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
-            </Button>
-
-            <input
-              type="range"
-              min={0}
-              max={1}
-              step={0.01}
-              value={isMuted ? 0 : volume}
-              onChange={(e) => setVolumeLevel(Number(e.target.value))}
-              className="w-20 h-1 bg-white/20 rounded-lg appearance-none cursor-pointer"
-            />
-
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setIsHidden(true)}
-              className="p-2 text-white/70 hover:text-white"
-              aria-label="Hide player"
-            >
-              <ArrowDown className="w-4 h-4" />
-            </Button>
-          </div>
-        </div>
-
-        {/* Progress Bar */}
-        <div className="flex items-center space-x-3 text-xs">
-          <span className="text-white/70 min-w-[40px]">
-            {formatTime(progress)}
-          </span>
-          <div className="flex-1 bg-white/20 rounded-full h-1 relative overflow-hidden">
-            <motion.div
-              className="h-full bg-gradient-to-r from-purple-500 to-pink-500 rounded-full"
-              style={{ width: duration ? `${(progress / duration) * 100}%` : '0%' }}
-              transition={{ duration: 0.1 }}
-            />
-          </div>
-          <span className="text-white/70 min-w-[40px]">
-            {formatTime(duration)}
-          </span>
-        </div>
-      </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </>
-  )
-}
 
 // Fixed floating elements with stable positions
 function EnhancedFloatingElements() {
@@ -1246,8 +677,16 @@ function CinematicHero() {
   )
 }
 
-// Enhanced Story Chapter with real photos
-function EnhancedStoryChapter({ chapter, index }: { chapter: (typeof storyChapters)[0]; index: number }) {
+// Enhanced Story Chapter with real photos and music integration
+function EnhancedStoryChapter({ 
+  chapter, 
+  index, 
+  onPlayChapter 
+}: { 
+  chapter: (typeof storyChapters)[0]; 
+  index: number;
+  onPlayChapter: (chapterId: number) => void;
+}) {
   const ref = useRef<HTMLElement>(null)
   const isInView = useInView(ref, { once: true, margin: "-50px" })
   const isEven = index % 2 === 0
@@ -1261,7 +700,6 @@ function EnhancedStoryChapter({ chapter, index }: { chapter: (typeof storyChapte
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end start"],
-    container: ref
   })
 
   const y = useTransform(scrollYProgress, [0, 1], [100, -100])
@@ -1408,13 +846,13 @@ function EnhancedStoryChapter({ chapter, index }: { chapter: (typeof storyChapte
                     <span className="truncate max-w-[100px]">{chapter.mood}</span>
                   </motion.div>
                   <motion.button
-                      onClick={() => setHeartbeatActive(!heartbeatActive)}
-                      className="flex items-center bg-white/90 backdrop-blur-sm px-3 py-2 rounded-full shadow-lg border border-red-200/50 hover:bg-red-50 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500"
-                      whileHover={{ scale: 1.05 }}
-                      aria-label={`${heartbeatActive ? 'Stop' : 'Start'} heartbeat animation`}
-                      role="button"
-                      tabIndex={0}
-                    >
+                    onClick={() => setHeartbeatActive(!heartbeatActive)}
+                    className="flex items-center bg-white/90 backdrop-blur-sm px-3 py-2 rounded-full shadow-lg border border-red-200/50 hover:bg-red-50 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500"
+                    whileHover={{ scale: 1.05 }}
+                    aria-label={`${heartbeatActive ? 'Stop' : 'Start'} heartbeat animation`}
+                    role="button"
+                    tabIndex={0}
+                  >
                     <motion.div
                       animate={heartbeatActive ? { scale: [1, 1.3, 1] } : {}}
                       transition={{ duration: 0.6, repeat: heartbeatActive ? Infinity : 0 }}
@@ -1509,7 +947,7 @@ function EnhancedStoryChapter({ chapter, index }: { chapter: (typeof storyChapte
                   </motion.button>
                 </div>
 
-                {/* Enhanced Song Reference */}
+                {/* Enhanced Song Reference with Play Button */}
                 <motion.div
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
@@ -1538,46 +976,14 @@ function EnhancedStoryChapter({ chapter, index }: { chapter: (typeof storyChapte
                       size="sm"
                       variant="ghost"
                       className="text-white hover:bg-white/20 p-2"
-                      aria-label="Play on Spotify"
-                      onClick={async () => {
-                        if (chapter.spotifyTrack) {
-                          try {
-                            // Use the same playSpecificTrack logic from the main player
-                            if (!deviceId.current || !spotifyAPI.isAuthenticated()) {
-                              console.log('Device or authentication not available')
-                              window.open(`https://open.spotify.com/track/${chapter.spotifyTrack}`, '_blank')
-                              return
-                            }
-
-                            const response = await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId.current}`, {
-                              method: 'PUT',
-                              headers: {
-                                'Authorization': `Bearer ${localStorage.getItem('spotify_access_token')}`,
-                                'Content-Type': 'application/json',
-                              },
-                              body: JSON.stringify({
-                                uris: [`spotify:track:${chapter.spotifyTrack}`]
-                              })
-                            })
-
-                            if (!response.ok) {
-                              throw new Error(`Failed to play track: ${response.status}`)
-                            }
-                          } catch (error) {
-                            console.error('Error playing chapter track:', error)
-                            // Fallback: open in Spotify app/web
-                            window.open(`https://open.spotify.com/track/${chapter.spotifyTrack}`, '_blank')
-                          }
-                        } else {
-                          console.log(`Playing ${chapter.song}`)
-                          alert('Please connect to Spotify and update your playlist to play chapter soundtracks!')
-                        }
-                      }}
+                      aria-label="Play chapter soundtrack"
+                      onClick={() => onPlayChapter(chapter.id)}
                     >
                       <Play className="w-4 h-4" />
                     </Button>
                   </div>
-                </motion.div>              </div>
+                </motion.div>
+              </div>
 
               {/* Expandable Memories with better layout */}
               <AnimatePresence>
@@ -1797,7 +1203,7 @@ function SpectacularFinalChapter() {
   useEffect(() => {
     if (isInView && mounted) {
       const messageTimer = setTimeout(() => setShowMessage(true), 2000)
-      const fireworksTimer = setTimeout(()=> setShowFireworks(true), 3000)
+      const fireworksTimer = setTimeout(() => setShowFireworks(true), 3000)
       return () => {
         clearTimeout(messageTimer)
         clearTimeout(fireworksTimer)
@@ -2048,10 +1454,20 @@ function ErrorBoundary({ children }: { children: React.ReactNode }) {
 // Main Component
 export default function UltimateRomanticLoveStory() {
   const [loading, setLoading] = useState(true)
+  const [currentChapter, setCurrentChapter] = useState<number | null>(null)
 
   useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 1500)
     return () => clearTimeout(timer)
+  }, [])
+
+  const handlePlayChapter = useCallback((chapterId: number) => {
+    setCurrentChapter(chapterId)
+    console.log(`Playing chapter ${chapterId}`)
+  }, [])
+
+  const handleTrackChange = useCallback((track: any) => {
+    console.log(`Track changed to: ${track.name}`)
   }, [])
 
   if (loading) {
@@ -2083,15 +1499,25 @@ export default function UltimateRomanticLoveStory() {
     <ErrorBoundary>
       <div className="relative min-h-screen" role="main">
         <EnhancedFloatingElements />
-        <SpotifyMusicPlayer />
 
         <CinematicHero />
 
         {storyChapters.map((chapter, index) => (
-          <EnhancedStoryChapter key={chapter.id} chapter={chapter} index={index} />
+          <EnhancedStoryChapter 
+            key={chapter.id} 
+            chapter={chapter} 
+            index={index} 
+            onPlayChapter={handlePlayChapter}
+          />
         ))}
 
         <SpectacularFinalChapter />
+
+        {/* Local Music Player Integration */}
+        <LocalMusicPlayer 
+          currentChapter={currentChapter || undefined}
+          onTrackChange={handleTrackChange}
+        />
       </div>
     </ErrorBoundary>
   )
